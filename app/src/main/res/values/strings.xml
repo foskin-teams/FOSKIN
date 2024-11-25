@@ -33,6 +33,8 @@
     <string name="btn_promo">Check Now</string>
     <string name="desc_promo">The FOSKIN 90% Centella Asiatica Extract</string>
     <string name="product_description">product banner</string>
+    <string name="title_skincare">Skincare Routine</string>
+    <string name="title_recommended">Recommended Today</string>
 
     <!-- Quick Survey -->
     <string name="question">1 of 2 questions</string>
