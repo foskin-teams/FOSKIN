@@ -17,6 +17,8 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.project.foskin.R
+import java.text.NumberFormat
+import java.util.Locale
 
 class ProductRecommendedAdapter(
     private val context: Context,
@@ -31,8 +33,10 @@ class ProductRecommendedAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productItems[position]
 
+        val formattedPrice = NumberFormat.getNumberInstance(Locale("id", "ID")).format(product.price)
+
         holder.titleTextView.text = product.title
-        holder.priceTextView.text = "Rp ${product.price}"
+        holder.priceTextView.text = "Rp ${formattedPrice}"
         holder.ratingTextView.text = product.rating.toString()
         holder.soldCountTextView.text = "${product.soldCount} terjual online"
 

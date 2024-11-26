@@ -37,21 +37,66 @@ class ShopFragment : Fragment() {
 
     private fun getMenuData(): List<MenuItemSkincare> {
         return listOf(
-            MenuItemSkincare("Facial Wash", R.drawable.menu_image_1),
-            MenuItemSkincare("Toner", R.drawable.menu_image_2),
-            MenuItemSkincare("Micellar Water", R.drawable.menu_image_3),
-            MenuItemSkincare("Essence", R.drawable.menu_image_4),
-            MenuItemSkincare("Serum", R.drawable.menu_image_5),
-            MenuItemSkincare("Sheet Mask", R.drawable.menu_image_6),
-            MenuItemSkincare("Ampoule", R.drawable.menu_image_7),
-            MenuItemSkincare("Moisturizer", R.drawable.menu_image_8),
-            MenuItemSkincare("Eye Cream", R.drawable.menu_image_9),
-            MenuItemSkincare("Exfoliator", R.drawable.menu_image_10),
-            MenuItemSkincare("Sunscreen", R.drawable.menu_image_11),
-            MenuItemSkincare("Face Oil", R.drawable.menu_image_12),
-            MenuItemSkincare("Spot Treatment", R.drawable.menu_image_13),
-            MenuItemSkincare("Sleeping Mask", R.drawable.menu_image_14),
-            MenuItemSkincare("Face Mist", R.drawable.menu_image_15)
+            MenuItemSkincare(
+                name = "Facial Wash",
+                imageResId = "https://drive.google.com/uc?id=1yIUswx4ji56HoodLKII3D1zGkEfamZNG"
+            ),
+            MenuItemSkincare(
+                name = "Toner",
+                imageResId = "https://drive.google.com/uc?id=1EYSH6AlQZAohKn9pn7sqf2oZ_p_UMUg8"
+            ),
+            MenuItemSkincare(
+                name = "Micellar Water",
+                imageResId = "https://drive.google.com/uc?id=1vu1M5Zno-4av8uEWBv6EiwRr_X1tA_up"
+            ),
+            MenuItemSkincare(
+                name = "Essence",
+                imageResId = "https://drive.google.com/uc?id=19vDHsAvEPMeUgEOoGlm4CgbZ45ucMh6u"
+            ),
+            MenuItemSkincare(
+                name = "Serum",
+                imageResId = "https://drive.google.com/uc?id=1uvulYH7IwBPp1h4dZiypksteEJXtiA_y"
+            ),
+            MenuItemSkincare(
+                name = "Sheet Mask",
+                imageResId = "https://drive.google.com/uc?id=1gZiUsVV7twTNFt9PZhvcb4Hh-pnLzE5B"
+            ),
+            MenuItemSkincare(
+                name = "Ampoule",
+                imageResId = "https://drive.google.com/uc?id=1gJ2H_KznV7T8STOqcy8xtoVXTqPZe34u"
+            ),
+            MenuItemSkincare(
+                name = "Moisturizer",
+                imageResId = "https://drive.google.com/uc?id=1Qo1wMvbWi7JIw_15aenyacVqfetFpjd2"
+            ),
+            MenuItemSkincare(
+                name = "Eye Cream",
+                imageResId = "https://drive.google.com/uc?id=1wNX4fKpsYUc6Vg3e4VVs-XMNs4tYZMR9"
+            ),
+            MenuItemSkincare(
+                name = "Exfoliator",
+                imageResId = "https://drive.google.com/uc?id=1_bp5uqsBdiwvKUPXOtsmZW98rIcqTcKg"
+            ),
+            MenuItemSkincare(
+                name = "Sunscreen",
+                imageResId = "https://drive.google.com/uc?id=1_F42W8R9Ct6lWHQ4525HToi-ZHu8CXSn"
+            ),
+            MenuItemSkincare(
+                name = "Face Oil",
+                imageResId = "https://drive.google.com/uc?id=1oJZoB4pHQ9vnBR98DU5idJd104RtyJpQ"
+            ),
+            MenuItemSkincare(
+                name = "Spot Treatment",
+                imageResId = "https://drive.google.com/uc?id=1UuzXoUZ9-35GRHuYIGCv1iG6pQ1ZDX5-"
+            ),
+            MenuItemSkincare(
+                name = "Sleeping Mask",
+                imageResId = "https://drive.google.com/uc?id=1XYl4WCL1k6SyfSvuk0ZUW9jyDRwFwbpK"
+            ),
+            MenuItemSkincare(
+                name = "Face Mist",
+                imageResId = "https://drive.google.com/uc?id=1ql1It9etDxLJJ0w7i1p72BoOtUU9_ELU"
+            )
         )
     }
 
