@@ -1,39 +1,82 @@
 package com.project.foskin
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.project.foskin.databinding.ActivityMainBinding
+import android.app.Dialog
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
+import android.view.MotionEvent
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.project.foskin.databinding.ActivityMainBinding
+import com.project.foskin.ui.detect.product.ProductScanActivity
+import com.project.foskin.ui.detect.product.ValidateProductScanActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val productScanLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == ProductScanActivity.CAMERAX_RESULT) {
+            val imageUri = result.data?.getStringExtra(ProductScanActivity.EXTRA_CAMERAX_IMAGE)
+            val intent = Intent(this, ValidateProductScanActivity::class.java)
+            intent.putExtra(ValidateProductScanActivity.EXTRA_IMAGE_URI, imageUri)
+            startActivity(intent)  // Launch ValidateProductScanActivity
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
+            }
+        }
+
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(
+            this,
+            REQUIRED_PERMISSION
+        ) == PackageManager.PERMISSION_GRANTED
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         supportActionBar?.hide()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupNavigation()
+        setupFab()
+
+        // Memeriksa izin kamera
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        }
+    }
+
+    private fun setupNavigation() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-
         val navView = findViewById<BottomNavigationView>(R.id.navView)
-
         navView.background = null
 
         val appBarConfiguration = AppBarConfiguration(
@@ -46,68 +89,80 @@ class MainActivity : AppCompatActivity() {
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-
         binding.navView.setupWithNavController(navController)
 
-        binding.navView.setOnNavigationItemSelectedListener { item ->
+        binding.navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_home -> {
-                    navController.navigate(R.id.navigation_home)
-                    true
-                }
-                R.id.navigation_shop -> {
-                    navController.navigate(R.id.navigation_shop)
-                    true
-                }
-                R.id.navigation_message -> {
-                    navController.navigate(R.id.navigation_message)
-                    true
-                }
+                R.id.navigation_home,
+                R.id.navigation_shop,
+                R.id.navigation_message,
                 R.id.navigation_profile -> {
-                    navController.navigate(R.id.navigation_profile)
+                    navController.navigate(item.itemId)
                     true
                 }
+
                 else -> false
             }
         }
+    }
 
+    private fun setupFab() {
         binding.fabDetect.setOnClickListener {
             showBottomDialog()
         }
     }
 
     private fun showBottomDialog() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.bottomsheetlayout)
+        val dialog = Dialog(this).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.bottomsheetlayout)
+            setupDialogWindow()
+        }
 
-        val imgClose = dialog.findViewById<ImageView>(R.id.imgClose)
+        dialog.findViewById<ImageView>(R.id.imgClose)?.setOnTouchListener(
+            handleDragToDismiss(dialog)
+        )
 
-        imgClose.setOnTouchListener(object : View.OnTouchListener {
-            var yStart: Float = 0f
-
-            override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        yStart = event.rawY
-                        return true
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        val yMove = event.rawY
-                        if (yMove - yStart > 100) {
-                            dialog.dismiss()
-                            return true
-                        }
-                    }
-                }
-                return false
-            }
-        })
-
+        dialog.findViewById<ImageButton>(R.id.productScan)?.setOnClickListener {
+            val intent = Intent(this, ProductScanActivity::class.java)
+            productScanLauncher.launch(intent)
+            dialog.dismiss()
+        }
         dialog.show()
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-        dialog.window?.setGravity(Gravity.BOTTOM)
+    }
+
+    private fun Dialog.setupDialogWindow() {
+        window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes?.windowAnimations = R.style.DialogAnimation
+            setGravity(Gravity.BOTTOM)
+        }
+    }
+
+    private fun handleDragToDismiss(dialog: Dialog): View.OnTouchListener {
+        var startDragY = 0f
+        return View.OnTouchListener { _, event ->
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    startDragY = event.rawY
+                    true
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    val dragDistance = event.rawY - startDragY
+                    if (dragDistance > 100) {
+                        dialog.dismiss()
+                        true
+                    } else false
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
 }

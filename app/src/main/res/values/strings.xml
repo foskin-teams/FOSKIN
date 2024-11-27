@@ -35,9 +35,17 @@
     <string name="product_description">product banner</string>
     <string name="title_skincare">Skincare Routine</string>
     <string name="title_recommended">Recommended Today</string>
+    <string name="rating_products">4.8</string>
 
     <!-- Quick Survey -->
     <string name="question">1 of 2 questions</string>
-    <string name="rating_products">4.8</string>
+
+    <!-- Scan Product -->
+    <string name="camera_button">camera_button</string>
+    <string name="description_security">This camera is guaranteed safe to use, as it\'s only for analyzing the products you upload, so your privacy remains protected.</string>
+    <string name="data_privacy">Data privacy</string>
+    <string name="security">Security</string>
+    <string name="description_scan_product">Make sure the light is bright enough, then adjust it so that the front or back of what you want to photograph is clearly visible. So, just take a photo!</string>
+    <string name="title_scan_product">Product photo: front or back of product ingredients</string>
 
 </resources>
