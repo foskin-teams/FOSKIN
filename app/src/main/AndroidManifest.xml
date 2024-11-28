@@ -22,6 +22,12 @@
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
         <activity
+            android:name=".ui.detect.product.ResultScanProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.product.ErrorValidateProductScanActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.detect.product.ValidateProductScanActivity"
             android:exported="false" />
         <activity

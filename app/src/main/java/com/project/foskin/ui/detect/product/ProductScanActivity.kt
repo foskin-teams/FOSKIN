@@ -1,9 +1,15 @@
 package com.project.foskin.ui.detect.product
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -34,6 +40,34 @@ class ProductScanActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             onBackPressed()
         }
+
+        val textView = findViewById<TextView>(R.id.instructionText1)
+
+        val spannable = SpannableString("Product photo: front or back of product ingredients")
+        spannable.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.green)),
+            15, 20,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            15, 20,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.green)),
+            24, 28,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            24, 28,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        textView.text = spannable
+
     }
 
     override fun onResume() {
@@ -79,9 +113,11 @@ class ProductScanActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val intent = Intent()
-                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
-                    setResult(CAMERAX_RESULT, intent)
+                    val savedUri = output.savedUri
+
+                    val intent = Intent(this@ProductScanActivity, ValidateProductScanActivity::class.java)
+                    intent.putExtra(ValidateProductScanActivity.EXTRA_IMAGE_URI, savedUri.toString())
+                    startActivity(intent)
                     finish()
                 }
 

@@ -11,6 +11,7 @@
     <color name="light_grey">#EDF1F3</color>
     <color name="gold">#DEC283</color>
     <color name="meteor">#EDF0F5</color>
-
+    <color name="green">#15B8A7</color>
+    <color name="red">#FF0000</color>
     <color name="grey">#6C7278</color>
 </resources>

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detect.product.ValidateProductScanActivity">
+    tools:context=".ui.detect.product.ErrorValidateProductScanActivity">
 
     <ImageView
         android:id="@+id/previewImageView"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageButton
-        android:id="@+id/backValidate"
+        android:id="@+id/backErrorValidate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -45,15 +45,15 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
             android:paddingEnd="10dp"
-            android:text="@string/title_validate_product_scan"
-            android:textColor="@color/black"
+            android:text="@string/title_error_validate_product_scan"
+            android:textColor="@color/red"
             android:textSize="20sp" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/pictures" />
+            android:src="@drawable/error_picture" />
     </LinearLayout>
 
     <TextView
@@ -64,7 +64,7 @@
         android:fontFamily="@font/poppins_medium"
         android:paddingStart="26dp"
         android:paddingEnd="26dp"
-        android:text="@string/desc_validate_product_scan"
+        android:text="@string/desc_error_validate_product_scan"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,23 +72,7 @@
         app:layout_constraintTop_toBottomOf="@id/instructionText1" />
 
     <Button
-        android:id="@+id/btnAgreeValidate"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="26dp"
-        android:backgroundTint="@color/green"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:text="That's okay"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/instructionText2" />
-
-    <Button
-        android:id="@+id/btnTryAgainValidate"
+        android:id="@+id/btnTryAgainErrorValidate"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="10dp"
@@ -100,8 +84,9 @@
         android:text="Take another photo, please"
         android:textColor="@color/green"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnAgreeValidate" />
+        app:layout_constraintTop_toBottomOf="@id/instructionText2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

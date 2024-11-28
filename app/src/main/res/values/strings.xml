@@ -47,5 +47,9 @@
     <string name="security">Security</string>
     <string name="description_scan_product">Make sure the light is bright enough, then adjust it so that the front or back of what you want to photograph is clearly visible. So, just take a photo!</string>
     <string name="title_scan_product">Product photo: front or back of product ingredients</string>
+    <string name="title_validate_product_scan">Is the photo clear enough?</string>
+    <string name="desc_validate_product_scan">Make sure the front or the ingredients of the product are fully visible, not blurry or cropped!</string>
+    <string name="desc_error_validate_product_scan">If your image is blurry or unclear, we can’t analyze the product properly. Try uploading a clearer one for the best results!</string>
+    <string name="title_error_validate_product_scan">Oops! The Image Isn’t Clear</string>
 
 </resources>
