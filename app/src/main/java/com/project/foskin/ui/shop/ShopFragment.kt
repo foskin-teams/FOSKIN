@@ -103,23 +103,23 @@ class ShopFragment : Fragment() {
             ),
             ProductItem(
                 "https://drive.google.com/uc?id=1_F42W8R9Ct6lWHQ4525HToi-ZHu8CXSn",
-                "SPF 50 Sunscreen - Broad Spectrum Protection", 40000, 4.5f, 140, "https://shopee.co.id/product-link-11"
+                "Sunscreen SPF 50 - Protects from UV Rays", 55000, 4.7f, 220, "https://shopee.co.id/product-link-11"
             ),
             ProductItem(
                 "https://drive.google.com/uc?id=1oJZoB4pHQ9vnBR98DU5idJd104RtyJpQ",
-                "Face Oil - Nourishing and Lightweight Formula", 95000, 4.3f, 180, "https://shopee.co.id/product-link-12"
+                "Nourishing Face Oil - Adds Glow and Softness", 70000, 4.4f, 100, "https://shopee.co.id/product-link-12"
             ),
             ProductItem(
                 "https://drive.google.com/uc?id=1UuzXoUZ9-35GRHuYIGCv1iG6pQ1ZDX5-",
-                "Acne Spot Treatment - Targets and Reduces Breakouts", 155000, 4.7f, 200, "https://shopee.co.id/product-link-13"
+                "Blemish Spot Treatment - Targets Pimples", 40000, 4.5f, 90, "https://shopee.co.id/product-link-13"
             ),
             ProductItem(
                 "https://drive.google.com/uc?id=1XYl4WCL1k6SyfSvuk0ZUW9jyDRwFwbpK",
-                "Overnight Sleeping Mask - Hydrating and Repairing", 50000, 4.6f, 150, "https://shopee.co.id/product-link-14"
+                "Overnight Sleeping Mask - Skin Recovery", 85000, 4.8f, 200, "https://shopee.co.id/product-link-14"
             ),
             ProductItem(
                 "https://drive.google.com/uc?id=1ql1It9etDxLJJ0w7i1p72BoOtUU9_ELU",
-                "Soothing Face Mist - Refreshes and Hydrates", 30000, 4.2f, 120, "https://shopee.co.id/product-link-15"
+                "Refreshing Face Mist - Instant Hydration", 15000, 4.2f, 70, "https://shopee.co.id/product-link-15"
             )
         )
     }

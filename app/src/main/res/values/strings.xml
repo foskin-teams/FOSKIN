@@ -55,4 +55,9 @@
     <string name="title_related_product">Related product</string>
     <string name="desc_result_scan_product">Contains Salicylic Acid to cleanse pores and prevent acne, Aloe Vera to soothe the skin, Vitamin E as an antioxidant, and Hyaluronic Acid to maintain the skin\'s natural moisture. Suitable for oily to acne-prone skin.</string>
 
+    <!-- Bottom Sheet Layout -->
+    <string name="desc_poduct_scan">Scan a product to find similar items or detailed information about it.</string>
+    <string name="desc_face_recognition">Use Face Recognition to analyze your skin type and get personalized care recommendations.</string>
+    <string name="title_bottomsheetlayout">Select the Option You Want</string>
+
 </resources>

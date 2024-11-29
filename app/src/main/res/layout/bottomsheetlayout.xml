@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select the Option You Want"
+        android:text="@string/title_bottomsheetlayout"
         android:padding="16dp"
         android:fontFamily="@font/poppins_medium"
         android:textAlignment="center"
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Use Face Recognition to analyze your skin type and get personalized care recommendations."
+                android:text="@string/desc_face_recognition"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp"
                 android:layout_marginTop="8dp"
@@ -107,7 +107,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Scan a product to find similar items or detailed information about it."
+                android:text="@string/desc_poduct_scan"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp"
                 android:layout_marginTop="8dp"
