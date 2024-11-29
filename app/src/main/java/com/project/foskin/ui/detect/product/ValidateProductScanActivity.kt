@@ -43,6 +43,7 @@ class ValidateProductScanActivity : AppCompatActivity() {
                 val intent = Intent(this, ResultScanProductActivity::class.java)
                 intent.putExtra(ResultScanProductActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
                 startActivity(intent)
+                finish()
             }
         }
 

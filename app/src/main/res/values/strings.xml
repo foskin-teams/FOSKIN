@@ -51,7 +51,8 @@
     <string name="desc_validate_product_scan">Make sure the front or the ingredients of the product are fully visible, not blurry or cropped!</string>
     <string name="desc_error_validate_product_scan">If your image is blurry or unclear, we can’t analyze the product properly. Try uploading a clearer one for the best results!</string>
     <string name="title_error_validate_product_scan">Oops! The Image Isn’t Clear</string>
-    <string name="title_result_scan_product">Result Scan Product</string>
+    <string name="title_ingredient_product">Ingredient Product</string>
     <string name="title_related_product">Related product</string>
+    <string name="desc_result_scan_product">Contains Salicylic Acid to cleanse pores and prevent acne, Aloe Vera to soothe the skin, Vitamin E as an antioxidant, and Hyaluronic Acid to maintain the skin\'s natural moisture. Suitable for oily to acne-prone skin.</string>
 
 </resources>

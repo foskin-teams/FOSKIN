@@ -35,8 +35,19 @@ class ResultScanProductActivity : AppCompatActivity() {
         }
 
         val adapter = ProductRecommendedAdapter(this, getProductData())
-        binding.rvRelatedProduct.layoutManager = GridLayoutManager(this, 2) // Grid with 2 columns
+        binding.rvRelatedProduct.layoutManager = GridLayoutManager(this, 2)
         binding.rvRelatedProduct.adapter = adapter
+
+        val maxScrollY = resources.displayMetrics.density * 300
+
+        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            val translationY = if (scrollY <= maxScrollY) {
+                -scrollY.toFloat() / 2
+            } else {
+                -maxScrollY / 2
+            }
+            binding.nestedScrollView.translationY = translationY
+        }
     }
 
     private fun getProductData(): List<ProductItem> {
