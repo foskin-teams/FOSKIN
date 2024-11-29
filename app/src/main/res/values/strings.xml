@@ -51,5 +51,7 @@
     <string name="desc_validate_product_scan">Make sure the front or the ingredients of the product are fully visible, not blurry or cropped!</string>
     <string name="desc_error_validate_product_scan">If your image is blurry or unclear, we can’t analyze the product properly. Try uploading a clearer one for the best results!</string>
     <string name="title_error_validate_product_scan">Oops! The Image Isn’t Clear</string>
+    <string name="title_result_scan_product">Result Scan Product</string>
+    <string name="title_related_product">Related product</string>
 
 </resources>

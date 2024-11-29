@@ -37,13 +37,15 @@ class ValidateProductScanActivity : AppCompatActivity() {
         binding.btnAgreeValidate.setOnClickListener {
             if (isImageBlur(currentImageUri)) {
                 val intent = Intent(this, ErrorValidateProductScanActivity::class.java)
+                intent.putExtra(ErrorValidateProductScanActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
                 startActivity(intent)
             } else {
                 val intent = Intent(this, ResultScanProductActivity::class.java)
-                intent.putExtra(EXTRA_IMAGE_URI, currentImageUri.toString())
+                intent.putExtra(ResultScanProductActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
                 startActivity(intent)
             }
         }
+
     }
 
     private fun showImage() {
