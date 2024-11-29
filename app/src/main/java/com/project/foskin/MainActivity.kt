@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.project.foskin.ui.detect.product.ProductScanActivity
 import com.project.foskin.ui.detect.product.ValidateProductScanActivity
 
@@ -119,17 +120,29 @@ class MainActivity : AppCompatActivity() {
             setupDialogWindow()
         }
 
-        dialog.findViewById<ImageView>(R.id.imgClose)?.setOnTouchListener(
-            handleDragToDismiss(dialog)
-        )
+        // Load image from Google Drive using Glide
+        val productScanButton = dialog.findViewById<ImageButton>(R.id.productScan)
+        val imageUrl = "https://drive.google.com/uc?id=1wcTnrKn56Wk2V70t6-N262JS_cwDpsDD"
+        Glide.with(this)
+            .load(imageUrl)
+            .placeholder(android.R.color.darker_gray) // Placeholder while loading
+            .error(android.R.color.holo_red_light)   // Error image if loading fails
+            .into(productScanButton)
 
+        // Handle click events
         dialog.findViewById<ImageButton>(R.id.productScan)?.setOnClickListener {
             val intent = Intent(this, ProductScanActivity::class.java)
             productScanLauncher.launch(intent)
             dialog.dismiss()
         }
+
+        dialog.findViewById<ImageView>(R.id.imgClose)?.setOnTouchListener(
+            handleDragToDismiss(dialog)
+        )
+
         dialog.show()
     }
+
 
     private fun Dialog.setupDialogWindow() {
         window?.apply {
