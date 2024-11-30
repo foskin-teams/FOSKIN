@@ -27,6 +27,9 @@
     <string name="who_age_quick_survey">How old are you?</string>
     <string name="who_gender_quick_survey">What is your gender?</string>
 
+    <!-- Home -->
+    <string name="desc_banner_promo_home">Has your scan limit exceeded 5x a day? Don\'t worry.. you can upgrade to Premium and get additional limits now!!</string>
+
     <!-- Shop -->
     <string name="promo_month">November Promo</string>
     <string name="persentase_promo">-45%</string>
