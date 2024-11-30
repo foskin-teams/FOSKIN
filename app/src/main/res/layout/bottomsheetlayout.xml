@@ -17,55 +17,40 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_bottomsheetlayout"
-        android:padding="16dp"
         android:fontFamily="@font/poppins_medium"
+        android:padding="16dp"
+        android:text="@string/title_bottomsheetlayout"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="5dp"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        app:cardCornerRadius="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <FrameLayout
+            <ImageButton
+                android:id="@+id/faceScan"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/faceScan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="80dp"
-                    android:background="@android:color/transparent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Face Scan"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center" />
-            </FrameLayout>
+                android:layout_height="160dp"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/product_scan" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:fontFamily="@font/poppins_regular"
                 android:text="@string/desc_face_recognition"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/poppins_regular" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -73,47 +58,30 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="5dp"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        app:cardCornerRadius="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <FrameLayout
+            <ImageButton
+                android:id="@+id/productScan"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/productScan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="80dp"
-                    android:scaleType="centerCrop" />
-
-                <TextView
-                    android:id="@+id/productScanHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Product Scan"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:padding="4dp"
-                    android:layout_marginTop="8dp"/>
-            </FrameLayout>
+                android:layout_height="160dp"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/product_scan" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:fontFamily="@font/poppins_regular"
                 android:text="@string/desc_poduct_scan"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/poppins_regular" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

@@ -59,5 +59,6 @@
     <string name="desc_poduct_scan">Scan a product to find similar items or detailed information about it.</string>
     <string name="desc_face_recognition">Use Face Recognition to analyze your skin type and get personalized care recommendations.</string>
     <string name="title_bottomsheetlayout">Select the Option You Want</string>
+    <string name="product_scan">Product Scan</string>
 
 </resources>
