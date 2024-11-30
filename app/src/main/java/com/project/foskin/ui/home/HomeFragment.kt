@@ -1,5 +1,6 @@
 package com.project.foskin.ui.home
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -8,6 +9,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.project.foskin.R
+import com.project.foskin.ui.remainders.RemaindersActivity
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
@@ -45,6 +48,13 @@ class HomeFragment : Fragment() {
 
         // Setup the banner click behavior
         setupBannerPromoClick(view)
+
+        val btnRemainders = view.findViewById<Button>(R.id.btnRemainders)
+        btnRemainders.setOnClickListener {
+            // Navigating to RemaindersActivity when the button is clicked
+            val intent = Intent(context, RemaindersActivity::class.java)
+            startActivity(intent)
+        }
 
         return view
     }
