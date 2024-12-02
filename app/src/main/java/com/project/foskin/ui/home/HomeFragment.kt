@@ -11,11 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.project.foskin.R
 import com.project.foskin.ui.remainders.RemaindersActivity
 import java.util.Calendar
@@ -24,6 +24,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var textUserName: TextView
     private lateinit var textGreeting: TextView
+    private lateinit var notificationBadge: TextView
+    private lateinit var btnNotification: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +37,8 @@ class HomeFragment : Fragment() {
         // Initialize the views
         textUserName = view.findViewById(R.id.textUserName)
         textGreeting = view.findViewById(R.id.textGreeting)
+        btnNotification = view.findViewById(R.id.btnNotification)
+        notificationBadge = view.findViewById(R.id.notificationBadge)
 
         // Update the greeting text
         updateGreeting()
@@ -55,6 +59,12 @@ class HomeFragment : Fragment() {
             val intent = Intent(context, RemaindersActivity::class.java)
             startActivity(intent)
         }
+
+        // Setup notification badge
+        setupNotificationBadge()
+
+        // Set click listeners for each ImageView
+        setupImageViewClickListeners(view)
 
         return view
     }
@@ -102,6 +112,47 @@ class HomeFragment : Fragment() {
         bannerButton.setOnClickListener {
             Toast.makeText(context, "Banner promo di-klik!", Toast.LENGTH_SHORT).show()
             // Add any specific logic for banner click here
+        }
+    }
+
+    private fun setupNotificationBadge() {
+        // Simulate notification count
+        val notificationCount = 5 // Replace with dynamic value
+        if (notificationCount > 0) {
+            notificationBadge.text = notificationCount.toString()
+            notificationBadge.visibility = View.VISIBLE
+        } else {
+            notificationBadge.visibility = View.GONE
+        }
+
+        btnNotification.setOnClickListener {
+            Toast.makeText(context, "Notification clicked", Toast.LENGTH_SHORT).show()
+            // Clear notifications (for example)
+            notificationBadge.visibility = View.GONE
+        }
+    }
+
+    private fun setupImageViewClickListeners(view: View) {
+        val ivRoutines = view.findViewById<ImageView>(R.id.ivRoutines)
+        val ivClinic = view.findViewById<ImageView>(R.id.ivClinic)
+        val ivPromo = view.findViewById<ImageView>(R.id.ivPromo)
+        val ivBlog = view.findViewById<ImageView>(R.id.ivBlog)
+
+        // Add click listeners for each ImageView
+        ivRoutines.setOnClickListener {
+            Toast                .makeText(context, "Routines clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        ivClinic.setOnClickListener {
+            Toast.makeText(context, "Clinic clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        ivPromo.setOnClickListener {
+            Toast.makeText(context, "Promo clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        ivBlog.setOnClickListener {
+            Toast.makeText(context, "Blog clicked", Toast.LENGTH_SHORT).show()
         }
     }
 }
