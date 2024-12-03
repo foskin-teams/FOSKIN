@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.project.foskin.R
+import com.project.foskin.ui.Auth.EnterWhatsappNumberActivity
 
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

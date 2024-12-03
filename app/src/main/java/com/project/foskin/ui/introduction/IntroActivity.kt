@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.project.foskin.MainActivity
 import com.project.foskin.R
+import com.project.foskin.ui.Auth.EnterWhatsappNumberActivity
 import com.project.foskin.ui.Auth.QuickSurveyActivity
 
 class IntroActivity : AppCompatActivity() {
@@ -33,7 +34,7 @@ class IntroActivity : AppCompatActivity() {
         }
 
         btnStarted.setOnClickListener {
-            startActivity(Intent(this, QuickSurveyActivity::class.java))
+            startActivity(Intent(this, EnterWhatsappNumberActivity::class.java))
             finish()
         }
     }

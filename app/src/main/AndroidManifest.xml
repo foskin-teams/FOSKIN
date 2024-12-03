@@ -22,6 +22,12 @@
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
         <activity
+            android:name=".ui.Auth.OtpVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Auth.EnterWhatsappNumberActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.remainders.RemaindersActivity"
             android:exported="false" />
         <activity
@@ -43,11 +49,11 @@
             android:name=".ui.introduction.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.introduction.SplashScreen"
+            android:name=".MainActivity"
             android:exported="false"
             android:label="@string/app_name" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.introduction.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

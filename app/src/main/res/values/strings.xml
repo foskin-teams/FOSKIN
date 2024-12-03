@@ -63,5 +63,6 @@
     <string name="desc_face_recognition">Use Face Recognition to analyze your skin type and get personalized care recommendations.</string>
     <string name="title_bottomsheetlayout">Select the Option You Want</string>
     <string name="product_scan">Product Scan</string>
+    <string name="termsAndPolicyText">By signing up, you agree to our Terms of Service and Privacy Policy</string>
 
 </resources>
