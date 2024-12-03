@@ -40,30 +40,23 @@ class HomeFragment : Fragment() {
         btnNotification = view.findViewById(R.id.btnNotification)
         notificationBadge = view.findViewById(R.id.notificationBadge)
 
-        // Update the greeting text
         updateGreeting()
 
-        // Initialize the banner and load image
         val bannerPromoHome = view.findViewById<ImageButton>(R.id.bannerPromoHome)
         loadImageIntoButton(bannerPromoHome, "https://drive.google.com/uc?id=1DE6Rt55zuHLBsLyZqpq1XpwCWS23e0Zn")
 
-        // Setup the formatted text
         setupFormattedText(view)
 
-        // Setup the banner click behavior
         setupBannerPromoClick(view)
 
         val btnRemainders = view.findViewById<Button>(R.id.btnRemainders)
         btnRemainders.setOnClickListener {
-            // Navigating to RemaindersActivity when the button is clicked
             val intent = Intent(context, RemaindersActivity::class.java)
             startActivity(intent)
         }
 
-        // Setup notification badge
         setupNotificationBadge()
 
-        // Set click listeners for each ImageView
         setupImageViewClickListeners(view)
 
         return view
@@ -86,7 +79,6 @@ class HomeFragment : Fragment() {
             "Has your scan limit exceeded 5x a day?\nDon't worry.. you can upgrade to Premium and get additional limits now!!"
         val spannableString = SpannableString(fullText)
 
-        // Format the text to bold the first part
         val boldStart = fullText.indexOf("Has your scan limit exceeded 5x a day?")
         val boldEnd = boldStart + "Has your scan limit exceeded 5x a day?".length
         spannableString.setSpan(
@@ -111,13 +103,11 @@ class HomeFragment : Fragment() {
         val bannerButton = view.findViewById<ImageButton>(R.id.bannerPromoHome)
         bannerButton.setOnClickListener {
             Toast.makeText(context, "Banner promo di-klik!", Toast.LENGTH_SHORT).show()
-            // Add any specific logic for banner click here
         }
     }
 
     private fun setupNotificationBadge() {
-        // Simulate notification count
-        val notificationCount = 5 // Replace with dynamic value
+        val notificationCount = 5
         if (notificationCount > 0) {
             notificationBadge.text = notificationCount.toString()
             notificationBadge.visibility = View.VISIBLE
@@ -127,7 +117,6 @@ class HomeFragment : Fragment() {
 
         btnNotification.setOnClickListener {
             Toast.makeText(context, "Notification clicked", Toast.LENGTH_SHORT).show()
-            // Clear notifications (for example)
             notificationBadge.visibility = View.GONE
         }
     }
@@ -138,9 +127,8 @@ class HomeFragment : Fragment() {
         val ivPromo = view.findViewById<ImageView>(R.id.ivPromo)
         val ivBlog = view.findViewById<ImageView>(R.id.ivBlog)
 
-        // Add click listeners for each ImageView
         ivRoutines.setOnClickListener {
-            Toast                .makeText(context, "Routines clicked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Routines clicked", Toast.LENGTH_SHORT).show()
         }
 
         ivClinic.setOnClickListener {

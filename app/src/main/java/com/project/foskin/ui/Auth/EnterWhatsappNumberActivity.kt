@@ -11,9 +11,11 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.hbb20.CountryCodePicker
 import com.project.foskin.R
 
 class EnterWhatsappNumberActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter_whatsapp_number)
@@ -54,9 +56,9 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
         val phoneNumberInput = findViewById<EditText>(R.id.phoneNumberInput)
         val continueButton = findViewById<Button>(R.id.continueButton)
         val errorMessageText = findViewById<TextView>(R.id.errorMessageText)
+        val countryCodePicker = findViewById<CountryCodePicker>(R.id.ccp)
 
-        // Membatasi panjang input menjadi 13 digit
-        phoneNumberInput.filters = arrayOf(android.text.InputFilter.LengthFilter(13))
+        phoneNumberInput.filters = arrayOf(android.text.InputFilter.LengthFilter(12))
 
         phoneNumberInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -83,6 +85,8 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
 
         continueButton.setOnClickListener {
             val phoneNumber = phoneNumberInput.text.toString()
+            val countryCode = countryCodePicker.selectedCountryCodeWithPlus
+
             if (phoneNumber.startsWith("0")) {
                 // Show error message if the number starts with "0"
                 errorMessageText.text = "Please do not start the number with 0"
@@ -94,7 +98,8 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
             } else {
                 // Navigate to OtpVerificationActivity
                 val intent = Intent(this, OtpVerificationActivity::class.java)
-                intent.putExtra("PHONE_NUMBER", phoneNumber) // Pass phone number to the next activity
+                val fullPhoneNumber = "$countryCode$phoneNumber"
+                intent.putExtra("PHONE_NUMBER", fullPhoneNumber) // Pass the full phone number to the next activity
                 startActivity(intent)
             }
         }

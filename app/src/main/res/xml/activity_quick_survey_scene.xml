@@ -6,6 +6,8 @@
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@id/start"
         app:duration="1000">
+
+        <!-- Trigger transition when button is clicked -->
         <OnClick
             app:targetId="@id/btnNext1"
             app:clickAction="transitionToEnd" />
@@ -14,6 +16,7 @@
             app:clickAction="transitionToStart" />
     </Transition>
 
+    <!-- Define start state -->
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@id/surveyPage1"
@@ -30,8 +33,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone" />
+
+        <!-- Fade-out effect for surveyPage1 -->
+        <KeyFrameSet>
+            <KeyAttributes
+                app:framePosition="0"
+                app:targetId="@id/surveyPage1"
+                app:alpha="1" />
+        </KeyFrameSet>
     </ConstraintSet>
 
+    <!-- Define end state -->
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@id/surveyPage1"
@@ -48,5 +60,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="visible" />
+
+        <!-- Fade-in effect for surveyPage2 -->
+        <KeyFrameSet>
+            <KeyAttributes
+                app:framePosition="100"
+                app:targetId="@id/surveyPage2"
+                app:alpha="1" />
+        </KeyFrameSet>
     </ConstraintSet>
+
 </MotionScene>
