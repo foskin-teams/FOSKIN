@@ -49,11 +49,11 @@ class HomeFragment : Fragment() {
 
         setupBannerPromoClick(view)
 
-        val btnRemainders = view.findViewById<Button>(R.id.btnRemainders)
-        btnRemainders.setOnClickListener {
-            val intent = Intent(context, RemaindersActivity::class.java)
-            startActivity(intent)
-        }
+//        val btnRemainders = view.findViewById<Button>(R.id.btnRemainders)
+//        btnRemainders.setOnClickListener {
+//            val intent = Intent(context, RemaindersActivity::class.java)
+//            startActivity(intent)
+//        }
 
         setupNotificationBadge()
 
