@@ -22,6 +22,12 @@
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
         <activity
+            android:name=".ui.home.blog.BlogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.blog.DetailBlogActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.Auth.OtpVerificationActivity"
             android:exported="false" />
         <activity

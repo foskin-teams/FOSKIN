@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.home.blog.DetailBlogActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Image Section with Back Button -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp">
+
+            <!-- ImageView -->
+            <ImageView
+                android:id="@+id/image_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background" />
+
+            <!-- Back Button -->
+            <ImageButton
+                android:id="@+id/button_cancel"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/circle_bg_cancel"
+                android:padding="8dp"
+                android:src="@drawable/delete"
+                android:scaleType="center" />
+        </FrameLayout>
+
+        <!-- Title Section -->
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:hint="The Ultimate Guide to Achieving Healthy Glowing Skin"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="6dp"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_read_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="7 min read"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/grey" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="17dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/grey" />
+
+            <TextView
+                android:id="@+id/text_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="December 4, 2024"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_card_detail"
+            android:clipToPadding="false"
+            android:layout_marginTop="18dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/avatar_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/circle_background"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true"
+                android:src="@drawable/marcello" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Marcello Ilham"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins_medium"/>
+
+                <TextView
+                    android:id="@+id/job_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Specialist"
+                    android:fontFamily="@font/poppins_light"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/arrow_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/shape_background"
+                android:padding="5dp"
+                android:src="@drawable/ic_arrow" />
+        </LinearLayout>
+
+        <!-- Content Section -->
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/desc_detail_blog"
+            android:lineSpacingExtra="4dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"
+            android:paddingBottom="20dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</ScrollView>

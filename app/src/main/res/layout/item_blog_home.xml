@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp">
@@ -38,7 +38,7 @@
         android:fontFamily="@font/poppins_medium"
         android:hint="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
         android:textColor="@android:color/black"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:maxLines="2"
         android:ellipsize="end" />
 
@@ -50,7 +50,7 @@
         android:fontFamily="@font/poppins_regular"
         android:hint="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of ..."
         android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:maxLines="3"
         android:ellipsize="end" />
 </LinearLayout>
