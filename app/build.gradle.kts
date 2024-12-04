@@ -17,7 +17,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL", "\"https://event-api.dicoding.dev/\"")
     }
+
 
     buildTypes {
         release {
@@ -66,10 +68,9 @@ dependencies {
     implementation(libs.camera.lifecycle)
     implementation(libs.camera.view)
     implementation("org.tensorflow:tensorflow-lite:2.12.0")
-
     implementation("com.google.android.material:material:1.9.0")
-
     implementation("com.hbb20:ccp:2.5.0")
-
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
 }
