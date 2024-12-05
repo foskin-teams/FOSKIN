@@ -16,7 +16,9 @@ class AddRemaindersActivity : AppCompatActivity() {
     private lateinit var npMinute: NumberPicker
     private lateinit var tvSubheader: TextView
     private lateinit var tvRepeat: TextView
+    private lateinit var tvSkincareItem: TextView
     private lateinit var tvAlarmPeriod: TextView
+    private lateinit var tvChooseSkincareItem: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +31,10 @@ class AddRemaindersActivity : AppCompatActivity() {
         npMinute = findViewById(R.id.np_minute)
         tvSubheader = findViewById(R.id.tv_subheader)
         tvRepeat = findViewById(R.id.tv_repeat)
-        tvAlarmPeriod = findViewById(R.id.tv_alarm_period) // New
+        tvAlarmPeriod = findViewById(R.id.tv_alarm_period)
+        tvSkincareItem = findViewById(R.id.tv_skincare_items)
+        tvChooseSkincareItem = findViewById(R.id.tvChooseSkincareItem)
 
-        // Set limits for NumberPicker
         npHour.minValue = 0
         npHour.maxValue = 23
         npHour.wrapSelectorWheel = true
@@ -40,28 +43,60 @@ class AddRemaindersActivity : AppCompatActivity() {
         npMinute.maxValue = 59
         npMinute.wrapSelectorWheel = true
 
-        // Initialize current time display
         updateSubheaderTime()
-        updateAlarmPeriod() // Initialize period display
+        updateAlarmPeriod()
 
-        // Add listener for NumberPicker changes
         npHour.setOnValueChangedListener { _, _, _ ->
             updateSubheaderTime()
-            updateAlarmPeriod() // Update period when hour changes
+            updateAlarmPeriod()
         }
         npMinute.setOnValueChangedListener { _, _, _ -> updateSubheaderTime() }
 
-        // Set listener for tvRepeat click to show dialog
         tvRepeat.setOnClickListener {
             showRepeatOptionsDialog()
         }
 
-        // Back button action
+        tvSkincareItem.setOnClickListener {
+            showItemSkincareOptionsDialog()
+        }
+
         val btnBack: ImageButton = findViewById(R.id.btn_back)
         btnBack.setOnClickListener {
             finish()
         }
     }
+
+    private fun showItemSkincareOptionsDialog() {
+        val skincareOptions = arrayOf(
+            "Micellar Water", "Facial Wash", "Exfoliating", "Toner", "Serum",
+            "Retinol", "Sunscreen", "Moisturizing", "Night Cream", "Eye Cream",
+            "Sleeping Mask", "Essence"
+        )
+
+        val selectedItems = BooleanArray(skincareOptions.size)
+        val selectedNames = mutableListOf<String>()
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Choose Skincare Items")
+
+        builder.setMultiChoiceItems(skincareOptions, selectedItems) { _, which, isChecked ->
+            if (isChecked) {
+                selectedNames.add(skincareOptions[which])
+            } else {
+                selectedNames.remove(skincareOptions[which])
+            }
+        }
+
+        builder.setPositiveButton("OK") { _, _ ->
+            val selectedText = selectedNames.joinToString(", ")
+            findViewById<TextView>(R.id.tvChooseSkincareItem).text = selectedText
+        }
+
+        builder.setNegativeButton("Cancel", null)
+
+        builder.create().show()
+    }
+
 
     private fun updateSubheaderTime() {
         val calendarNow = Calendar.getInstance()
@@ -93,8 +128,8 @@ class AddRemaindersActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Repeat Options")
         builder.setSingleChoiceItems(repeatOptions, currentSelection) { dialog, which ->
-            tvRepeat.text = repeatOptions[which] // Update the text in tvRepeat
-            dialog.dismiss() // Close the dialog
+            tvRepeat.text = repeatOptions[which]
+            dialog.dismiss()
         }
         builder.create().show()
     }
