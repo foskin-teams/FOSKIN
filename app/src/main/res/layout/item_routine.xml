@@ -63,6 +63,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tvSetClock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/clock"
@@ -73,6 +74,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tvDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -83,6 +85,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tvPeriode"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

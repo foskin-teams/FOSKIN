@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.NumberPicker
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,8 @@ class AddRemaindersActivity : AppCompatActivity() {
     private lateinit var tvSkincareItem: TextView
     private lateinit var tvAlarmPeriod: TextView
     private lateinit var tvChooseSkincareItem: TextView
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnSave: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,8 @@ class AddRemaindersActivity : AppCompatActivity() {
         tvAlarmPeriod = findViewById(R.id.tv_alarm_period)
         tvSkincareItem = findViewById(R.id.tv_skincare_items)
         tvChooseSkincareItem = findViewById(R.id.tvChooseSkincareItem)
+        btnBack = findViewById(R.id.btn_back)
+        btnSave = findViewById(R.id.btn_save)
 
         npHour.minValue = 0
         npHour.maxValue = 23
@@ -61,15 +66,19 @@ class AddRemaindersActivity : AppCompatActivity() {
             showItemSkincareOptionsDialog()
         }
 
-        val btnBack: ImageButton = findViewById(R.id.btn_back)
         btnBack.setOnClickListener {
             finish()
         }
 
+        btnSave.setOnClickListener {
+            if (validateInputs()) {
+                Toast.makeText(this, "Data saved successfully!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+
     }
 
-
-    // Fungsi untuk menampilkan dialog pemilihan repeat (Once / Daily)
     private fun showRepeatOptionsDialog() {
         val repeatOptions = arrayOf("Once", "Daily")
         val currentSelection = repeatOptions.indexOf(tvRepeat.text.toString())
@@ -120,7 +129,6 @@ class AddRemaindersActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-    // Fungsi untuk mengupdate subheader time
     private fun updateSubheaderTime() {
         val calendarNow = Calendar.getInstance()
         val selectedCalendar = Calendar.getInstance()
@@ -147,9 +155,38 @@ class AddRemaindersActivity : AppCompatActivity() {
         }
     }
 
-    // Fungsi untuk mengupdate alarm period
     private fun updateAlarmPeriod() {
         val hour = npHour.value
         tvAlarmPeriod.text = if (hour in 0..11) "Morning" else "Evening"
     }
+
+    private fun validateInputs(): Boolean {
+        val repeatText = tvRepeat.text.toString()
+        val skincareItemsText = tvChooseSkincareItem.text.toString()
+
+        if (repeatText.isBlank()) {
+            Toast.makeText(this, "Please select repeat option", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (skincareItemsText.isBlank()) {
+            Toast.makeText(this, "Please choose at least one skincare item", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        val currentTime = Calendar.getInstance()
+        val selectedTime = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, npHour.value)
+            set(Calendar.MINUTE, npMinute.value)
+            set(Calendar.SECOND, 0)
+        }
+
+        if (selectedTime.timeInMillis <= currentTime.timeInMillis) {
+            Toast.makeText(this, "Please select a valid future time", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
+
 }
