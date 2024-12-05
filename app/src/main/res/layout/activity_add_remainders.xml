@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:text="Edit"
                 android:fontFamily="@font/poppins_regular"
-                android:textColor="#666"
+                android:textColor="#1937CE"
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -176,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_light"
-                android:text="Micellar Water, Facial Wash, Toner, Serum"
+                android:hint="Choose your item..."
                 android:textColor="#666"
                 android:textSize="14sp" />
         </LinearLayout>

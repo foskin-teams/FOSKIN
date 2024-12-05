@@ -2,7 +2,6 @@ package com.project.foskin.ui.home.routines
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +15,7 @@ class RemaindersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_remainders)
         supportActionBar?.hide()
 
-        val tvAddNotification : TextView = findViewById(R.id.tv_add_notification)
+        val tvAddNotification: TextView = findViewById(R.id.tv_add_notification)
         val btnBack: TextView = findViewById(R.id.tvBackRemainders)
 
         tvAddNotification.setOnClickListener {

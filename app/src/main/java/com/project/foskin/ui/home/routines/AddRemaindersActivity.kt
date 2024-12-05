@@ -26,7 +26,6 @@ class AddRemaindersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_remainders)
         supportActionBar?.hide()
 
-        // Initialize components
         npHour = findViewById(R.id.np_hour)
         npMinute = findViewById(R.id.np_minute)
         tvSubheader = findViewById(R.id.tv_subheader)
@@ -50,7 +49,9 @@ class AddRemaindersActivity : AppCompatActivity() {
             updateSubheaderTime()
             updateAlarmPeriod()
         }
-        npMinute.setOnValueChangedListener { _, _, _ -> updateSubheaderTime() }
+        npMinute.setOnValueChangedListener { _, _, _ ->
+            updateSubheaderTime()
+        }
 
         tvRepeat.setOnClickListener {
             showRepeatOptionsDialog()
@@ -64,63 +65,11 @@ class AddRemaindersActivity : AppCompatActivity() {
         btnBack.setOnClickListener {
             finish()
         }
-    }
 
-    private fun showItemSkincareOptionsDialog() {
-        val skincareOptions = arrayOf(
-            "Micellar Water", "Facial Wash", "Exfoliating", "Toner", "Serum",
-            "Retinol", "Sunscreen", "Moisturizing", "Night Cream", "Eye Cream",
-            "Sleeping Mask", "Essence"
-        )
-
-        val selectedItems = BooleanArray(skincareOptions.size)
-        val selectedNames = mutableListOf<String>()
-
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Choose Skincare Items")
-
-        builder.setMultiChoiceItems(skincareOptions, selectedItems) { _, which, isChecked ->
-            if (isChecked) {
-                selectedNames.add(skincareOptions[which])
-            } else {
-                selectedNames.remove(skincareOptions[which])
-            }
-        }
-
-        builder.setPositiveButton("OK") { _, _ ->
-            val selectedText = selectedNames.joinToString(", ")
-            findViewById<TextView>(R.id.tvChooseSkincareItem).text = selectedText
-        }
-
-        builder.setNegativeButton("Cancel", null)
-
-        builder.create().show()
     }
 
 
-    private fun updateSubheaderTime() {
-        val calendarNow = Calendar.getInstance()
-
-        val currentTimeInMinutes = calendarNow.get(Calendar.HOUR_OF_DAY) * 60 + calendarNow.get(Calendar.MINUTE)
-
-        val totalMinutesSelected = npHour.value * 60 + npMinute.value
-
-        val remainingTimeInMinutes = totalMinutesSelected - currentTimeInMinutes
-
-        if (remainingTimeInMinutes > 0) {
-            val remainingHours = remainingTimeInMinutes / 60
-            val remainingMinutes = remainingTimeInMinutes % 60
-            tvSubheader.text = "Alarm in $remainingHours hour $remainingMinutes minute"
-        } else {
-            tvSubheader.text = "Alarm time has passed"
-        }
-    }
-
-    private fun updateAlarmPeriod() {
-        val hour = npHour.value
-        tvAlarmPeriod.text = if (hour in 0..11) "Morning" else "Evening"
-    }
-
+    // Fungsi untuk menampilkan dialog pemilihan repeat (Once / Daily)
     private fun showRepeatOptionsDialog() {
         val repeatOptions = arrayOf("Once", "Daily")
         val currentSelection = repeatOptions.indexOf(tvRepeat.text.toString())
@@ -132,5 +81,75 @@ class AddRemaindersActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         builder.create().show()
+    }
+
+    private fun showItemSkincareOptionsDialog() {
+        val skincareOptions = arrayOf(
+            "Micellar Water", "Facial Wash", "Exfoliating", "Toner", "Essence", "Serum",
+            "Retinol", "Moisturizing", "Eye Cream", "Night Cream", "Sleeping Mask", "Sunscreen"
+        )
+
+        val selectedItems = mutableListOf<String>()
+        val currentItemsText = tvChooseSkincareItem.text.toString()
+        selectedItems.addAll(currentItemsText.split(", ").filter { it.isNotBlank() })
+
+        val checkedItems = skincareOptions.map { selectedItems.contains(it) }.toBooleanArray()
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Choose Skincare Items")
+
+        builder.setMultiChoiceItems(skincareOptions, checkedItems) { _, which, isChecked ->
+            val selectedItem = skincareOptions[which]
+            if (isChecked) {
+                if (!selectedItems.contains(selectedItem)) {
+                    selectedItems.add(selectedItem)
+                }
+            } else {
+                selectedItems.remove(selectedItem)
+            }
+        }
+
+        builder.setPositiveButton("OK") { _, _ ->
+            val sortedSelectedItems = selectedItems.sortedBy { skincareOptions.indexOf(it) }
+            val selectedText = sortedSelectedItems.joinToString(", ")
+            tvChooseSkincareItem.text = selectedText
+        }
+
+        builder.setNegativeButton("Cancel", null)
+
+        builder.create().show()
+    }
+
+    // Fungsi untuk mengupdate subheader time
+    private fun updateSubheaderTime() {
+        val calendarNow = Calendar.getInstance()
+        val selectedCalendar = Calendar.getInstance()
+
+        selectedCalendar.set(Calendar.HOUR_OF_DAY, npHour.value)
+        selectedCalendar.set(Calendar.MINUTE, npMinute.value)
+        selectedCalendar.set(Calendar.SECOND, 0)
+
+        if (selectedCalendar.timeInMillis <= calendarNow.timeInMillis) {
+            selectedCalendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        val diffInMillis = selectedCalendar.timeInMillis - calendarNow.timeInMillis
+        val diffInMinutes = (diffInMillis / (1000 * 60)).toInt()
+
+        val days = diffInMinutes / (24 * 60)
+        val hours = (diffInMinutes % (24 * 60)) / 60
+        val minutes = (diffInMinutes % 60)
+
+        tvSubheader.text = when {
+            days > 0 -> "Alarm in $days day $hours hour $minutes minute"
+            hours > 0 || minutes > 0 -> "Alarm in $hours hour $minutes minute"
+            else -> "Alarm time has passed"
+        }
+    }
+
+    // Fungsi untuk mengupdate alarm period
+    private fun updateAlarmPeriod() {
+        val hour = npHour.value
+        tvAlarmPeriod.text = if (hour in 0..11) "Morning" else "Evening"
     }
 }
