@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="30dp"
+    tools:context=".ui.home.routines.AddRemaindersActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:ignore="MissingConstraints">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/back_arrow_black"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Kembali" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tambah alarm"
+                android:textColor="#000"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <ImageButton
+                android:id="@+id/btn_save"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/check_success"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Simpan" />
+        </LinearLayout>
+
+        <!-- Sub Header -->
+        <TextView
+            android:id="@+id/tv_subheader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alarm dalam 7 jam 7 menit"
+            android:textColor="#666"
+            android:fontFamily="@font/poppins_light"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Time Picker -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <NumberPicker
+                android:id="@+id/np_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="center" />
+
+            <NumberPicker
+                android:id="@+id/np_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+
+        <!-- Nada Dering -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nada dering"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_alarm_tone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alarm natural"
+                android:fontFamily="@font/poppins_light"
+                android:textColor="#666"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Ulangi"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sekali"
+                android:fontFamily="@font/poppins_light"
+                android:textColor="#666"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Getar saat alarm berbunyi"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/switch_vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Hapus setelah berbunyi"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/switch_delete_after_ringing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Label -->
+        <EditText
+            android:id="@+id/et_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Masukkan label"
+            android:background="#FFF"
+            android:fontFamily="@font/poppins_regular"
+            android:padding="12dp"
+            android:inputType="text"
+            android:textColor="#000"
+            android:textSize="16sp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

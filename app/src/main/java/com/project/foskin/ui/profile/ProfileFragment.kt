@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.project.foskin.R
 import com.project.foskin.ui.Auth.EnterWhatsappNumberActivity
-import com.project.foskin.ui.remainders.RemaindersActivity
+import com.project.foskin.ui.home.routines.RemaindersActivity
 
 class ProfileFragment : Fragment() {
 
@@ -47,12 +47,6 @@ class ProfileFragment : Fragment() {
 
         layoutLogout.setOnClickListener {
             showLogoutConfirmation()
-        }
-
-        val btnRemainders = view.findViewById<Button>(R.id.btnRemainders)
-        btnRemainders.setOnClickListener {
-            val intent = Intent(context, RemaindersActivity::class.java)
-            startActivity(intent)
         }
 
         return view

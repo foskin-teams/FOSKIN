@@ -23,6 +23,7 @@ import com.project.foskin.ui.home.blog.BlogActivity
 import com.project.foskin.ui.home.blog.BlogAdapter
 import com.project.foskin.ui.home.blog.BlogItem
 import com.project.foskin.ui.home.blog.DetailBlogActivity
+import com.project.foskin.ui.home.routines.RemaindersActivity
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
@@ -254,7 +255,8 @@ class HomeFragment : Fragment() {
         val ivBlog = view.findViewById<ImageView>(R.id.ivBlog)
 
         ivRoutines.setOnClickListener {
-            Toast.makeText(context, "Routines clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, RemaindersActivity::class.java)
+            startActivity(intent)
         }
 
         ivClinic.setOnClickListener {
