@@ -19,9 +19,8 @@
 
     <fragment
         android:id="@+id/navigation_detect"
-        android:name="com.project.foskin.ui.detect.DetectFragment"
-        android:label="@string/title_detect"
-        tools:layout="@layout/fragment_detect" />
+        android:name="com.project.foskin.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home"/>
 
     <fragment
         android:id="@+id/navigation_message"
