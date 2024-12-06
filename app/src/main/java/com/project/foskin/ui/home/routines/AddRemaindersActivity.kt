@@ -1,13 +1,19 @@
 package com.project.foskin.ui.home.routines
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.NumberPicker
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.project.foskin.R
 import java.util.*
 
@@ -22,6 +28,7 @@ class AddRemaindersActivity : AppCompatActivity() {
     private lateinit var tvChooseSkincareItem: TextView
     private lateinit var btnBack: ImageButton
     private lateinit var btnSave: ImageButton
+    private lateinit var alarmViewModel: AlarmViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +45,8 @@ class AddRemaindersActivity : AppCompatActivity() {
         tvChooseSkincareItem = findViewById(R.id.tvChooseSkincareItem)
         btnBack = findViewById(R.id.btn_back)
         btnSave = findViewById(R.id.btn_save)
+        alarmViewModel = ViewModelProvider(this)[AlarmViewModel::class.java]
+
 
         npHour.minValue = 0
         npHour.maxValue = 23
@@ -72,12 +81,56 @@ class AddRemaindersActivity : AppCompatActivity() {
 
         btnSave.setOnClickListener {
             if (validateInputs()) {
-                Toast.makeText(this, "Data saved successfully!", Toast.LENGTH_SHORT).show()
+                val hour = npHour.value
+                val minute = npMinute.value
+                val period = tvAlarmPeriod.text.toString()
+                val repeat = tvRepeat.text.toString()
+                val skincareItems = tvChooseSkincareItem.text.toString()
+                val vibrate = findViewById<Switch>(R.id.switch_vibrate).isChecked
+                val deleteAfterRing = findViewById<Switch>(R.id.switch_delete_after_ringing).isChecked
+
+                // Generate a unique ID for the new alarm
+                val newAlarm = AlarmData(
+                    id = System.currentTimeMillis(),  // Use the current time in milliseconds as a unique ID
+                    hour = hour,
+                    minute = minute,
+                    period = period,
+                    repeat = repeat,
+                    skincareItems = skincareItems,
+                    vibrate = vibrate,
+                    deleteAfterRinging = deleteAfterRing
+                )
+
+                alarmViewModel.addAlarm(this, newAlarm)
+
+                // Memperbarui tampilan segera setelah menambahkan alarm
+                alarmViewModel.loadAlarms(this)
+
+                Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
 
     }
+
+    private fun setAlarm(hour: Int, minute: Int, message: String) {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+        }
+
+        val alarmIntent = Intent(this, AlarmReceiver::class.java).apply {
+            putExtra("alarm_message", message)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
 
     private fun showRepeatOptionsDialog() {
         val repeatOptions = arrayOf("Once", "Daily")
