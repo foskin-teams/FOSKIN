@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.project.foskin.R
 
 class RemaindersActivity : AppCompatActivity() {
@@ -15,6 +16,11 @@ class RemaindersActivity : AppCompatActivity() {
     private lateinit var alarmViewModel: AlarmViewModel
     private lateinit var alarmAdapter: AlarmAdapter
     private lateinit var tvRemove: TextView
+    private lateinit var tvNextIntakeEmpty: TextView
+    private lateinit var tvPastIntakeEmpty: TextView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var rvNextIntake: RecyclerView
+    private lateinit var rvPastIntake: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,31 +29,35 @@ class RemaindersActivity : AppCompatActivity() {
 
         val tvAddNotification: TextView = findViewById(R.id.tv_add_notification)
         val btnBack: TextView = findViewById(R.id.tvBackRemainders)
-        val rvNextIntake: RecyclerView = findViewById(R.id.rv_next_intake)
-        val tvNextIntakeEmpty: TextView = findViewById(R.id.tv_next_intake_empty)
-        tvRemove = findViewById(R.id.tv_remove)  // Initialize tv_remove
+        rvNextIntake = findViewById(R.id.rv_next_intake)
+        rvPastIntake = findViewById(R.id.rv_past_intake)
+        tvNextIntakeEmpty = findViewById(R.id.tv_next_intake_empty)
+        tvPastIntakeEmpty = findViewById(R.id.tv_past_intake_empty)
+        tvRemove = findViewById(R.id.tv_remove)
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
 
         alarmViewModel = ViewModelProvider(this)[AlarmViewModel::class.java]
 
         alarmAdapter = AlarmAdapter(mutableListOf()) { updatedAlarm ->
-            alarmViewModel.addAlarm(this, updatedAlarm) // Update SharedPreferences
-            updateRemoveVisibility()  // Check visibility of tv_remove after state change
+            alarmViewModel.addAlarm(this, updatedAlarm)
+            updateRemoveVisibility()
         }
 
         rvNextIntake.adapter = alarmAdapter
         rvNextIntake.layoutManager = LinearLayoutManager(this)
 
         alarmViewModel.alarms.observe(this) { alarms ->
-            val sortedAlarms = alarms.sortedBy { it.timeInMillis() }
-            alarmAdapter.updateData(sortedAlarms)
-            toggleEmptyState(rvNextIntake, tvNextIntakeEmpty, sortedAlarms.isEmpty())
-
-            // Ensure visibility of tv_remove after updating the list
+            alarmAdapter.updateData(alarms.sortedBy { it.timeInMillis() })
+            toggleEmptyState(rvNextIntake, tvNextIntakeEmpty, alarms.isEmpty())
             updateRemoveVisibility()
         }
 
+        // Past intake RecyclerView
+        val pastAlarms = mutableListOf<AlarmData>() // Get past alarms here
+        toggleEmptyState(rvPastIntake, tvPastIntakeEmpty, pastAlarms.isEmpty())
+
         tvAddNotification.setOnClickListener {
-            // Navigate to AddRemaindersActivity
             startActivity(Intent(this, AddRemaindersActivity::class.java))
         }
 
@@ -57,35 +67,39 @@ class RemaindersActivity : AppCompatActivity() {
 
         alarmViewModel.loadAlarms(this)
 
-        // Handle click event for tv_remove
+        alarmViewModel.startAutoRefresh(this)
+
         tvRemove.setOnClickListener {
-            val checkedAlarms = alarmAdapter.getCheckedItems() // Get checked alarms
+            val checkedAlarms = alarmAdapter.getCheckedItems()
             checkedAlarms.forEach { alarm ->
-                alarmViewModel.removeAlarm(this, alarm) // Remove each checked alarm
+                alarmViewModel.removeAlarm(this, alarm)
             }
 
-            // After removal, update the visibility of tv_remove
             updateRemoveVisibility()
         }
+
+        swipeRefreshLayout.setEnabled(false)
+
+        hideRecyclerView(true)
     }
 
     private fun updateRemoveVisibility() {
-        // Show or hide tv_remove based on whether any checkbox is checked
-        val hasCheckedItems = alarmAdapter.hasCheckedItems() // This method checks for checked items
-        if (hasCheckedItems) {
-            tvRemove.visibility = View.VISIBLE
-        } else {
-            tvRemove.visibility = View.GONE
-        }
+        val hasCheckedItems = alarmAdapter.hasCheckedItems()
+        tvRemove.visibility = if (hasCheckedItems) View.VISIBLE else View.GONE
     }
 
     private fun toggleEmptyState(recyclerView: RecyclerView, emptyTextView: TextView, isEmpty: Boolean) {
-        if (isEmpty) {
-            recyclerView.visibility = View.GONE
-            emptyTextView.visibility = View.VISIBLE
+        recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        emptyTextView.visibility = if (isEmpty) View.VISIBLE else View.GONE
+    }
+
+    private fun hideRecyclerView(hide: Boolean) {
+        if (hide) {
+            rvNextIntake.visibility = View.INVISIBLE
+            swipeRefreshLayout.setEnabled(false)
         } else {
-            recyclerView.visibility = View.VISIBLE
-            emptyTextView.visibility = View.GONE
+            rvNextIntake.visibility = View.VISIBLE
+            swipeRefreshLayout.setEnabled(true)
         }
     }
 }

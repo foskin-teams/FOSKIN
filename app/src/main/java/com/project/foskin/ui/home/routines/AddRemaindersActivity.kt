@@ -89,9 +89,8 @@ class AddRemaindersActivity : AppCompatActivity() {
                 val vibrate = findViewById<Switch>(R.id.switch_vibrate).isChecked
                 val deleteAfterRing = findViewById<Switch>(R.id.switch_delete_after_ringing).isChecked
 
-                // Generate a unique ID for the new alarm
                 val newAlarm = AlarmData(
-                    id = System.currentTimeMillis(),  // Use the current time in milliseconds as a unique ID
+                    id = System.currentTimeMillis(),
                     hour = hour,
                     minute = minute,
                     period = period,
@@ -103,14 +102,13 @@ class AddRemaindersActivity : AppCompatActivity() {
 
                 alarmViewModel.addAlarm(this, newAlarm)
 
-                // Memperbarui tampilan segera setelah menambahkan alarm
+                // Load alarms immediately
                 alarmViewModel.loadAlarms(this)
 
                 Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
-
     }
 
     private fun setAlarm(hour: Int, minute: Int, message: String) {

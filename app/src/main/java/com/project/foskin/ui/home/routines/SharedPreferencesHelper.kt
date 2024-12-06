@@ -19,8 +19,10 @@ object SharedPreferencesHelper {
 
     fun getAlarms(context: Context): List<AlarmData> {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val json = sharedPreferences.getString(ALARM_LIST_KEY, null) ?: return emptyList()
+        val json = sharedPreferences.getString(ALARM_LIST_KEY, null)
         val type = object : TypeToken<List<AlarmData>>() {}.type
-        return Gson().fromJson(json, type)
+        val alarms = Gson().fromJson<List<AlarmData>>(json, type) ?: emptyList()
+
+        return alarms
     }
 }

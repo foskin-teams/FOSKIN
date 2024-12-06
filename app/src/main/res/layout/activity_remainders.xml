@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -71,20 +70,23 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_next_intake"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:nestedScrollingEnabled="false"
-            android:overScrollMode="ifContentScrolls" />
+            android:layout_height="300dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_next_intake"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/tv_next_intake_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_medium"
             android:text="Data empty, please add remainders before"
             android:textColor="@color/grey"
@@ -101,13 +103,17 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_past_intake"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_intake"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:nestedScrollingEnabled="false"
-            android:overScrollMode="ifContentScrolls" />
+            android:layout_height="300dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_past_intake"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/tv_past_intake_empty"
@@ -120,7 +126,6 @@
             android:textColor="@color/grey"
             android:textSize="16sp"
             android:visibility="gone" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

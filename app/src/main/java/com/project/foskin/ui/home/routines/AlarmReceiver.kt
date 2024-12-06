@@ -1,5 +1,6 @@
 package com.project.foskin.ui.home.routines
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.project.foskin.R
 
 class AlarmReceiver : BroadcastReceiver() {
+    @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         val message = intent.getStringExtra("alarm_message") ?: "Alarm is ringing!"
         val notification = NotificationCompat.Builder(context, "alarm_channel")

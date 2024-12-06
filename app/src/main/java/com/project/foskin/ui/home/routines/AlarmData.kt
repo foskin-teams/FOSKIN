@@ -3,7 +3,7 @@ package com.project.foskin.ui.home.routines
 import java.util.Calendar
 
 data class AlarmData(
-    val id: Long,  // ID unik untuk setiap alarm
+    val id: Long,
     val hour: Int,
     val minute: Int,
     val period: String,
@@ -13,7 +13,6 @@ data class AlarmData(
     val deleteAfterRinging: Boolean
 )
 
-// Fungsi untuk mengembalikan waktu alarm dalam milidetik
 fun AlarmData.timeInMillis(): Long {
     val now = Calendar.getInstance()
     val alarmTime = Calendar.getInstance()
