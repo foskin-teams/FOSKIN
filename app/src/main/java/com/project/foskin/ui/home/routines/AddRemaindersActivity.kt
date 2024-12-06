@@ -174,18 +174,6 @@ class AddRemaindersActivity : AppCompatActivity() {
             return false
         }
 
-        val currentTime = Calendar.getInstance()
-        val selectedTime = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, npHour.value)
-            set(Calendar.MINUTE, npMinute.value)
-            set(Calendar.SECOND, 0)
-        }
-
-        if (selectedTime.timeInMillis <= currentTime.timeInMillis) {
-            Toast.makeText(this, "Please select a valid future time", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
         return true
     }
 

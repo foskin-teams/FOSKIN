@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.project.foskin.R
+
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
