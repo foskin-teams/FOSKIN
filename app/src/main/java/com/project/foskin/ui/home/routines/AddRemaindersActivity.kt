@@ -111,25 +111,6 @@ class AddRemaindersActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAlarm(hour: Int, minute: Int, message: String) {
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 0)
-        }
-
-        val alarmIntent = Intent(this, AlarmReceiver::class.java).apply {
-            putExtra("alarm_message", message)
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-    }
-
-
     private fun showRepeatOptionsDialog() {
         val repeatOptions = arrayOf("Once", "Daily")
         val currentSelection = repeatOptions.indexOf(tvRepeat.text.toString())

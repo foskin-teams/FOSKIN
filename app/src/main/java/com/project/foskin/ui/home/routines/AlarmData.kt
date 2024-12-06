@@ -1,7 +1,10 @@
 package com.project.foskin.ui.home.routines
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.Calendar
 
+@Parcelize
 data class AlarmData(
     val id: Long,
     val hour: Int,
@@ -11,7 +14,7 @@ data class AlarmData(
     val skincareItems: String,
     val vibrate: Boolean,
     val deleteAfterRinging: Boolean
-)
+) : Parcelable
 
 fun AlarmData.timeInMillis(): Long {
     val now = Calendar.getInstance()
