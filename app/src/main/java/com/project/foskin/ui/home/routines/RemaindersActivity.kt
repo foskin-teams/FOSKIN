@@ -14,11 +14,11 @@ import com.project.foskin.R
 class RemaindersActivity : AppCompatActivity() {
 
     private lateinit var alarmViewModel: AlarmViewModel
-    private lateinit var alarmAdapter: AlarmAdapter
     private lateinit var tvRemove: TextView
     private lateinit var tvNextIntakeEmpty: TextView
     private lateinit var tvPastIntakeEmpty: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var swipeRefreshLayoutPast: SwipeRefreshLayout
     private lateinit var rvNextIntake: RecyclerView
     private lateinit var rvPastIntake: RecyclerView
 
@@ -36,26 +36,57 @@ class RemaindersActivity : AppCompatActivity() {
         tvRemove = findViewById(R.id.tv_remove)
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+        swipeRefreshLayoutPast = findViewById(R.id.swipe_refresh_layout_intake)
 
         alarmViewModel = ViewModelProvider(this)[AlarmViewModel::class.java]
 
-        alarmAdapter = AlarmAdapter(mutableListOf()) { updatedAlarm ->
-            alarmViewModel.addAlarm(this, updatedAlarm)
-            updateRemoveVisibility()
-        }
+        val upcomingAlarmAdapter = UpcomingAlarmAdapter(
+            alarms = mutableListOf(),
+            onAlarmChecked = {
+                updateRemoveVisibility()
+            }
+        )
 
-        rvNextIntake.adapter = alarmAdapter
+        rvNextIntake.adapter = upcomingAlarmAdapter
         rvNextIntake.layoutManager = LinearLayoutManager(this)
 
+        val pastAlarmAdapter = PastAlarmAdapter(
+            alarms = mutableListOf(),
+            onAlarmChecked = {
+                updateRemoveVisibility()
+            }
+        )
+
+        rvPastIntake.adapter = pastAlarmAdapter
+        rvPastIntake.layoutManager = LinearLayoutManager(this)
+
         alarmViewModel.alarms.observe(this) { alarms ->
-            alarmAdapter.updateData(alarms.sortedBy { it.timeInMillis() })
-            toggleEmptyState(rvNextIntake, tvNextIntakeEmpty, alarms.isEmpty())
-            updateRemoveVisibility()
+            val currentTimeMillis = System.currentTimeMillis()
+
+            val upcomingAlarms = alarms.filter { it.timeInMillis() > currentTimeMillis }
+            val pastAlarms = alarms.filter { it.timeInMillis() <= currentTimeMillis }
+
+            (rvNextIntake.adapter as UpcomingAlarmAdapter).updateData(upcomingAlarms)
+
+            (rvPastIntake.adapter as PastAlarmAdapter).updateData(pastAlarms)
+
+            toggleEmptyState(rvNextIntake, tvNextIntakeEmpty, upcomingAlarms.isEmpty())
+            toggleEmptyState(rvPastIntake, tvPastIntakeEmpty, pastAlarms.isEmpty())
         }
 
-        // Past intake RecyclerView
-        val pastAlarms = mutableListOf<AlarmData>() // Get past alarms here
-        toggleEmptyState(rvPastIntake, tvPastIntakeEmpty, pastAlarms.isEmpty())
+        tvRemove.setOnClickListener {
+            val checkedAlarms = mutableListOf<AlarmData>()
+            checkedAlarms.addAll((rvNextIntake.adapter as UpcomingAlarmAdapter).getCheckedItems())
+            checkedAlarms.addAll((rvPastIntake.adapter as PastAlarmAdapter).getCheckedItems())
+
+            checkedAlarms.forEach { alarm ->
+                alarmViewModel.removeAlarm(this, alarm)
+            }
+
+            (rvNextIntake.adapter as UpcomingAlarmAdapter).clearCheckedItems()
+            (rvPastIntake.adapter as PastAlarmAdapter).clearCheckedItems()
+            updateRemoveVisibility()
+        }
 
         tvAddNotification.setOnClickListener {
             startActivity(Intent(this, AddRemaindersActivity::class.java))
@@ -66,25 +97,22 @@ class RemaindersActivity : AppCompatActivity() {
         }
 
         alarmViewModel.loadAlarms(this)
-
         alarmViewModel.startAutoRefresh(this)
 
-        tvRemove.setOnClickListener {
-            val checkedAlarms = alarmAdapter.getCheckedItems()
-            checkedAlarms.forEach { alarm ->
-                alarmViewModel.removeAlarm(this, alarm)
-            }
-
-            updateRemoveVisibility()
+        swipeRefreshLayout.setOnRefreshListener {
+            alarmViewModel.loadAlarms(this)
+            swipeRefreshLayout.isRefreshing = false
         }
 
-        swipeRefreshLayout.setEnabled(false)
+        // Disable swipe for past intake
+        swipeRefreshLayoutPast.isEnabled = false
 
         hideRecyclerView(true)
     }
 
     private fun updateRemoveVisibility() {
-        val hasCheckedItems = alarmAdapter.hasCheckedItems()
+        val hasCheckedItems = (rvNextIntake.adapter as UpcomingAlarmAdapter).hasCheckedItems() ||
+                (rvPastIntake.adapter as PastAlarmAdapter).hasCheckedItems()
         tvRemove.visibility = if (hasCheckedItems) View.VISIBLE else View.GONE
     }
 
@@ -96,10 +124,14 @@ class RemaindersActivity : AppCompatActivity() {
     private fun hideRecyclerView(hide: Boolean) {
         if (hide) {
             rvNextIntake.visibility = View.INVISIBLE
-            swipeRefreshLayout.setEnabled(false)
+            rvPastIntake.visibility = View.INVISIBLE
+            swipeRefreshLayout.isEnabled = false
+            swipeRefreshLayoutPast.isEnabled = false
         } else {
             rvNextIntake.visibility = View.VISIBLE
-            swipeRefreshLayout.setEnabled(true)
+            rvPastIntake.visibility = View.VISIBLE
+            swipeRefreshLayout.isEnabled = true
+            swipeRefreshLayoutPast.isEnabled = false
         }
     }
 }

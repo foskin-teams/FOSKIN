@@ -1,6 +1,7 @@
 package com.project.foskin.ui.home.routines
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.NumberPicker
@@ -95,13 +96,23 @@ class AddRemaindersActivity : AppCompatActivity() {
                     deleteAfterRinging = deleteAfterRing
                 )
 
-                alarmViewModel.addAlarm(this, newAlarm)
+                val savedAlarms = SharedPreferencesHelper.getAlarms(this)
+                if (!savedAlarms.any { it.id == newAlarm.id }) {
+                    alarmViewModel.addAlarm(this, newAlarm)
 
-                // Load alarms immediately
-                alarmViewModel.loadAlarms(this)
+                    val alarms = savedAlarms.toMutableList()
+                    alarms.add(newAlarm)
+                    SharedPreferencesHelper.saveAlarms(this, alarms)
 
-                Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
-                finish()
+                    val intent = Intent(this, RemaindersActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+
+                    Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "This alarm already exists.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -198,7 +209,6 @@ class AddRemaindersActivity : AppCompatActivity() {
             tvSubheader.text = "Alarm time has passed"
         }
     }
-
 
     private fun updateAlarmPeriod() {
         val hour = npHour.value

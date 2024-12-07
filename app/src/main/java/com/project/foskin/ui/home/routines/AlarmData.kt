@@ -17,16 +17,11 @@ data class AlarmData(
 ) : Parcelable
 
 fun AlarmData.timeInMillis(): Long {
-    val now = Calendar.getInstance()
     val alarmTime = Calendar.getInstance()
-
     alarmTime.set(Calendar.HOUR_OF_DAY, this.hour)
     alarmTime.set(Calendar.MINUTE, this.minute)
     alarmTime.set(Calendar.SECOND, 0)
 
-    if (alarmTime.before(now)) {
-        alarmTime.add(Calendar.DAY_OF_YEAR, 1)
-    }
-
-    return alarmTime.timeInMillis - now.timeInMillis
+    return alarmTime.timeInMillis
 }
+

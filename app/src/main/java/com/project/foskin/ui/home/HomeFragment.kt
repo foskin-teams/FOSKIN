@@ -3,13 +3,14 @@ package com.project.foskin.ui.home
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,14 +18,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.project.foskin.R
 import com.project.foskin.ui.home.blog.BlogActivity
 import com.project.foskin.ui.home.blog.BlogAdapter
 import com.project.foskin.ui.home.blog.BlogItem
 import com.project.foskin.ui.home.blog.DetailBlogActivity
+import com.project.foskin.ui.home.routines.AlarmData
 import com.project.foskin.ui.home.routines.RemaindersActivity
+import com.project.foskin.ui.home.routines.SharedPreferencesHelper
+import com.project.foskin.ui.home.routines.timeInMillis
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 
 class HomeFragment : Fragment() {
 
@@ -33,6 +42,8 @@ class HomeFragment : Fragment() {
     private lateinit var notificationBadge: TextView
     private lateinit var btnNotification: ImageButton
     private lateinit var btnSeeAllBlog: TextView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var btnSeeAllRoutine: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +57,11 @@ class HomeFragment : Fragment() {
         btnNotification = view.findViewById(R.id.btnNotification)
         notificationBadge = view.findViewById(R.id.notificationBadge)
         btnSeeAllBlog = view.findViewById(R.id.btnSeeAllBlog)
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
+        btnSeeAllRoutine = view.findViewById(R.id.btnSeeAllRoutine)
 
         val rvBlogHome = view.findViewById<RecyclerView>(R.id.rvBlogHome)
-        rvBlogHome.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvBlogHome.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val adapter = BlogAdapter(getBlogData(), isHomeLayout = true) { blogItem ->
             val intent = Intent(context, DetailBlogActivity::class.java).apply {
                 putExtra("BLOG_ITEM", blogItem)
@@ -57,7 +69,6 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         rvBlogHome.adapter = adapter
-
 
         updateGreeting()
 
@@ -67,13 +78,80 @@ class HomeFragment : Fragment() {
             "https://drive.google.com/uc?id=1DE6Rt55zuHLBsLyZqpq1XpwCWS23e0Zn"
         )
 
+        btnSeeAllRoutine.setOnClickListener {
+            val intent = Intent(context, RemaindersActivity::class.java)
+            startActivity(intent)
+        }
+
         setupFormattedText(view)
         setupBannerPromoClick(view)
         setupNotificationBadge()
         setupImageViewClickListeners(view)
         setupSeeAllBlogClick()
 
+        val savedAlarms = SharedPreferencesHelper.getAlarms(requireContext())
+
+        if (savedAlarms.isNotEmpty()) {
+            val latestAlarm = savedAlarms.last()
+
+            view.findViewById<TextView>(R.id.showItemSkincare).text = latestAlarm.skincareItems
+
+            updateDateTime(view)
+            view.findViewById<TextView>(R.id.showTimeSkincare).text = String.format("%02d:%02d", latestAlarm.hour, latestAlarm.minute)
+        }
+
+        swipeRefreshLayout.isEnabled = false
+
+        setupRealTimeUpdate(view)
+
+        if (savedAlarms.isNotEmpty()) {
+            updateCardRemainders(view)
+        }
+
         return view
+    }
+
+    private fun updateDateTime(view: View) {
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val formattedDate = dateFormat.format(Calendar.getInstance().time)
+        view.findViewById<TextView>(R.id.showDateSkincare).text = formattedDate
+    }
+
+    private fun getUpcomingAlarm(alarms: List<AlarmData>): AlarmData? {
+        val currentTimeMillis = System.currentTimeMillis()
+        return alarms
+            .filter { it.timeInMillis() >= currentTimeMillis }
+            .minByOrNull { it.timeInMillis() - currentTimeMillis }
+    }
+
+    private fun updateCardRemainders(view: View) {
+        val savedAlarms = SharedPreferencesHelper.getAlarms(requireContext())
+
+        val upcomingAlarm = getUpcomingAlarm(savedAlarms)
+
+        if (upcomingAlarm != null) {
+            view.findViewById<TextView>(R.id.showItemSkincare).text = upcomingAlarm.skincareItems
+            view.findViewById<TextView>(R.id.showTimeSkincare).text =
+                String.format("%02d:%02d", upcomingAlarm.hour, upcomingAlarm.minute)
+        } else {
+            view.findViewById<TextView>(R.id.showItemSkincare).text = getString(R.string.no_upcoming_alarm)
+            view.findViewById<TextView>(R.id.showTimeSkincare).text = getString(R.string.no_time_alarm)
+        }
+
+        updateDateTime(view)
+    }
+
+    private fun setupRealTimeUpdate(view: View) {
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                activity?.runOnUiThread {
+                    // Memperbarui data setiap detik
+                    updateDateTime(view)
+                    updateCardRemainders(view)
+                }
+            }
+        }, 0, 1000)
     }
 
     private fun setupSeeAllBlogClick() {

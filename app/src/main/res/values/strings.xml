@@ -65,5 +65,7 @@
     <string name="product_scan">Product Scan</string>
     <string name="termsAndPolicyText">By signing up, you agree to our Terms of Service and Privacy Policy</string>
     <string name="desc_detail_blog">Achieving glowing skin isn\'t just about external care; it’s a holistic process that involves nurturing your skin from within. A consistent skincare routine is the first step. This includes cleansing, toning, and moisturizing your skin every day. Cleansing removes dirt and oil, while toning restores the skin’s natural pH balance, and moisturizing ensures hydration. \n\n Diet also plays a vital role in your skin\'s health. Incorporating antioxidant-rich foods like berries, leafy greens, and nuts can protect your skin against free radicals that cause premature aging. Additionally, drinking at least eight glasses of water daily helps flush toxins from your system and keeps your skin plump and hydrated. \n\n Lastly, sun protection is a non-negotiable. Harmful UV rays can cause pigmentation, fine lines, and even skin cancer. Applying sunscreen with at least SPF 30 before stepping out, even on cloudy days, can prevent sun damage and maintain your skin’s youthful glow.</string>
+    <string name="no_upcoming_alarm">Choose your item skincare in menu Routine</string>
+    <string name="no_time_alarm">Set your time</string>
 
 </resources>
