@@ -400,7 +400,7 @@
                                 android:id="@+id/btnDetail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/bg_reschedule" />
+                                android:background="@drawable/bg_detail" />
 
                             <TextView
                                 android:layout_width="match_parent"
