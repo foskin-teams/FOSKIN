@@ -10,6 +10,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -128,11 +129,40 @@ class HomeFragment : Fragment() {
             .minByOrNull { it.timeInMillis() - currentTimeMillis }
     }
 
+    private fun updateCardRemainders(view: View) {
+        val savedAlarms = SharedPreferencesHelper.getAlarms(requireContext())
+
+        val upcomingAlarm = getUpcomingAlarm(savedAlarms)
+
+        // Update the UI elements based on the upcoming alarm
+        if (upcomingAlarm != null) {
+            view.findViewById<TextView>(R.id.showItemSkincare).text = upcomingAlarm.skincareItems
+            view.findViewById<TextView>(R.id.showTimeSkincare).text =
+                String.format("%02d:%02d", upcomingAlarm.hour, upcomingAlarm.minute)
+
+            // Enable the Detail button since there is an upcoming alarm
+            btnDetail.isEnabled = true
+        } else {
+            // Handle case when no upcoming alarm exists
+            view.findViewById<TextView>(R.id.showItemSkincare).text = getString(R.string.no_upcoming_alarm)
+            view.findViewById<TextView>(R.id.showTimeSkincare).text = getString(R.string.no_time_alarm)
+
+            // Disable the Detail button if no upcoming alarm
+            btnDetail.isEnabled = false
+        }
+
+        // Update the current date
+        updateDateTime(view)
+    }
+
     private fun showItemDetailsDialog() {
         val savedAlarms = SharedPreferencesHelper.getAlarms(requireContext())
 
         if (savedAlarms.isNotEmpty()) {
             val latestAlarm = savedAlarms.last()
+
+            val scaleAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.btn_click_effect)
+            btnDetail.startAnimation(scaleAnim)
 
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_item_details, null)
             val textSkincareItems = dialogView.findViewById<TextView>(R.id.textSkincareSteps)
@@ -141,15 +171,12 @@ class HomeFragment : Fragment() {
             val skincareSteps = latestAlarm.skincareItems.split(",")
             val formattedSteps = StringBuilder()
 
-            // Create numbered list for skincare steps
             skincareSteps.forEachIndexed { index, step ->
                 formattedSteps.append("${index + 1}. ${step.trim()}\n")
             }
 
-            // Set formatted skincare steps
             textSkincareItems.text = formattedSteps.toString()
 
-            // Format the date
             val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
             val formattedDate = dateFormat.format(Calendar.getInstance().time)
             textDate.text = formattedDate
@@ -163,22 +190,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateCardRemainders(view: View) {
-        val savedAlarms = SharedPreferencesHelper.getAlarms(requireContext())
-
-        val upcomingAlarm = getUpcomingAlarm(savedAlarms)
-
-        if (upcomingAlarm != null) {
-            view.findViewById<TextView>(R.id.showItemSkincare).text = upcomingAlarm.skincareItems
-            view.findViewById<TextView>(R.id.showTimeSkincare).text =
-                String.format("%02d:%02d", upcomingAlarm.hour, upcomingAlarm.minute)
-        } else {
-            view.findViewById<TextView>(R.id.showItemSkincare).text = getString(R.string.no_upcoming_alarm)
-            view.findViewById<TextView>(R.id.showTimeSkincare).text = getString(R.string.no_time_alarm)
-        }
-
-        updateDateTime(view)
-    }
 
     private fun setupRealTimeUpdate(view: View) {
         val timer = Timer()
@@ -187,11 +198,12 @@ class HomeFragment : Fragment() {
                 activity?.runOnUiThread {
                     // Memperbarui data setiap detik
                     updateDateTime(view)
-                    updateCardRemainders(view)
+                    updateCardRemainders(view)  // This will enable or disable the Detail button based on the upcoming alarm
                 }
             }
         }, 0, 1000)
     }
+
 
     private fun setupSeeAllBlogClick() {
         btnSeeAllBlog.setOnClickListener {
