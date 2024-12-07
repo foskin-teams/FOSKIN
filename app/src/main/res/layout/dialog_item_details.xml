@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="@drawable/dialog_rounded_background"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/textTitleDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detail Alarm"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/textTitleStep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Step by step use your Skincare :"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="#000000"
+        android:gravity="start"/>
+
+    <TextView
+        android:id="@+id/textSkincareSteps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="Step by step use your Skincare :\n1. Micellar Water\n2. Facial Wash\n3. Toner\n4. Serum\n5. Eye Cream\n6. Night Cream\n7. Sunscreen"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Desember 07, 2024"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_light"
+        android:textColor="#000000"
+        android:gravity="end"
+        android:layout_marginBottom="16dp"/>
+
+</LinearLayout>

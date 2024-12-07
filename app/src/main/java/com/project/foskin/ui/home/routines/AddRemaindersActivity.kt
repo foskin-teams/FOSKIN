@@ -92,17 +92,45 @@ class AddRemaindersActivity : AppCompatActivity() {
                     period = period,
                     repeat = repeat,
                     skincareItems = skincareItems,
-                    vibrate = false,
+                    vibrate = vibrate,
                     deleteAfterRinging = deleteAfterRing
                 )
 
                 val savedAlarms = SharedPreferencesHelper.getAlarms(this)
-                if (!savedAlarms.any { it.id == newAlarm.id }) {
+
+                val existingAlarm = savedAlarms.find {
+                    it.hour == hour && it.minute == minute
+                }
+
+                if (existingAlarm != null) {
+                    AlertDialog.Builder(this)
+                        .setTitle("Time Conflict")
+                        .setMessage("An alarm is already set for ${String.format("%02d:%02d", hour, minute)}. Do you want to delete the previous alarm?")
+                        .setPositiveButton("Yes") { dialog, _ ->
+                            val updatedAlarms = savedAlarms.filter { it.id != existingAlarm.id }.toMutableList()
+                            SharedPreferencesHelper.saveAlarms(this, updatedAlarms) // Save updated list
+
+                            alarmViewModel.addAlarm(this, newAlarm)
+                            updatedAlarms.add(newAlarm)
+                            SharedPreferencesHelper.saveAlarms(this, updatedAlarms)
+
+                            val intent = Intent(this, RemaindersActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            startActivity(intent)
+
+                            Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                } else {
                     alarmViewModel.addAlarm(this, newAlarm)
 
-                    val alarms = savedAlarms.toMutableList()
-                    alarms.add(newAlarm)
-                    SharedPreferencesHelper.saveAlarms(this, alarms)
+                    val updatedAlarms = savedAlarms.toMutableList()
+                    updatedAlarms.add(newAlarm)
+                    SharedPreferencesHelper.saveAlarms(this, updatedAlarms)
 
                     val intent = Intent(this, RemaindersActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -110,8 +138,6 @@ class AddRemaindersActivity : AppCompatActivity() {
 
                     Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
                     finish()
-                } else {
-                    Toast.makeText(this, "This alarm already exists.", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -17,6 +17,7 @@
         android:orientation="horizontal">
 
         <View
+            android:id="@+id/vBackgroundRoutine"
             android:layout_width="12dp"
             android:layout_height="match_parent"
             android:background="@color/teal_200" />

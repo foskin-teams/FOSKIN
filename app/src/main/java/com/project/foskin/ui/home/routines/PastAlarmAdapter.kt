@@ -21,6 +21,7 @@ class PastAlarmAdapter(
         val tvRepeat: TextView = view.findViewById(R.id.tvRepeat)
         val tvPeriode: TextView = view.findViewById(R.id.tvPeriode)
         val ivCheck: ImageButton = view.findViewById(R.id.iv_check)
+        val vBackgroundRoutine: View = view.findViewById(R.id.vBackgroundRoutine)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PastAlarmViewHolder {
@@ -36,6 +37,12 @@ class PastAlarmAdapter(
         holder.tvTime.text = formattedTime
         holder.tvRepeat.text = alarm.repeat
         holder.tvPeriode.text = alarm.period
+
+        // Set background color to purple for past alarms
+        holder.vBackgroundRoutine.setBackgroundColor(holder.itemView.context.getColor(R.color.purple_500))
+
+        // Add blur effect (or a simulated layer effect for now)
+        holder.itemView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
         val checkIcon = if (checkedItems.contains(alarm)) {
             R.drawable.check_circle_remainders
@@ -71,8 +78,16 @@ class PastAlarmAdapter(
     }
 
     fun updateData(newAlarms: List<AlarmData>) {
+        // Update data in the adapter
         alarms.clear()
         alarms.addAll(newAlarms)
+
+        // If the size exceeds 4, remove the oldest items
+        if (alarms.size > 4) {
+            alarms.sortBy { it.timeInMillis() }  // Sort based on time (assuming timeInMillis returns a timestamp)
+            alarms = alarms.takeLast(4).toMutableList()  // Keep only the 4 most recent items
+        }
+
         notifyDataSetChanged()
     }
 }

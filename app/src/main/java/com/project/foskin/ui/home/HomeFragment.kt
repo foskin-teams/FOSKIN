@@ -1,10 +1,9 @@
 package com.project.foskin.ui.home
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -44,6 +43,7 @@ class HomeFragment : Fragment() {
     private lateinit var btnSeeAllBlog: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var btnSeeAllRoutine: TextView
+    private lateinit var btnDetail: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +59,7 @@ class HomeFragment : Fragment() {
         btnSeeAllBlog = view.findViewById(R.id.btnSeeAllBlog)
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
         btnSeeAllRoutine = view.findViewById(R.id.btnSeeAllRoutine)
+        btnDetail = view.findViewById(R.id.btnDetail)
 
         val rvBlogHome = view.findViewById<RecyclerView>(R.id.rvBlogHome)
         rvBlogHome.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -71,6 +72,9 @@ class HomeFragment : Fragment() {
         rvBlogHome.adapter = adapter
 
         updateGreeting()
+        btnDetail.setOnClickListener {
+            showItemDetailsDialog()
+        }
 
         val bannerPromoHome = view.findViewById<ImageButton>(R.id.bannerPromoHome)
         loadImageIntoButton(
@@ -122,6 +126,41 @@ class HomeFragment : Fragment() {
         return alarms
             .filter { it.timeInMillis() >= currentTimeMillis }
             .minByOrNull { it.timeInMillis() - currentTimeMillis }
+    }
+
+    private fun showItemDetailsDialog() {
+        val savedAlarms = SharedPreferencesHelper.getAlarms(requireContext())
+
+        if (savedAlarms.isNotEmpty()) {
+            val latestAlarm = savedAlarms.last()
+
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_item_details, null)
+            val textSkincareItems = dialogView.findViewById<TextView>(R.id.textSkincareSteps)
+            val textDate = dialogView.findViewById<TextView>(R.id.textDate)
+
+            val skincareSteps = latestAlarm.skincareItems.split(",")
+            val formattedSteps = StringBuilder()
+
+            // Create numbered list for skincare steps
+            skincareSteps.forEachIndexed { index, step ->
+                formattedSteps.append("${index + 1}. ${step.trim()}\n")
+            }
+
+            // Set formatted skincare steps
+            textSkincareItems.text = formattedSteps.toString()
+
+            // Format the date
+            val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(Calendar.getInstance().time)
+            textDate.text = formattedDate
+
+            val alertDialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(true)
+                .create()
+
+            alertDialog.show()
+        }
     }
 
     private fun updateCardRemainders(view: View) {

@@ -72,8 +72,8 @@ class RemaindersActivity : AppCompatActivity() {
 
             toggleEmptyState(rvNextIntake, tvNextIntakeEmpty, upcomingAlarms.isEmpty())
             toggleEmptyState(rvPastIntake, tvPastIntakeEmpty, pastAlarms.isEmpty())
-
         }
+
 
         tvRemove.setOnClickListener {
             val checkedAlarms = mutableListOf<AlarmData>()
