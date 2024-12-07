@@ -1,9 +1,6 @@
 package com.project.foskin.ui.home.routines
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
+import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.NumberPicker
@@ -11,11 +8,10 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.project.foskin.R
-import java.util.*
+import java.util.Calendar
 
 class AddRemaindersActivity : AppCompatActivity() {
 
@@ -47,7 +43,6 @@ class AddRemaindersActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.btn_save)
         alarmViewModel = ViewModelProvider(this)[AlarmViewModel::class.java]
 
-
         npHour.minValue = 0
         npHour.maxValue = 23
         npHour.wrapSelectorWheel = true
@@ -56,13 +51,13 @@ class AddRemaindersActivity : AppCompatActivity() {
         npMinute.maxValue = 59
         npMinute.wrapSelectorWheel = true
 
-        updateSubheaderTime()
-        updateAlarmPeriod()
+        setTimeToNow()
 
         npHour.setOnValueChangedListener { _, _, _ ->
             updateSubheaderTime()
             updateAlarmPeriod()
         }
+
         npMinute.setOnValueChangedListener { _, _, _ ->
             updateSubheaderTime()
         }
@@ -96,7 +91,7 @@ class AddRemaindersActivity : AppCompatActivity() {
                     period = period,
                     repeat = repeat,
                     skincareItems = skincareItems,
-                    vibrate = vibrate,
+                    vibrate = false,
                     deleteAfterRinging = deleteAfterRing
                 )
 
@@ -109,6 +104,14 @@ class AddRemaindersActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    private fun setTimeToNow() {
+        val calendar = Calendar.getInstance()
+        npHour.value = calendar.get(Calendar.HOUR_OF_DAY)
+        npMinute.value = calendar.get(Calendar.MINUTE)
+        updateSubheaderTime()
+        updateAlarmPeriod()
     }
 
     private fun showRepeatOptionsDialog() {
@@ -180,12 +183,22 @@ class AddRemaindersActivity : AppCompatActivity() {
         val hours = (diffInMinutes % (24 * 60)) / 60
         val minutes = (diffInMinutes % 60)
 
-        tvSubheader.text = when {
-            days > 0 -> "Alarm in $days day $hours hour $minutes minute"
-            hours > 0 || minutes > 0 -> "Alarm in $hours hour $minutes minute"
-            else -> "Alarm time has passed"
+        if (calendarNow.get(Calendar.HOUR_OF_DAY) == npHour.value &&
+            calendarNow.get(Calendar.MINUTE) == npMinute.value) {
+            tvSubheader.text = "Alarm time has passed\nAlarm in 23 hour 59 minute"
+        }
+        else if (diffInMillis <= 60000) {
+            tvSubheader.text = "Alarm in $hours hour $minutes minute"
+        }
+        else if (days > 0) {
+            tvSubheader.text = "Alarm in $days day $hours hour $minutes minute"
+        } else if (hours > 0 || minutes > 0) {
+            tvSubheader.text = "Alarm in $hours hour $minutes minute"
+        } else {
+            tvSubheader.text = "Alarm time has passed"
         }
     }
+
 
     private fun updateAlarmPeriod() {
         val hour = npHour.value
@@ -208,5 +221,4 @@ class AddRemaindersActivity : AppCompatActivity() {
 
         return true
     }
-
 }

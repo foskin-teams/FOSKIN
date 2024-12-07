@@ -33,6 +33,7 @@ class AlarmViewModel : ViewModel() {
         handler.removeCallbacksAndMessages(null)
     }
 
+
     fun addAlarm(context: Context, alarm: AlarmData) {
         val currentAlarms = SharedPreferencesHelper.getAlarms(context).toMutableList()
         val existingAlarmIndex = currentAlarms.indexOfFirst { it.id == alarm.id }
@@ -44,6 +45,7 @@ class AlarmViewModel : ViewModel() {
         }
 
         SharedPreferencesHelper.saveAlarms(context, currentAlarms)
+
         loadAlarms(context)
     }
 
@@ -53,7 +55,9 @@ class AlarmViewModel : ViewModel() {
         if (alarmIndex != -1) {
             currentAlarms.removeAt(alarmIndex)
             SharedPreferencesHelper.saveAlarms(context, currentAlarms)
+
             loadAlarms(context)
         }
     }
+
 }

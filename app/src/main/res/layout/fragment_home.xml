@@ -307,16 +307,17 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_semi_bold"
-                                android:text="Day Routines"
+                                android:text="Skincare Routines"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
                             <TextView
+                                android:id="@+id/showItemSkincare"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:fontFamily="@font/poppins_regular"
-                                android:text="Facial Wash, Micellar Water, Toner, Sunscreen, Essence"
+                                android:text="Choose your item skincare in menu Routine"
                                 android:textColor="@color/grey"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -349,6 +350,7 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/showDateSkincare"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
@@ -373,11 +375,12 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/showTimeSkincare"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="7:00 AM - 7:30 AM"
+                                android:text="19:00 PM"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -389,7 +392,7 @@
                         android:layout_marginTop="12dp">
 
                         <ImageButton
-                            android:id="@+id/btnReschedule"
+                            android:id="@+id/btnDetail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_reschedule" />
