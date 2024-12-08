@@ -38,10 +38,8 @@ class PastAlarmAdapter(
         holder.tvRepeat.text = alarm.repeat
         holder.tvPeriode.text = alarm.period
 
-        // Set background color to purple for past alarms
         holder.vBackgroundRoutine.setBackgroundColor(holder.itemView.context.getColor(R.color.purple_500))
 
-        // Add blur effect (or a simulated layer effect for now)
         holder.itemView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
         val checkIcon = if (checkedItems.contains(alarm)) {
@@ -78,14 +76,12 @@ class PastAlarmAdapter(
     }
 
     fun updateData(newAlarms: List<AlarmData>) {
-        // Update data in the adapter
         alarms.clear()
         alarms.addAll(newAlarms)
 
-        // If the size exceeds 4, remove the oldest items
-        if (alarms.size > 4) {
-            alarms.sortBy { it.timeInMillis() }  // Sort based on time (assuming timeInMillis returns a timestamp)
-            alarms = alarms.takeLast(4).toMutableList()  // Keep only the 4 most recent items
+        if (alarms.size > 10) {
+            alarms.sortBy { it.timeInMillis() }
+            alarms = alarms.takeLast(10).toMutableList()
         }
 
         notifyDataSetChanged()

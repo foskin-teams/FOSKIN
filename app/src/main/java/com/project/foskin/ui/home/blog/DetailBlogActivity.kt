@@ -27,7 +27,6 @@ class DetailBlogActivity : AppCompatActivity() {
             val textContent = findViewById<TextView>(R.id.text_content)
             val buttonCancel = findViewById<ImageButton>(R.id.button_cancel)
 
-            // Set data ke UI
             Glide.with(this)
                 .load(blogItem.imageUrl)
                 .placeholder(R.drawable.ic_launcher_background)

@@ -11,11 +11,10 @@ import com.project.foskin.R
 
 class BlogAdapter(
     private val blogList: List<BlogItem>,
-    private val isHomeLayout: Boolean, // Menentukan layout (home/all)
+    private val isHomeLayout: Boolean,
     private val onItemClicked: (BlogItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    // ViewHolder untuk layout Home
     class HomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val blogImage: ImageView = view.findViewById(R.id.iv_image)
         val blogDate: TextView = view.findViewById(R.id.tv_date)
@@ -23,8 +22,13 @@ class BlogAdapter(
         val blogDescription: TextView = view.findViewById(R.id.tv_description)
     }
 
-    // ViewHolder untuk layout All
-    class AllViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class HorizontalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val blogImage: ImageView = view.findViewById(R.id.iv_image)
+        val blogDate: TextView = view.findViewById(R.id.tv_date)
+        val blogTitle: TextView = view.findViewById(R.id.tv_title)
+    }
+
+    class VerticalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val blogImage: ImageView = view.findViewById(R.id.iv_image)
         val blogDate: TextView = view.findViewById(R.id.tv_date)
         val blogTitle: TextView = view.findViewById(R.id.tv_title)
@@ -32,50 +36,78 @@ class BlogAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE_HOME) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_home, parent, false)
-            HomeViewHolder(view)
-        } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_all, parent, false)
-            AllViewHolder(view)
+        return when (viewType) {
+            VIEW_TYPE_HOME -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_home, parent, false)
+                HomeViewHolder(view)
+            }
+            VIEW_TYPE_HORIZONTAL -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_horizontal, parent, false)
+                HorizontalViewHolder(view)
+            }
+            else -> { // VIEW_TYPE_VERTICAL
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_vertical, parent, false)
+                VerticalViewHolder(view)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val blogItem = blogList[position]
-        if (holder is HomeViewHolder) {
-            // Bind data untuk layout Home
-            holder.blogDate.text = blogItem.date
-            holder.blogTitle.text = blogItem.title
-            holder.blogDescription.text = blogItem.description
-            Glide.with(holder.blogImage.context)
-                .load(blogItem.imageUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_error)
-                .into(holder.blogImage)
-            holder.itemView.setOnClickListener { onItemClicked(blogItem) }
-        } else if (holder is AllViewHolder) {
-            // Bind data untuk layout All
-            holder.blogDate.text = blogItem.date
-            holder.blogTitle.text = blogItem.title
-            holder.blogDescription.text = blogItem.description
-            Glide.with(holder.blogImage.context)
-                .load(blogItem.imageUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_error)
-                .into(holder.blogImage)
-            holder.itemView.setOnClickListener { onItemClicked(blogItem) }
+        when (holder) {
+            is HomeViewHolder -> {
+                holder.blogDate.text = blogItem.date
+                holder.blogTitle.text = blogItem.title
+                holder.blogDescription.text = blogItem.description
+                Glide.with(holder.blogImage.context)
+                    .load(blogItem.imageUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_error)
+                    .into(holder.blogImage)
+                holder.itemView.setOnClickListener { onItemClicked(blogItem) }
+            }
+            is HorizontalViewHolder -> {
+                holder.blogDate.text = blogItem.date
+                holder.blogTitle.text = blogItem.title
+                Glide.with(holder.blogImage.context)
+                    .load(blogItem.imageUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_error)
+                    .into(holder.blogImage)
+                holder.itemView.setOnClickListener { onItemClicked(blogItem) }
+            }
+            is VerticalViewHolder -> {
+                holder.blogDate.text = blogItem.date
+                holder.blogTitle.text = blogItem.title
+                holder.blogDescription.text = blogItem.description
+                Glide.with(holder.blogImage.context)
+                    .load(blogItem.imageUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_error)
+                    .into(holder.blogImage)
+                holder.itemView.setOnClickListener { onItemClicked(blogItem) }
+            }
         }
     }
 
     override fun getItemCount(): Int = blogList.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (isHomeLayout) VIEW_TYPE_HOME else VIEW_TYPE_ALL
+        return if (isHomeLayout) {
+            VIEW_TYPE_HOME
+        } else {
+            if (blogList[position].isHorizontal) {
+                VIEW_TYPE_HORIZONTAL
+            } else {
+                VIEW_TYPE_VERTICAL
+            }
+        }
     }
+
 
     companion object {
         private const val VIEW_TYPE_HOME = 1
-        private const val VIEW_TYPE_ALL = 2
+        private const val VIEW_TYPE_HORIZONTAL = 2
+        private const val VIEW_TYPE_VERTICAL = 3
     }
 }

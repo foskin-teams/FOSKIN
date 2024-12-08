@@ -8,5 +8,6 @@ data class BlogItem(
     val title: String,
     val date: String,
     val description: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val isHorizontal: Boolean
 ) : Parcelable
