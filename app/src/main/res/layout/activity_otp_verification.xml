@@ -13,7 +13,7 @@
         android:id="@+id/backButtonOtp"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="start"
         android:src="@drawable/back_arrow_black"
         android:contentDescription="Back" />
@@ -27,18 +27,17 @@
         android:fontFamily="@font/poppins_bold"
         android:text="OTP Verification"
         android:textColor="@android:color/black"
-        android:textSize="24sp" />
+        android:textSize="33sp" />
 
     <TextView
         android:id="@+id/otpSubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_gravity="center"
         android:fontFamily="@font/poppins_regular"
         android:text="We already sent you a verification code."
         android:textColor="@android:color/darker_gray"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:id="@+id/otpContainer"
@@ -144,10 +143,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:backgroundTint="@color/gold"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="@font/poppins_semi_bold"
         android:text="Verify"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
 
     <TextView

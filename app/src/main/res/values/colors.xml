@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="biru_tua">#091F5B</color>
+
     <color name="light_grey">#EDF1F3</color>
     <color name="gold">#DEC283</color>
     <color name="meteor">#EDF0F5</color>

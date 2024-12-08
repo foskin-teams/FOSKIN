@@ -21,29 +21,7 @@ class ProfileFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // Setup LinearLayouts
-        val layoutEditProfile = view.findViewById<LinearLayout>(R.id.edit_profile)
-        val layoutChangeNumber = view.findViewById<LinearLayout>(R.id.change_number)
-        val layoutPrivacyPolicy = view.findViewById<LinearLayout>(R.id.privacy_policy)
-        val layoutHelpCenter = view.findViewById<LinearLayout>(R.id.help_center)
         val layoutLogout = view.findViewById<LinearLayout>(R.id.logout)
-
-        // Add click listeners
-        layoutEditProfile.setOnClickListener {
-            // Navigate to edit profile
-        }
-
-        layoutChangeNumber.setOnClickListener {
-            // Navigate to change number
-        }
-
-        layoutPrivacyPolicy.setOnClickListener {
-            // Navigate to privacy policy
-        }
-
-        layoutHelpCenter.setOnClickListener {
-            // Navigate to help center
-        }
 
         layoutLogout.setOnClickListener {
             showLogoutConfirmation()
