@@ -1,4 +1,4 @@
-package com.project.foskin.ui.message
+package com.project.foskin.ui.chat
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.project.foskin.R
 
-class MessageFragment : Fragment() {
+class ChatFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MessageFragment()
+        fun newInstance() = ChatFragment()
     }
 
-    private val viewModel: MessageViewModel by viewModels()
+    private val viewModel: ChatViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,6 @@ class MessageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_message, container, false)
+        return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 }
