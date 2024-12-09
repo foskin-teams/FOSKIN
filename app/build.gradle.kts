@@ -44,7 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        buildConfig = true // Aktifkan fitur BuildConfig
+        buildConfig = true
     }
 }
 

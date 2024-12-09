@@ -25,6 +25,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.foskin.databinding.ActivityMainBinding
+import com.project.foskin.ui.detect.face.FaceRecognitionFrontActivity
+import com.project.foskin.ui.detect.face.FaceValidationFrontActivity
 import com.project.foskin.ui.detect.product.ProductScanActivity
 import com.project.foskin.ui.detect.product.ValidateProductScanActivity
 
@@ -39,6 +41,17 @@ class MainActivity : AppCompatActivity() {
             val imageUri = result.data?.getStringExtra(ProductScanActivity.EXTRA_CAMERAX_IMAGE)
             val intent = Intent(this, ValidateProductScanActivity::class.java)
             intent.putExtra(ValidateProductScanActivity.EXTRA_IMAGE_URI, imageUri)
+            startActivity(intent)
+        }
+    }
+
+    private val faceScanLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == FaceRecognitionFrontActivity.CAMERAX_RESULT) {
+            val imageUri = result.data?.getStringExtra(FaceRecognitionFrontActivity.EXTRA_CAMERAX_IMAGE)
+            val intent = Intent(this, FaceValidationFrontActivity::class.java)
+            intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI, imageUri)
             startActivity(intent)
         }
     }
@@ -117,6 +130,13 @@ class MainActivity : AppCompatActivity() {
             faceScanButton,
             "https://drive.google.com/uc?id=1V7IygvYKqyluDopiM1pLCoOiOtp5dVzw"
         )
+
+        faceScanButton.setOnClickListener {
+            val intent = Intent(this, FaceRecognitionFrontActivity::class.java)
+            faceScanLauncher.launch(intent)
+            dialog.dismiss()
+        }
+
         loadImageIntoButton(
             productScanButton,
             "https://drive.google.com/uc?id=1DRl0oax1qiqgcxT1ilLIabq4ffm6UGPK"
@@ -176,8 +196,6 @@ class MainActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
     }
-
-
 
     companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA

@@ -10,7 +10,6 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -25,10 +24,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.detect.face.FaceValidationRightActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.face.FaceRecognitionRightActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.face.FaceValidationLeftActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.face.FaceRecognitionLeftActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.face.FaceRecognitionFrontActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".ui.home.routines.AlarmReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
 
         <activity
             android:name=".ui.home.routines.AddRemaindersActivity"
