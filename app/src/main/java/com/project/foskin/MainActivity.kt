@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == FaceRecognitionFrontActivity.CAMERAX_RESULT) {
             val imageUri = result.data?.getStringExtra(FaceRecognitionFrontActivity.EXTRA_CAMERAX_IMAGE)
             val intent = Intent(this, FaceValidationFrontActivity::class.java)
-            intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI, imageUri)
+            intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, imageUri)
             startActivity(intent)
         }
     }

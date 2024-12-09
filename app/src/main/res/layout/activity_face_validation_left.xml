@@ -7,4 +7,76 @@
     android:layout_height="match_parent"
     tools:context=".ui.detect.face.FaceValidationLeftActivity">
 
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:gravity="center"
+        android:text="Left Side Face"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:text="recommended with rear camera"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <ImageView
+        android:id="@+id/previewImageView"
+        android:layout_width="0dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <Button
+        android:id="@+id/btnAgreeValidate"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="26dp"
+        android:backgroundTint="@color/green"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="That's okay"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/previewImageView" />
+
+    <Button
+        android:id="@+id/btnTryAgainValidate"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="26dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="Take another photo, please"
+        android:textColor="@color/green"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAgreeValidate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

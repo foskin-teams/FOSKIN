@@ -1,8 +1,14 @@
 package com.project.foskin.ui.detect.face
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +21,14 @@ import androidx.core.content.ContextCompat
 import com.project.foskin.R
 import com.project.foskin.databinding.ActivityFaceRecognitionFrontBinding
 import com.project.foskin.utils.createCustomTempFile
-
+import java.io.File
+import java.io.FileOutputStream
 
 class FaceRecognitionFrontActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFaceRecognitionFrontBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
-
     private val pickImageRequestCode = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +40,11 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
         binding.captureImage.setOnClickListener { takePhoto() }
         binding.btnRotate.setOnClickListener { toggleCamera() }
         binding.btnGallery.setOnClickListener { openGallery() }
+
+        val backButton = findViewById<TextView>(R.id.tvBack)
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onResume() {
@@ -80,20 +91,55 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = output.savedUri
+                    val savedUri = Uri.fromFile(photoFile)
+                    if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
+                        val flippedFile = flipImageHorizontally(photoFile)
+                        val flippedUri = Uri.fromFile(flippedFile)
 
-                    val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
-                    intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI, savedUri.toString())
-                    startActivity(intent)
-                    finish()
+                        val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
+                        intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, flippedUri.toString())
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
+                        intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, savedUri.toString())
+                        startActivity(intent)
+                        finish()
+                    }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(this@FaceRecognitionFrontActivity, "Failed to take picture.", Toast.LENGTH_SHORT).show()
-                    Log.e(TAG, "onError: ${exc.message}")
+                    Log.e(TAG, "Camera error: ${exc.message}")
                 }
             }
         )
+    }
+
+    private fun flipImageHorizontally(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+
+        val exif = ExifInterface(file.path)
+        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+
+        val matrix = Matrix()
+
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+        }
+
+        matrix.postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f)
+
+        val flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+
+        val outputStream = FileOutputStream(file)
+        flippedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        return file
     }
 
     private fun toggleCamera() {
@@ -113,11 +159,16 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == pickImageRequestCode && resultCode == RESULT_OK) {
             data?.data?.let { imageUri ->
+                Log.d(TAG, "Selected Image URI: $imageUri")
+
                 val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
-                intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI, imageUri.toString())
+                intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, imageUri.toString())
                 startActivity(intent)
+            } ?: run {
+                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT).show()
             }
         }
     }

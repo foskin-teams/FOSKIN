@@ -2,6 +2,7 @@ package com.project.foskin.ui.detect.product
 
 import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -42,7 +43,6 @@ class ProductScanActivity : AppCompatActivity() {
         }
 
         val textView = findViewById<TextView>(R.id.instructionText1)
-
         val spannable = SpannableString("Product photo: front or back of product ingredients")
         spannable.setSpan(
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.green)),
@@ -54,7 +54,6 @@ class ProductScanActivity : AppCompatActivity() {
             15, 20,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-
         spannable.setSpan(
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.green)),
             24, 28,
@@ -65,9 +64,7 @@ class ProductScanActivity : AppCompatActivity() {
             24, 28,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-
         textView.text = spannable
-
     }
 
     override fun onResume() {
@@ -113,8 +110,7 @@ class ProductScanActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = output.savedUri
-
+                    val savedUri = Uri.fromFile(photoFile)
                     val intent = Intent(this@ProductScanActivity, ValidateProductScanActivity::class.java)
                     intent.putExtra(ValidateProductScanActivity.EXTRA_IMAGE_URI, savedUri.toString())
                     startActivity(intent)

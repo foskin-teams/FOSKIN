@@ -25,19 +25,25 @@
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
         <activity
-            android:name=".ui.detect.face.FaceValidationRightActivity"
+            android:name=".ui.detect.face.ResultFaceRecognitionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.face.FaceRecognitionFrontActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detect.face.FaceValidationFrontActivity"
             android:exported="false" />
         <activity
             android:name=".ui.detect.face.FaceRecognitionRightActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detect.face.FaceValidationLeftActivity"
+            android:name=".ui.detect.face.FaceValidationRightActivity"
             android:exported="false" />
         <activity
             android:name=".ui.detect.face.FaceRecognitionLeftActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detect.face.FaceRecognitionFrontActivity"
+            android:name=".ui.detect.face.FaceValidationLeftActivity"
             android:exported="false" />
 
         <receiver

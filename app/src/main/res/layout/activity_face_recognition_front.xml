@@ -34,7 +34,7 @@
             android:layout_marginTop="30dp"
             android:fontFamily="@font/poppins_semi_bold"
             android:gravity="center"
-            android:text="Take a photo of the front side"
+            android:text="Front Face"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

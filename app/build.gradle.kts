@@ -79,6 +79,8 @@ dependencies {
     kapt ("androidx.room:room-compiler:2.5.0")
     implementation ("androidx.room:room-ktx:2.5.0")
 
+    implementation("com.google.mlkit:face-detection:16.1.7")
+
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
