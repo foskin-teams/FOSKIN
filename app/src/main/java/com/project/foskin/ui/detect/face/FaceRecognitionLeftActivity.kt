@@ -8,9 +8,7 @@ import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -18,12 +16,8 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.project.foskin.R
 import com.project.foskin.databinding.ActivityFaceRecognitionLeftBinding
-import com.project.foskin.ui.detect.face.FaceValidationLeftActivity.Companion.EXTRA_IMAGE_URI2
-import com.project.foskin.ui.detect.product.ResultScanProductActivity
+import com.project.foskin.ui.detect.face.FaceValidationLeftActivity.Companion.EXTRA_IMAGE_URI_LEFT
 import com.project.foskin.utils.createCustomTempFile
 import java.io.File
 import java.io.FileOutputStream
@@ -96,12 +90,12 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
                         val flippedUri = Uri.fromFile(flippedFile)
 
                         val intent = Intent(this@FaceRecognitionLeftActivity, FaceValidationLeftActivity::class.java)
-                        intent.putExtra(EXTRA_IMAGE_URI2, flippedUri.toString())
+                        intent.putExtra(EXTRA_IMAGE_URI_LEFT, flippedUri.toString())
                         startActivity(intent)
                         finish()
                     } else {
                         val intent = Intent(this@FaceRecognitionLeftActivity, FaceValidationLeftActivity::class.java)
-                        intent.putExtra(EXTRA_IMAGE_URI2, savedUri.toString())
+                        intent.putExtra(EXTRA_IMAGE_URI_LEFT, savedUri.toString())
                         startActivity(intent)
                         finish()
                     }
@@ -164,7 +158,7 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
                 Log.d(TAG, "Selected Image URI: $imageUri")
 
                 val intent = Intent(this@FaceRecognitionLeftActivity, FaceValidationLeftActivity::class.java)
-                intent.putExtra(EXTRA_IMAGE_URI2, imageUri.toString())
+                intent.putExtra(FaceValidationLeftActivity.EXTRA_IMAGE_URI_LEFT, imageUri.toString())
                 startActivity(intent)
             } ?: run {
                 Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT).show()
@@ -174,5 +168,7 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "FaceRecognitionLeftActivity"
+        const val EXTRA_IMAGE_URI_LEFT = "EXTRA_IMAGE_URI_LEFT"
     }
+
 }

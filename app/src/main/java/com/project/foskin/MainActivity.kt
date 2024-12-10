@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.foskin.databinding.ActivityMainBinding
 import com.project.foskin.ui.detect.face.FaceRecognitionFrontActivity
 import com.project.foskin.ui.detect.face.FaceValidationFrontActivity
+import com.project.foskin.ui.detect.face.ResultFaceActivity
 import com.project.foskin.ui.detect.product.ProductScanActivity
 import com.project.foskin.ui.detect.product.ValidateProductScanActivity
 
@@ -50,9 +51,12 @@ class MainActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == FaceRecognitionFrontActivity.CAMERAX_RESULT) {
             val imageUri = result.data?.getStringExtra(FaceRecognitionFrontActivity.EXTRA_CAMERAX_IMAGE)
-            val intent = Intent(this, FaceValidationFrontActivity::class.java)
-            intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, imageUri)
-            startActivity(intent)
+            imageUri?.let {
+                val intent = Intent(this, FaceValidationFrontActivity::class.java).apply {
+                    putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI_FRONT, it)
+                }
+                startActivity(intent)
+            }
         }
     }
 

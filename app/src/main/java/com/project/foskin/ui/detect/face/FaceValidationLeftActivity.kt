@@ -3,15 +3,10 @@ package com.project.foskin.ui.detect.face
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.project.foskin.R
 import com.project.foskin.databinding.ActivityFaceValidationLeftBinding
-import com.project.foskin.ui.detect.product.ResultScanProductActivity
+import com.project.foskin.ui.detect.face.FaceValidationFrontActivity.Companion
 
 class FaceValidationLeftActivity : AppCompatActivity() {
 
@@ -24,7 +19,7 @@ class FaceValidationLeftActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
-        currentImageUri = Uri.parse(intent.getStringExtra(EXTRA_IMAGE_URI2))
+        currentImageUri = Uri.parse(intent.getStringExtra(EXTRA_IMAGE_URI_LEFT))
 
         showImage()
 
@@ -35,15 +30,11 @@ class FaceValidationLeftActivity : AppCompatActivity() {
         }
 
         binding.btnAgreeValidate.setOnClickListener {
-            val intent = Intent(this, FaceRecognitionRightActivity::class.java)
-//            intent.putExtra(FaceRecognitionLeftActivity.EXTRA_IMAGE_URI2, currentImageUri.toString())
+            val intent = Intent(this, FaceRecognitionRightActivity::class.java).apply {
+                putExtra(EXTRA_IMAGE_URI_LEFT, intent.getStringExtra(EXTRA_IMAGE_URI_LEFT))
+            }
             startActivity(intent)
             finish()
-        }
-
-        val backButton = findViewById<TextView>(R.id.tvBack)
-        backButton.setOnClickListener {
-            onBackPressed()
         }
     }
 
@@ -56,6 +47,7 @@ class FaceValidationLeftActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_IMAGE_URI2 = "EXTRA_IMAGE_URI2"
+        const val EXTRA_IMAGE_URI_FRONT = "EXTRA_IMAGE_URI_FRONT"
+        const val EXTRA_IMAGE_URI_LEFT = "EXTRA_IMAGE_URI_LEFT"
     }
 }

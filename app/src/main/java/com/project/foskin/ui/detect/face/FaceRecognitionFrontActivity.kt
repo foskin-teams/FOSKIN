@@ -7,8 +7,8 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -74,7 +74,11 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
                     imageCapture
                 )
             } catch (exc: Exception) {
-                Toast.makeText(this@FaceRecognitionFrontActivity, "Failed to start camera.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@FaceRecognitionFrontActivity,
+                    "Failed to start camera.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.e(TAG, "startCamera: ${exc.message}")
             }
         }, ContextCompat.getMainExecutor(this))
@@ -96,20 +100,36 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
                         val flippedFile = flipImageHorizontally(photoFile)
                         val flippedUri = Uri.fromFile(flippedFile)
 
-                        val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
-                        intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, flippedUri.toString())
+                        val intent = Intent(
+                            this@FaceRecognitionFrontActivity,
+                            FaceValidationFrontActivity::class.java
+                        )
+                        intent.putExtra(
+                            FaceValidationFrontActivity.EXTRA_IMAGE_URI_FRONT,
+                            flippedUri.toString()
+                        )
                         startActivity(intent)
                         finish()
                     } else {
-                        val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
-                        intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, savedUri.toString())
+                        val intent = Intent(
+                            this@FaceRecognitionFrontActivity,
+                            FaceValidationFrontActivity::class.java
+                        )
+                        intent.putExtra(
+                            FaceValidationFrontActivity.EXTRA_IMAGE_URI_FRONT,
+                            savedUri.toString()
+                        )
                         startActivity(intent)
                         finish()
                     }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(this@FaceRecognitionFrontActivity, "Failed to take picture.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@FaceRecognitionFrontActivity,
+                        "Failed to take picture.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e(TAG, "Camera error: ${exc.message}")
                 }
             }
@@ -120,7 +140,8 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeFile(file.path)
 
         val exif = ExifInterface(file.path)
-        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        val orientation =
+            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
 
         val matrix = Matrix()
 
@@ -132,7 +153,8 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
 
         matrix.postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f)
 
-        val flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        val flippedBitmap =
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
         val outputStream = FileOutputStream(file)
         flippedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
@@ -152,7 +174,9 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(
+            Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         intent.type = "image/*"
         startActivityForResult(intent, pickImageRequestCode)
     }
@@ -164,11 +188,18 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
             data?.data?.let { imageUri ->
                 Log.d(TAG, "Selected Image URI: $imageUri")
 
-                val intent = Intent(this@FaceRecognitionFrontActivity, FaceValidationFrontActivity::class.java)
-                intent.putExtra(FaceValidationFrontActivity.EXTRA_IMAGE_URI1, imageUri.toString())
+                val intent = Intent(
+                    this@FaceRecognitionFrontActivity,
+                    FaceValidationFrontActivity::class.java
+                )
+                intent.putExtra(
+                    FaceValidationFrontActivity.EXTRA_IMAGE_URI_FRONT,
+                    imageUri.toString()
+                )
                 startActivity(intent)
             } ?: run {
-                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -178,4 +209,5 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
         const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
         const val CAMERAX_RESULT = 200
     }
+
 }

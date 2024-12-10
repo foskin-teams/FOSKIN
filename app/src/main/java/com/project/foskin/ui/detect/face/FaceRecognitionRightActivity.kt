@@ -17,7 +17,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.project.foskin.databinding.ActivityFaceRecognitionRightBinding
-import com.project.foskin.ui.detect.face.FaceValidationRightActivity.Companion.EXTRA_IMAGE_URI3
+import com.project.foskin.ui.detect.face.FaceValidationRightActivity.Companion.EXTRA_IMAGE_URI_RIGHT
 import com.project.foskin.utils.createCustomTempFile
 import java.io.File
 import java.io.FileOutputStream
@@ -90,12 +90,12 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                         val flippedUri = Uri.fromFile(flippedFile)
 
                         val intent = Intent(this@FaceRecognitionRightActivity, FaceValidationRightActivity::class.java)
-                        intent.putExtra(EXTRA_IMAGE_URI3, flippedUri.toString())
+                        intent.putExtra(EXTRA_IMAGE_URI_RIGHT, flippedUri.toString())
                         startActivity(intent)
                         finish()
                     } else {
                         val intent = Intent(this@FaceRecognitionRightActivity, FaceValidationRightActivity::class.java)
-                        intent.putExtra(EXTRA_IMAGE_URI3, savedUri.toString())
+                        intent.putExtra(EXTRA_IMAGE_URI_RIGHT, savedUri.toString())
                         startActivity(intent)
                         finish()
                     }
@@ -158,7 +158,7 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                 Log.d(TAG, "Selected Image URI: $imageUri")
 
                 val intent = Intent(this@FaceRecognitionRightActivity, FaceValidationRightActivity::class.java)
-                intent.putExtra(EXTRA_IMAGE_URI3, imageUri.toString())
+                intent.putExtra(FaceValidationRightActivity.EXTRA_IMAGE_URI_RIGHT, imageUri.toString())
                 startActivity(intent)
             } ?: run {
                 Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT).show()
@@ -168,5 +168,6 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "FaceRecognitionRightActivity"
+        const val EXTRA_IMAGE_URI_RIGHT = "EXTRA_IMAGE_URI_RIGHT"
     }
 }
