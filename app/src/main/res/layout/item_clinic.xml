@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,7 +24,6 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background" />
-
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
@@ -35,18 +33,6 @@
             android:orientation="vertical"
             android:gravity="center_vertical"
             android:padding="8dp">
-
-            <TextView
-                android:id="@+id/tvHours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/purple_500"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:padding="3dp"
-                android:text="Open"
-                android:textAlignment="textStart"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -70,44 +56,74 @@
                 android:textColor="#646464"
                 android:textSize="14sp" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="5dp">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_star" />
-
-                <TextView
-                    android:id="@+id/tvRating"
+                <LinearLayout
+                    android:id="@+id/llRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/rating_products"
-                    android:textColor="#333333"
-                    android:textSize="14sp" />
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_star" />
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/rating_products"
+                        android:textColor="#333333"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="|"
+                        android:textColor="#CCCCCC"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvReview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="182 (reviewrs)"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tvHours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:text="|"
-                    android:textColor="#CCCCCC"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tvReview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="182 (reviewrs)"
-                    android:textColor="#666666"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    android:background="@drawable/bg_button_open"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="2dp"
+                    android:text="Open"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/light_grey" />
 </LinearLayout>
