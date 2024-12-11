@@ -68,4 +68,7 @@
     <string name="no_upcoming_alarm">Choose your item skincare in menu Routines</string>
     <string name="no_time_alarm">Set your time</string>
 
+
+    <string name="google_maps_key">AIzaSyB5PNKVKY62rzVVI-Ys3IbnlUEaKle03rw</string>
+
 </resources>

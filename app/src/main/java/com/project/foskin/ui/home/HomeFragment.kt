@@ -25,6 +25,7 @@ import com.project.foskin.ui.home.blog.BlogActivity
 import com.project.foskin.ui.home.blog.BlogAdapter
 import com.project.foskin.ui.home.blog.BlogItem
 import com.project.foskin.ui.home.blog.DetailBlogActivity
+import com.project.foskin.ui.home.clinic.ClinicActivity
 import com.project.foskin.ui.home.promo.PromoActivity
 import com.project.foskin.ui.home.routines.AlarmData
 import com.project.foskin.ui.home.routines.RemaindersActivity
@@ -323,7 +324,8 @@ class HomeFragment : Fragment() {
         }
 
         ivClinic.setOnClickListener {
-            Toast.makeText(context, "Clinic clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, ClinicActivity::class.java)
+            startActivity(intent)
         }
 
         ivPromo.setOnClickListener {
