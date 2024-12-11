@@ -7,27 +7,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.project.foskin.R
 import com.project.foskin.ui.Auth.EnterWhatsappNumberActivity
-import com.project.foskin.ui.home.routines.RemaindersActivity
 
 class ProfileFragment : Fragment() {
+
+    private lateinit var modeImageView: ImageView
+    private lateinit var switchDarkMode: Switch
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        modeImageView = view.findViewById(R.id.mode)
+        switchDarkMode = view.findViewById(R.id.switchDarkMode)
 
         val layoutLogout = view.findViewById<LinearLayout>(R.id.logout)
         val llPrivacyPolicy = view.findViewById<LinearLayout>(R.id.llPrivacyPolicy)
         val llWebsite = view.findViewById<LinearLayout>(R.id.llWebsite)
-        val switchDarkMode = view.findViewById<Switch>(R.id.switchDarkMode)
 
         layoutLogout.setOnClickListener {
             showLogoutConfirmation()
@@ -45,8 +48,13 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
-        switchDarkMode.setOnCheckedChangeListener { _, _ ->
-            Toast.makeText(requireContext(), "Next Future", Toast.LENGTH_SHORT).show()
+        // Update mode icon when switch changes
+        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                modeImageView.setImageResource(R.drawable.night_mode) // Change to night mode
+            } else {
+                modeImageView.setImageResource(R.drawable.day_mode) // Change to day mode
+            }
         }
 
         return view

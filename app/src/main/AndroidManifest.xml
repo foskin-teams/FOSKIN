@@ -25,6 +25,12 @@
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
         <activity
+            android:name=".ui.home.clinic.ClinicActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.promo.PromoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.detect.face.ResultFaceActivity"
             android:exported="false" />
         <activity

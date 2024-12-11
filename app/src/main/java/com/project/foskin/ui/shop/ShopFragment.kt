@@ -19,7 +19,6 @@ class ShopFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_shop, container, false)
 
-        // Initialize RecyclerView for Skincare Menu
         val rvMenuSkincare = view.findViewById<RecyclerView>(R.id.rvCarouselSkincare)
         rvMenuSkincare.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -28,7 +27,6 @@ class ShopFragment : Fragment() {
         }
         rvMenuSkincare.adapter = adapter1
 
-        // Initialize RecyclerView for Recommended Products
         val rvRecommended = view.findViewById<RecyclerView>(R.id.rvRecommended)
         rvRecommended.layoutManager = GridLayoutManager(context, 2)
         val adapter2 = ProductRecommendedAdapter(requireContext(), getProductData())
@@ -37,7 +35,6 @@ class ShopFragment : Fragment() {
         return view
     }
 
-    // Method to return list of skincare menu items
     private fun getMenuData(): List<MenuItemSkincare> {
         return listOf(
             MenuItemSkincare("Facial Wash", "https://drive.google.com/uc?id=1yIUswx4ji56HoodLKII3D1zGkEfamZNG"),

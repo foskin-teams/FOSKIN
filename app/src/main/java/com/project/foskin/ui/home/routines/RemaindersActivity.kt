@@ -117,7 +117,11 @@ class RemaindersActivity : AppCompatActivity() {
         tvRemove.visibility = if (hasCheckedItems) View.VISIBLE else View.GONE
     }
 
-    private fun toggleEmptyState(recyclerView: RecyclerView, emptyTextView: TextView, isEmpty: Boolean) {
+    private fun toggleEmptyState(
+        recyclerView: RecyclerView,
+        emptyTextView: TextView,
+        isEmpty: Boolean
+    ) {
         recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
         emptyTextView.visibility = if (isEmpty) View.VISIBLE else View.GONE
     }

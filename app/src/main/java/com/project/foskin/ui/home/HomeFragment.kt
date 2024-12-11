@@ -25,6 +25,7 @@ import com.project.foskin.ui.home.blog.BlogActivity
 import com.project.foskin.ui.home.blog.BlogAdapter
 import com.project.foskin.ui.home.blog.BlogItem
 import com.project.foskin.ui.home.blog.DetailBlogActivity
+import com.project.foskin.ui.home.promo.PromoActivity
 import com.project.foskin.ui.home.routines.AlarmData
 import com.project.foskin.ui.home.routines.RemaindersActivity
 import com.project.foskin.ui.home.routines.SharedPreferencesHelper
@@ -326,7 +327,8 @@ class HomeFragment : Fragment() {
         }
 
         ivPromo.setOnClickListener {
-            Toast.makeText(context, "Promo clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, PromoActivity::class.java)
+            startActivity(intent)
         }
 
         ivBlog.setOnClickListener {
