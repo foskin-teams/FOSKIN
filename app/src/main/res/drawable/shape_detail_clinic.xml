@@ -1,0 +1,17 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow Layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#33000000" /> <!-- Semi-transparent shadow -->
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+
+    <!-- Main Rectangle -->
+    <item android:bottom="2dp"> <!-- Offset shadow -->
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.project.foskin.MainActivity
 import com.project.foskin.R
 import com.project.foskin.ui.Auth.EnterWhatsappNumberActivity
-import com.project.foskin.ui.Auth.QuickSurveyActivity
 
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

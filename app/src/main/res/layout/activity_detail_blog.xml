@@ -12,12 +12,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Image Section with Back Button -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="350dp">
 
-            <!-- ImageView -->
             <ImageView
                 android:id="@+id/image_header"
                 android:layout_width="match_parent"
@@ -25,7 +23,6 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background" />
 
-            <!-- Back Button -->
             <ImageButton
                 android:id="@+id/button_cancel"
                 android:layout_width="48dp"
@@ -38,7 +35,6 @@
                 android:scaleType="center" />
         </FrameLayout>
 
-        <!-- Title Section -->
         <TextView
             android:id="@+id/text_title"
             android:layout_width="match_parent"
@@ -85,7 +81,6 @@
                 android:textSize="14sp"
                 android:textColor="@color/black" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,7 +138,6 @@
                 android:src="@drawable/ic_arrow" />
         </LinearLayout>
 
-        <!-- Content Section -->
         <TextView
             android:id="@+id/text_content"
             android:layout_width="match_parent"

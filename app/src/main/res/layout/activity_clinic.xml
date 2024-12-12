@@ -28,25 +28,50 @@
             android:padding="16dp"
             android:src="@drawable/back_arrow_black" />
 
-        <TextView
-            android:id="@+id/textPromoTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="70dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/poppins_medium"
-            android:gravity="center"
-            android:text="Find your clinic"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:layout_marginEnd="50dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textPromoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="Your location"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCurrentLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawableStart="@drawable/pin"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="start"
+                    android:text="Turn on your location"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:elevation="8dp"
         android:layout_marginTop="20dp"
+        android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -85,9 +110,9 @@
 
     <fragment
         android:id="@+id/mapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:background="@drawable/gmaps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,44 +132,21 @@
             android:orientation="vertical"
             android:padding="4dp">
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="9dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:gravity="start"
-                    android:text="Your location :"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tvCurrentLocation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/poppins_regular"
-                    android:gravity="start"
-                    android:layout_marginStart="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="Turn on your location"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Choose your clinic :"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvClinic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="240dp"/>
+                android:paddingBottom="240dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -149,7 +149,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                     Toast.makeText(this, "OTP Verified!", Toast.LENGTH_SHORT).show()
 
                     // Intent ke QuickSurveyActivity setelah OTP verifikasi berhasil
-                    val intent = Intent(this, QuickSurveyActivity::class.java)
+                    val intent = Intent(this, QuickSurvey1Activity::class.java)
                     startActivity(intent)
                     finish()  // Optional: If you want to close the current activity
                 }

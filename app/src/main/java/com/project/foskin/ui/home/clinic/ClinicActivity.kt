@@ -86,13 +86,171 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getDummyClinics(): List<Clinic> {
         return listOf(
-            Clinic("Miracle Aesthetic Clinic Malang", "Jl. Wilis No.6, Malang", R.drawable.clinic_photo, 4.8f, 120),
-            Clinic("Eris Clinic", "Jl. Suhat No.11, Malang", R.drawable.clinic_photo, 4.7f, 98),
-            Clinic("Diva Beauty Clinic", "Jl. Kawi No.22, Malang", R.drawable.clinic_photo, 4.6f, 85),
-            Clinic("Olivia Skin Care", "Jl. Ijen No.10, Malang", R.drawable.clinic_photo, 4.5f, 74),
-            Clinic("SkinGlow Aesthetic", "Jl. Bandung No.5, Malang", R.drawable.clinic_photo, 4.9f, 200)
+            Clinic(
+                name = "Miracle Aesthetic Clinic Malang",
+                address = "Jl. Wilis No.6, Malang",
+                imageResId = R.drawable.clinic_photo,
+                rating = 4.8f,
+                reviews = 120,
+                slug = "miracle-aesthetic-malang",
+                storeImage = "https://example.com/images/miracle.jpg",
+                description = "A leading aesthetic clinic offering premium skin treatments.",
+                operationalHours = OperationalHours(
+                    opening = "09:00 AM",
+                    closing = "08:00 PM",
+                    weekday = mapOf("Monday" to "09:00 AM - 08:00 PM"),
+                    weekend = mapOf("Saturday" to "09:00 AM - 05:00 PM", "Sunday" to "Closed")
+                ),
+                detailedAddress = DetailedAddress(
+                    country = "Indonesia",
+                    city = "Malang",
+                    state = "Jawa Timur",
+                    district = "Klojen",
+                    streetName = "Jl. Wilis No.6",
+                    location = Location(latitude = -7.981298, longitude = 112.621391),
+                    maps = "https://maps.google.com/?q=Jl.+Wilis+No.6,+Malang"
+                ),
+                ratings = 4.8,
+                totalReviews = 120
+            ),
+            Clinic(
+                name = "Eris Clinic",
+                address = "Jl. Suhat No.11, Malang",
+                imageResId = R.drawable.clinic_photo,
+                rating = 4.7f,
+                reviews = 98,
+                slug = "eris-clinic-malang",
+                storeImage = "https://example.com/images/eris.jpg",
+                description = "Specializes in dermatological treatments and skincare.",
+                operationalHours = OperationalHours(
+                    opening = "10:00 AM",
+                    closing = "07:00 PM",
+                    weekday = mapOf("Monday" to "10:00 AM - 07:00 PM"),
+                    weekend = mapOf("Saturday" to "10:00 AM - 03:00 PM", "Sunday" to "Closed")
+                ),
+                detailedAddress = DetailedAddress(
+                    country = "Indonesia",
+                    city = "Malang",
+                    state = "Jawa Timur",
+                    district = "Lowokwaru",
+                    streetName = "Jl. Suhat No.11",
+                    location = Location(latitude = -7.946715, longitude = 112.615656),
+                    maps = "https://maps.google.com/?q=Jl.+Suhat+No.11,+Malang"
+                ),
+                ratings = 4.7,
+                totalReviews = 98
+            ),
+            Clinic(
+                name = "Diva Beauty Clinic",
+                address = "Jl. Kawi No.22, Malang",
+                imageResId = R.drawable.clinic_photo,
+                rating = 4.6f,
+                reviews = 85,
+                slug = "diva-beauty-clinic-malang",
+                storeImage = "https://example.com/images/diva.jpg",
+                description = "Offers beauty treatments for skin and hair.",
+                operationalHours = OperationalHours(
+                    opening = "08:00 AM",
+                    closing = "06:00 PM",
+                    weekday = mapOf("Monday" to "08:00 AM - 06:00 PM"),
+                    weekend = mapOf("Saturday" to "09:00 AM - 02:00 PM", "Sunday" to "Closed")
+                ),
+                detailedAddress = DetailedAddress(
+                    country = "Indonesia",
+                    city = "Malang",
+                    state = "Jawa Timur",
+                    district = "Blimbing",
+                    streetName = "Jl. Kawi No.22",
+                    location = Location(latitude = -7.973844, longitude = 112.638726),
+                    maps = "https://maps.google.com/?q=Jl.+Kawi+No.22,+Malang"
+                ),
+                ratings = 4.6,
+                totalReviews = 85
+            ),
+            Clinic(
+                name = "Olivia Skin Care",
+                address = "Jl. Ijen No.10, Malang",
+                imageResId = R.drawable.clinic_photo,
+                rating = 4.5f,
+                reviews = 74,
+                slug = "olivia-skin-care-malang",
+                storeImage = "https://example.com/images/olivia.jpg",
+                description = "Personalized skincare treatments for all skin types.",
+                operationalHours = OperationalHours(
+                    opening = "09:00 AM",
+                    closing = "07:00 PM",
+                    weekday = mapOf("Monday" to "09:00 AM - 07:00 PM"),
+                    weekend = mapOf("Saturday" to "10:00 AM - 04:00 PM", "Sunday" to "Closed")
+                ),
+                detailedAddress = DetailedAddress(
+                    country = "Indonesia",
+                    city = "Malang",
+                    state = "Jawa Timur",
+                    district = "Klojen",
+                    streetName = "Jl. Ijen No.10",
+                    location = Location(latitude = -7.983915, longitude = 112.623883),
+                    maps = "https://maps.google.com/?q=Jl.+Ijen+No.10,+Malang"
+                ),
+                ratings = 4.5,
+                totalReviews = 74
+            ),
+            Clinic(
+                name = "SkinGlow Aesthetic",
+                address = "Jl. Bandung No.5, Malang",
+                imageResId = R.drawable.clinic_photo,
+                rating = 4.9f,
+                reviews = 200,
+                slug = "skinglow-aesthetic-malang",
+                storeImage = "https://example.com/images/skinglow.jpg",
+                description = "Award-winning clinic for aesthetic treatments.",
+                operationalHours = OperationalHours(
+                    opening = "08:30 AM",
+                    closing = "08:30 PM",
+                    weekday = mapOf("Monday" to "08:30 AM - 08:30 PM"),
+                    weekend = mapOf("Saturday" to "09:00 AM - 05:00 PM", "Sunday" to "Closed")
+                ),
+                detailedAddress = DetailedAddress(
+                    country = "Indonesia",
+                    city = "Malang",
+                    state = "Jawa Timur",
+                    district = "Lowokwaru",
+                    streetName = "Jl. Bandung No.5",
+                    location = Location(latitude = -7.955724, longitude = 112.621224),
+                    maps = "https://maps.google.com/?q=Jl.+Bandung+No.5,+Malang"
+                ),
+                ratings = 4.9,
+                totalReviews = 200
+            ),
+            Clinic(
+                name = "Viva Derma Clinic",
+                address = "Jl. Diponegoro No.15, Malang",
+                imageResId = R.drawable.clinic_photo,
+                rating = 4.8f,
+                reviews = 150,
+                slug = "viva-derma-clinic",
+                storeImage = "https://example.com/images/viva.jpg",
+                description = "Advanced dermatology and aesthetic treatments.",
+                operationalHours = OperationalHours(
+                    opening = "09:00 AM",
+                    closing = "06:00 PM",
+                    weekday = mapOf("Monday" to "09:00 AM - 06:00 PM"),
+                    weekend = mapOf("Saturday" to "09:00 AM - 02:00 PM", "Sunday" to "Closed")
+                ),
+                detailedAddress = DetailedAddress(
+                    country = "Indonesia",
+                    city = "Malang",
+                    state = "Jawa Timur",
+                    district = "Klojen",
+                    streetName = "Jl. Diponegoro No.15",
+                    location = Location(latitude = -7.983610, longitude = 112.627512),
+                    maps = "https://maps.google.com/?q=Jl.+Diponegoro+No.15,+Malang"
+                ),
+                ratings = 4.8,
+                totalReviews = 150
+            )
         )
     }
+
     override fun onResume() {
         super.onResume()
 
@@ -178,7 +336,6 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                     val latitude = newLocation.latitude
                     val longitude = newLocation.longitude
 
-                    // Gunakan Geocoder untuk mendapatkan nama daerah
                     val geocoder = Geocoder(this@ClinicActivity, Locale.getDefault())
                     try {
                         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
@@ -211,14 +368,12 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun searchLocation(query: String) {
         val geocoder = Geocoder(this, Locale.getDefault())
         try {
-            // Cari alamat berdasarkan query
             val addresses = geocoder.getFromLocationName(query, 1)
             if (addresses != null && addresses.isNotEmpty()) {
                 val address = addresses[0]
                 val latitude = address.latitude
                 val longitude = address.longitude
 
-                // Update tampilan lokasi
                 binding.tvCurrentLocation.text = address.getAddressLine(0)
                 moveCameraToLocation(latitude, longitude)
             } else {
@@ -232,7 +387,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun moveCameraToLocation(latitude: Double, longitude: Double) {
         val location = LatLng(latitude, longitude)
-        gMap.clear()  // Menghapus marker sebelumnya
+        gMap.clear()
         gMap.addMarker(MarkerOptions().position(location).title("Searched Location"))
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12f))
     }

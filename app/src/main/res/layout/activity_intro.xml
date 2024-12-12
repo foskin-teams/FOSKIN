@@ -183,6 +183,9 @@
         android:background="@drawable/button_rounded_intro"
         android:text="@string/next"
         android:textColor="@color/white"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="17sp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -195,6 +198,9 @@
         android:background="@drawable/button_rounded_intro"
         android:text="@string/next"
         android:textColor="@color/white"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="17sp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -208,6 +214,9 @@
         android:background="@drawable/button_rounded_intro"
         android:text="@string/started"
         android:textColor="@color/white"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="17sp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
