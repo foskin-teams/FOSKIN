@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,18 +13,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.project.foskin.R
+import com.project.foskin.databinding.ActivityOtpVerificationBinding
 
 class OtpVerificationActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityOtpVerificationBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_otp_verification)
+        binding = ActivityOtpVerificationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
         setupOtpBoxes()
         setupResendButton()
         setupBackButton()
         setupVerifyButton()
+
+        binding.verifyButton.background = getDrawable(R.drawable.rounded_button_otp)
+        binding.verifyButton.backgroundTintList = null
     }
 
     private fun setupOtpBoxes() {
@@ -48,12 +56,10 @@ class OtpVerificationActivity : AppCompatActivity() {
                         otpBoxes[i - 1].requestFocus()
                     }
 
-                    // Hide error message and reset field if user starts typing
                     if (errorMessage.visibility == View.VISIBLE) {
                         errorMessage.visibility = View.GONE
                     }
 
-                    // Reset background color to normal
                     otpBoxes[i].background = getDrawable(R.drawable.otp_box_background)
                 }
 
@@ -79,7 +85,6 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         resendText.text = spannableString
 
-        // Set click listener for Resend
         resendText.setOnClickListener {
             Toast.makeText(this, "Verification code resent!", Toast.LENGTH_SHORT).show()
         }
@@ -109,49 +114,40 @@ class OtpVerificationActivity : AppCompatActivity() {
         verifyButton.setOnClickListener {
             var allFilled = true
 
-            // Periksa apakah semua kolom diisi
             for (otpBox in otpBoxes) {
                 if (otpBox.text.toString().isEmpty()) {
                     allFilled = false
-                    otpBox.background = getDrawable(R.drawable.error_background) // Menyoroti kolom kosong
+                    otpBox.background = getDrawable(R.drawable.error_background)
                 } else {
-                    otpBox.background = getDrawable(R.drawable.otp_box_background) // Kembalikan background ke normal
+                    otpBox.background = getDrawable(R.drawable.otp_box_background)
                 }
             }
 
-            // Menampilkan pesan error jika ada kolom yang kosong
             if (!allFilled) {
                 errorMessage.text = "All fields must be filled"
                 errorMessage.visibility = View.VISIBLE
             } else {
-                // Cek OTP, ganti dengan OTP yang valid sesuai kebutuhan Anda
                 val otpInput = otpBoxes.joinToString("") { it.text.toString() }
 
-                if (otpInput != "123456") { // Ganti dengan OTP yang valid
-                    // Jika OTP salah
+                if (otpInput != "123456") {
                     errorMessage.text = "Invalid OTP"
                     errorMessage.visibility = View.VISIBLE
 
-                    // Setelah error, reset kolom
                     otpBoxes.forEach { otpBox ->
-                        otpBox.text.clear() // Hapus teks pada semua kolom
-                        otpBox.background = getDrawable(R.drawable.otp_box_background) // Kembalikan background ke normal
+                        otpBox.text.clear()
+                        otpBox.background = getDrawable(R.drawable.otp_box_background)
                     }
 
-                    // Fokus ke kolom pertama
                     otpBoxes[0].requestFocus()
 
-                    // Tampilkan pesan kesalahan
                     Toast.makeText(this, "Incorrect OTP. Please try again", Toast.LENGTH_SHORT).show()
                 } else {
-                    // Jika OTP benar
                     errorMessage.visibility = View.GONE
                     Toast.makeText(this, "OTP Verified!", Toast.LENGTH_SHORT).show()
 
-                    // Intent ke QuickSurveyActivity setelah OTP verifikasi berhasil
                     val intent = Intent(this, QuickSurvey1Activity::class.java)
                     startActivity(intent)
-                    finish()  // Optional: If you want to close the current activity
+                    finish()
                 }
             }
         }

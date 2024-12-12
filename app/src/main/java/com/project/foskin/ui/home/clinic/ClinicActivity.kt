@@ -75,7 +75,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         val clinics = getDummyClinics()
         val clinicAdapter = ClinicAdapter(clinics) { clinic ->
             val intent = Intent(this, DetailClinicActivity::class.java)
-            intent.putExtra("clinic", clinic) // selectedClinic adalah objek Clinic
+            intent.putExtra("clinic", clinic)
             startActivity(intent)
 
         }

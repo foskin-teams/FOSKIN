@@ -280,8 +280,9 @@
             android:layout_weight="1"
             android:background="@drawable/shape_btn_grey"
             android:fontFamily="@font/poppins_medium"
+            android:textSize="17sp"
             android:text="Previous"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             app:backgroundTint="@null" />
 
         <Button
@@ -292,8 +293,9 @@
             android:layout_weight="1"
             android:background="@drawable/shape_btn"
             android:fontFamily="@font/poppins_medium"
+            android:textSize="17sp"
             android:text="Finish"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             app:backgroundTint="@null" />
     </LinearLayout>
 

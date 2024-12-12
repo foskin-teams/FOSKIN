@@ -47,7 +47,6 @@
         android:padding="12dp"
         android:layout_marginTop="16dp">
 
-        <!-- Country Code Picker -->
         <com.hbb20.CountryCodePicker
             android:id="@+id/ccp"
             android:layout_width="wrap_content"
@@ -71,7 +70,6 @@
 
     </LinearLayout>
 
-    <!-- Error Message -->
     <TextView
         android:id="@+id/errorMessageText"
         android:layout_width="match_parent"
@@ -91,6 +89,7 @@
         android:enabled="false"
         android:fontFamily="@font/poppins_medium"
         android:text="Continue"
+        android:backgroundTint="@null"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 

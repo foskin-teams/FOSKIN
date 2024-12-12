@@ -67,16 +67,15 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
                 val isNotEmpty = s?.isNotEmpty() == true
 
                 if (isNotEmpty) {
-                    // Enable the button and change its background
                     continueButton.isEnabled = true
                     continueButton.background = getDrawable(R.drawable.rounded_button_enabled)
+                    continueButton.backgroundTintList = null
                 } else {
-                    // Disable the button and reset its background
                     continueButton.isEnabled = false
                     continueButton.background = getDrawable(R.drawable.rounded_button_disabled)
+                    continueButton.backgroundTintList = null
                 }
 
-                // Reset the error message visibility when typing
                 errorMessageText.visibility = View.GONE
             }
 
@@ -88,18 +87,15 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
             val countryCode = countryCodePicker.selectedCountryCodeWithPlus
 
             if (phoneNumber.startsWith("0")) {
-                // Show error message if the number starts with "0"
                 errorMessageText.text = "Please do not start the number with 0"
                 errorMessageText.visibility = View.VISIBLE
             } else if (phoneNumber.length < 10) {
-                // Error message if the number is less than 10 digits
                 errorMessageText.text = "Phone number must be at least 10 digits"
                 errorMessageText.visibility = View.VISIBLE
             } else {
-                // Navigate to OtpVerificationActivity
                 val intent = Intent(this, OtpVerificationActivity::class.java)
                 val fullPhoneNumber = "$countryCode$phoneNumber"
-                intent.putExtra("PHONE_NUMBER", fullPhoneNumber) // Pass the full phone number to the next activity
+                intent.putExtra("PHONE_NUMBER", fullPhoneNumber)
                 startActivity(intent)
             }
         }
