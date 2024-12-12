@@ -32,6 +32,8 @@ class FaceValidationFrontActivity : AppCompatActivity() {
             val intent = Intent(this, FaceRecognitionLeftActivity::class.java).apply {
                 putExtra(EXTRA_IMAGE_URI_FRONT, intent.getStringExtra(EXTRA_IMAGE_URI_FRONT))
             }
+            imageuri.EXTRA_IMAGE_URI_FRONT = currentImageUri.toString()
+            imageuri.printUri()
             startActivity(intent)
             finish()
         }

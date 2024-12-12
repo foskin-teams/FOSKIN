@@ -24,7 +24,8 @@ class ResultFaceActivity : AppCompatActivity() {
     }
 
     private fun showImageFront() {
-        val imageUriFront = intent.getStringExtra(EXTRA_IMAGE_URI_FRONT)
+//        val imageUriFront = intent.getStringExtra(EXTRA_IMAGE_URI_FRONT)
+        val imageUriFront = imageuri.EXTRA_IMAGE_URI_FRONT
         imageUriFront?.let {
             Glide.with(this)
                 .load(Uri.parse(it))
@@ -33,7 +34,8 @@ class ResultFaceActivity : AppCompatActivity() {
     }
 
     private fun showImageLeft() {
-        val imageUriLeft = intent.getStringExtra(EXTRA_IMAGE_URI_LEFT)
+//        val imageUriLeft = intent.getStringExtra(EXTRA_IMAGE_URI_LEFT)
+        val imageUriLeft = imageuri.EXTRA_IMAGE_URI_LEFT
         imageUriLeft?.let {
             Glide.with(this)
                 .load(Uri.parse(it))
@@ -42,7 +44,8 @@ class ResultFaceActivity : AppCompatActivity() {
     }
 
     private fun showImageRight() {
-        val imageUriRight = intent.getStringExtra(EXTRA_IMAGE_URI_RIGHT)
+//        val imageUriRight = intent.getStringExtra(EXTRA_IMAGE_URI_RIGHT)
+        val imageUriRight = imageuri.EXTRA_IMAGE_URI_RIGHT
         imageUriRight?.let {
             Glide.with(this)
                 .load(Uri.parse(it))

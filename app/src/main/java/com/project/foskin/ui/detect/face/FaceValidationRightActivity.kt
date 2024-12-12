@@ -32,6 +32,8 @@ class FaceValidationRightActivity : AppCompatActivity() {
             val intent = Intent(this, ResultFaceActivity::class.java).apply {
                 putExtra(EXTRA_IMAGE_URI_RIGHT, intent.getStringExtra(EXTRA_IMAGE_URI_RIGHT))
             }
+            imageuri.EXTRA_IMAGE_URI_RIGHT = currentImageUri.toString()
+            imageuri.printUri()
             startActivity(intent)
             finish()
         }
