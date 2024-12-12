@@ -3,9 +3,11 @@ package com.project.foskin.ui.detect.face
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.project.foskin.databinding.ActivityFaceValidationFrontBinding
+import com.project.foskin.ui.detect.face.FaceValidationLeftActivity.Companion.EXTRA_IMAGE_URI_LEFT
 
 class FaceValidationFrontActivity : AppCompatActivity() {
 
@@ -25,12 +27,11 @@ class FaceValidationFrontActivity : AppCompatActivity() {
         binding.btnTryAgainValidate.setOnClickListener {
             val intent = Intent(this, FaceRecognitionFrontActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         binding.btnAgreeValidate.setOnClickListener {
             val intent = Intent(this, FaceRecognitionLeftActivity::class.java).apply {
-                putExtra(EXTRA_IMAGE_URI_FRONT, intent.getStringExtra(EXTRA_IMAGE_URI_FRONT))
+                putExtra(EXTRA_IMAGE_URI_FRONT, currentImageUri?.toString())
             }
             imageuri.EXTRA_IMAGE_URI_FRONT = currentImageUri.toString()
             imageuri.printUri()

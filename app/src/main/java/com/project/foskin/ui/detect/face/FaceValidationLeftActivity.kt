@@ -3,10 +3,12 @@ package com.project.foskin.ui.detect.face
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.project.foskin.databinding.ActivityFaceValidationLeftBinding
 import com.project.foskin.ui.detect.face.FaceValidationFrontActivity.Companion
+import com.project.foskin.ui.detect.face.FaceValidationRightActivity.Companion.EXTRA_IMAGE_URI_RIGHT
 
 class FaceValidationLeftActivity : AppCompatActivity() {
 
@@ -31,12 +33,11 @@ class FaceValidationLeftActivity : AppCompatActivity() {
 
         binding.btnAgreeValidate.setOnClickListener {
             val intent = Intent(this, FaceRecognitionRightActivity::class.java).apply {
-                putExtra(EXTRA_IMAGE_URI_LEFT, intent.getStringExtra(EXTRA_IMAGE_URI_LEFT))
+                putExtra(EXTRA_IMAGE_URI_LEFT, currentImageUri?.toString())
             }
             imageuri.EXTRA_IMAGE_URI_LEFT = currentImageUri.toString()
             imageuri.printUri()
             startActivity(intent)
-            finish()
         }
     }
 
@@ -49,7 +50,6 @@ class FaceValidationLeftActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_IMAGE_URI_FRONT = "EXTRA_IMAGE_URI_FRONT"
         const val EXTRA_IMAGE_URI_LEFT = "EXTRA_IMAGE_URI_LEFT"
     }
 }

@@ -8,4 +8,3 @@ data class ProductItem(
     val soldCount: Int,
     val shopLink: String
 )
-

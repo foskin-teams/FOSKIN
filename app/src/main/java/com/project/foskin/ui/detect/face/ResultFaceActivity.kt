@@ -16,8 +16,8 @@ class ResultFaceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityResultFaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
-        // Menampilkan gambar front, left, dan right
         showImageFront()
         showImageLeft()
         showImageRight()
@@ -29,7 +29,7 @@ class ResultFaceActivity : AppCompatActivity() {
         imageUriFront?.let {
             Glide.with(this)
                 .load(Uri.parse(it))
-                .into(binding.imageFront)  // Gambar depan
+                .into(binding.imageFront)
         }
     }
 
@@ -39,7 +39,7 @@ class ResultFaceActivity : AppCompatActivity() {
         imageUriLeft?.let {
             Glide.with(this)
                 .load(Uri.parse(it))
-                .into(binding.imageLeft)  // Gambar kiri
+                .into(binding.imageLeft)
         }
     }
 
@@ -49,7 +49,7 @@ class ResultFaceActivity : AppCompatActivity() {
         imageUriRight?.let {
             Glide.with(this)
                 .load(Uri.parse(it))
-                .into(binding.imageRight)  // Gambar kanan
+                .into(binding.imageRight)
         }
     }
 

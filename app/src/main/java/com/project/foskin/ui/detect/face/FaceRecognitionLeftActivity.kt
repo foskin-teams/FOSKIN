@@ -17,7 +17,6 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.project.foskin.databinding.ActivityFaceRecognitionLeftBinding
-import com.project.foskin.ui.detect.face.FaceValidationLeftActivity.Companion.EXTRA_IMAGE_URI_LEFT
 import com.project.foskin.utils.createCustomTempFile
 import java.io.File
 import java.io.FileOutputStream
@@ -88,7 +87,6 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
                     if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
                         val flippedFile = flipImageHorizontally(photoFile)
                         val flippedUri = Uri.fromFile(flippedFile)
-
                         val intent = Intent(this@FaceRecognitionLeftActivity, FaceValidationLeftActivity::class.java)
                         intent.putExtra(EXTRA_IMAGE_URI_LEFT, flippedUri.toString())
                         startActivity(intent)

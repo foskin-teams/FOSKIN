@@ -8,7 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.foskin.R
 
-class ClinicAdapter(private val clinics: List<Clinic>) : RecyclerView.Adapter<ClinicAdapter.ClinicViewHolder>() {
+class ClinicAdapter(
+    private val clinics: List<Clinic>,
+    private val onClinicClick: (Clinic) -> Unit
+) : RecyclerView.Adapter<ClinicAdapter.ClinicViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClinicViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_clinic, parent, false)
@@ -18,6 +21,9 @@ class ClinicAdapter(private val clinics: List<Clinic>) : RecyclerView.Adapter<Cl
     override fun onBindViewHolder(holder: ClinicViewHolder, position: Int) {
         val clinic = clinics[position]
         holder.bind(clinic)
+        holder.itemView.setOnClickListener {
+            onClinicClick(clinic)
+        }
     }
 
     override fun getItemCount(): Int = clinics.size

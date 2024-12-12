@@ -46,7 +46,6 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         getCurrentLocation()
 
         editSearch = findViewById(R.id.editSearch)
@@ -74,7 +73,12 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         val clinics = getDummyClinics()
-        val clinicAdapter = ClinicAdapter(clinics)
+        val clinicAdapter = ClinicAdapter(clinics) { clinic ->
+            val intent = Intent(this, DetailClinicActivity::class.java)
+            intent.putExtra("clinic", clinic) // selectedClinic adalah objek Clinic
+            startActivity(intent)
+
+        }
         binding.rvClinic.layoutManager = LinearLayoutManager(this)
         binding.rvClinic.adapter = clinicAdapter
 
