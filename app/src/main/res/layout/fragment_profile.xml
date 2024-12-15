@@ -266,7 +266,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="Add Clinic"
+                    android:text="Manage Clinic"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
 
