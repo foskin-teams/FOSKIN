@@ -68,7 +68,9 @@ data class OperationalHours(
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        parcel.readHashMap(String::class.java.classLoader) as Map<String, String>,
+        parcel.readHashMap(String::class.java.classLoader) as Map<String, String>
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

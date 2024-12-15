@@ -55,7 +55,6 @@ class ShopFragment : Fragment() {
         )
     }
 
-    // Method to return list of recommended products
     private fun getProductData(): List<ProductItem> {
         return listOf(
             ProductItem(

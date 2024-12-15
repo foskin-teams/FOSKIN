@@ -192,7 +192,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     private fun setupRealTimeUpdate(view: View) {
         val timer = Timer()
         timer.scheduleAtFixedRate(object : TimerTask() {
@@ -205,7 +204,6 @@ class HomeFragment : Fragment() {
             }
         }, 0, 1000)
     }
-
 
     private fun setupSeeAllBlogClick() {
         btnSeeAllBlog.setOnClickListener {

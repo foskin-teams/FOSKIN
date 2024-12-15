@@ -38,6 +38,7 @@ class FaceValidationLeftActivity : AppCompatActivity() {
             imageuri.EXTRA_IMAGE_URI_LEFT = currentImageUri.toString()
             imageuri.printUri()
             startActivity(intent)
+            finish()
         }
     }
 

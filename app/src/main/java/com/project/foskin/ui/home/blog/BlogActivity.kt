@@ -2,59 +2,51 @@ package com.project.foskin.ui.home.blog
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.project.foskin.R
+import com.project.foskin.databinding.ActivityBlogBinding
 
 class BlogActivity : AppCompatActivity() {
 
-    private lateinit var btnBack: Button
-    private lateinit var btnSearchIcon: ImageButton
-    private lateinit var editSearch: EditText
+    private lateinit var binding: ActivityBlogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_blog)
+        binding = ActivityBlogBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
-        // Inisialisasi komponen setelah setContentView
-        btnBack = findViewById(R.id.btnBack)
-        btnSearchIcon = findViewById(R.id.btnSearchIcon)
-        editSearch = findViewById(R.id.editSearch)
-
-        val rvBlogHorizontal = findViewById<RecyclerView>(R.id.rvBlogHorizontal)
-        rvBlogHorizontal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        // Setup RecyclerView for horizontal blog items
+        binding.rvBlogHorizontal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val adapterH = BlogAdapter(getBlogDataH(), isHomeLayout = false) { blogItem ->
             val intent = Intent(this, DetailBlogActivity::class.java).apply {
                 putExtra("BLOG_ITEM", blogItem)
             }
             startActivity(intent)
         }
-        rvBlogHorizontal.adapter = adapterH
+        binding.rvBlogHorizontal.adapter = adapterH
 
-        val rvBlogVertical = findViewById<RecyclerView>(R.id.rvBlogVertical)
-        rvBlogVertical.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        // Setup RecyclerView for vertical blog items
+        binding.rvBlogVertical.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val marginDecoration = MarginItemDecoration(0)
-        rvBlogVertical.addItemDecoration(marginDecoration)
+        binding.rvBlogVertical.addItemDecoration(marginDecoration)
         val adapterV = BlogAdapter(getBlogDataV(), isHomeLayout = false) { blogItem ->
             val intent = Intent(this, DetailBlogActivity::class.java).apply {
                 putExtra("BLOG_ITEM", blogItem)
             }
             startActivity(intent)
         }
-        rvBlogVertical.adapter = adapterV
+        binding.rvBlogVertical.adapter = adapterV
 
-        btnBack.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
-        btnSearchIcon.setOnClickListener {
-            val query = editSearch.text.toString()
+        binding.btnSearchIcon.setOnClickListener {
+            val query = binding.editSearch.text.toString()
             Toast.makeText(this, "Searching for: $query", Toast.LENGTH_SHORT).show()
         }
     }

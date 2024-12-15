@@ -90,7 +90,7 @@ class BlogAdapter(
         }
     }
 
-    override fun getItemCount(): Int = blogList.size
+    override  fun getItemCount(): Int = blogList.size
 
     override fun getItemViewType(position: Int): Int {
         return if (isHomeLayout) {

@@ -22,9 +22,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.project.foskin.R
 import com.project.foskin.databinding.ActivityClinicBinding
+import java.util.Calendar
 import java.util.Locale
 
 class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -73,16 +75,16 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         val clinics = getDummyClinics()
-        val clinicAdapter = ClinicAdapter(clinics) { clinic ->
-            val intent = Intent(this, DetailClinicActivity::class.java)
-            intent.putExtra("clinic", clinic)
+
+        binding.rvClinic.layoutManager = LinearLayoutManager(this)
+        val clinicAdapter = ClinicAdapter(clinics) { clinicItem ->
+            val intent = Intent(this, DetailClinicActivity::class.java).apply {
+                putExtra("CLINIC_ITEM", clinicItem)
+            }
             startActivity(intent)
 
         }
-        binding.rvClinic.layoutManager = LinearLayoutManager(this)
         binding.rvClinic.adapter = clinicAdapter
-
-        Log.d("ClinicActivity", "Total clinics: ${clinics.size}")
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -98,7 +100,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 reviews = 120,
                 slug = "miracle-aesthetic-malang",
                 storeImage = "https://example.com/images/miracle.jpg",
-                description = "A leading aesthetic clinic offering premium skin treatments.",
+                description = "Miracle Aesthetic Clinic Malang is a premium beauty clinic that has been a trusted name in the field of aesthetic and dermatological treatments. Known for its professional approach and cutting-edge technology, the clinic offers a wide range of services including skin rejuvenation, anti-aging treatments, acne management, and body contouring. With a team of highly trained dermatologists and aesthetic experts, Miracle Aesthetic Clinic ensures a personalized experience tailored to each client's needs. The clinic also emphasizes a holistic approach to beauty, combining science and art to deliver natural and long-lasting results, making it a top choice for those seeking the best in skincare and beauty treatments.",
                 operationalHours = OperationalHours(
                     opening = "09:00 AM",
                     closing = "08:00 PM",
@@ -125,7 +127,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 reviews = 98,
                 slug = "eris-clinic-malang",
                 storeImage = "https://example.com/images/eris.jpg",
-                description = "Specializes in dermatological treatments and skincare.",
+                description = "Eris Clinic is a modern beauty and wellness center committed to providing high-quality aesthetic solutions in a comfortable and relaxing environment. With a focus on personalized care, the clinic offers treatments ranging from laser therapies, chemical peels, and acne solutions to advanced anti-aging and skin-tightening procedures. The expert team at Eris Clinic combines years of experience with the latest innovations in medical aesthetics to ensure safe and effective results. Whether you’re looking to address specific skin concerns or simply enhance your natural beauty, Eris Clinic is dedicated to helping you achieve your goals with professionalism and care.",
                 operationalHours = OperationalHours(
                     opening = "10:00 AM",
                     closing = "07:00 PM",
@@ -152,7 +154,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 reviews = 85,
                 slug = "diva-beauty-clinic-malang",
                 storeImage = "https://example.com/images/diva.jpg",
-                description = "Offers beauty treatments for skin and hair.",
+                description = "Diva Beauty Clinic is a trusted destination for individuals seeking comprehensive beauty treatments delivered with excellence and precision. The clinic specializes in non-surgical aesthetic procedures such as facial rejuvenation, dermal fillers, body contouring, and skin whitening. With a reputation for providing outstanding client care, Diva Beauty Clinic employs the latest technology and high-quality products to achieve remarkable results. The team of certified professionals works closely with clients to design customized treatment plans that align with their beauty aspirations. Whether enhancing your skin's glow or addressing specific concerns, Diva Beauty Clinic ensures you leave feeling confident and radiant.",
                 operationalHours = OperationalHours(
                     opening = "08:00 AM",
                     closing = "06:00 PM",
@@ -179,7 +181,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 reviews = 74,
                 slug = "olivia-skin-care-malang",
                 storeImage = "https://example.com/images/olivia.jpg",
-                description = "Personalized skincare treatments for all skin types.",
+                description = "Olivia Skin Care is a premier beauty clinic that prioritizes healthy, glowing skin through state-of-the-art treatments and a client-focused approach. Offering an extensive range of skincare solutions, including deep cleansing facials, acne therapies, pigmentation correction, and anti-aging treatments, Olivia Skin Care is dedicated to helping clients achieve flawless skin. The clinic prides itself on using only safe and dermatologist-approved products, coupled with advanced techniques to deliver visible results. With a serene ambiance and a team of skilled professionals, Olivia Skin Care aims to provide not just treatments but a transformative journey toward better skin health and confidence.",
                 operationalHours = OperationalHours(
                     opening = "09:00 AM",
                     closing = "07:00 PM",
@@ -206,7 +208,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 reviews = 200,
                 slug = "skinglow-aesthetic-malang",
                 storeImage = "https://example.com/images/skinglow.jpg",
-                description = "Award-winning clinic for aesthetic treatments.",
+                description = "SkinGlow Aesthetic is a renowned aesthetic clinic designed to bring out the best version of you through advanced skincare and beauty treatments. The clinic offers services such as laser resurfacing, hydrafacials, anti-aging solutions, and skin tightening treatments, tailored to address various skin concerns. With a focus on combining medical expertise and innovative technology, SkinGlow Aesthetic ensures that clients receive the highest standard of care. The team of experienced practitioners takes pride in their ability to deliver natural, radiant results while maintaining a safe and relaxing environment. SkinGlow Aesthetic is a trusted partner for anyone looking to rejuvenate their skin and boost their confidence.",
                 operationalHours = OperationalHours(
                     opening = "08:30 AM",
                     closing = "08:30 PM",
@@ -233,7 +235,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 reviews = 150,
                 slug = "viva-derma-clinic",
                 storeImage = "https://example.com/images/viva.jpg",
-                description = "Advanced dermatology and aesthetic treatments.",
+                description = "Viva Derma Clinic is a leading aesthetic and dermatology clinic committed to enhancing natural beauty through science-backed solutions and personalized care. Specializing in advanced dermatological treatments such as microneedling, laser therapies, anti-aging procedures, and acne management, the clinic is dedicated to addressing a wide range of skin concerns effectively. The skilled team at Viva Derma Clinic combines their expertise with top-of-the-line equipment and premium products to ensure outstanding results. With a mission to promote self-confidence and well-being, Viva Derma Clinic strives to provide a supportive and comfortable space for clients to achieve their beauty and skincare goals.",
                 operationalHours = OperationalHours(
                     opening = "09:00 AM",
                     closing = "06:00 PM",
@@ -287,6 +289,11 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
             if (location != null) {
                 val latitude = location.latitude
                 val longitude = location.longitude
+
+                getDummyClinics().forEach { clinic ->
+                    val clinicLocation = LatLng(clinic.detailedAddress.location.latitude, clinic.detailedAddress.location.longitude)
+                    gMap.addMarker(MarkerOptions().position(clinicLocation).title(clinic.name))
+                }
 
                 val geocoder = Geocoder(this, Locale.getDefault())
                 try {
@@ -380,6 +387,9 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 binding.tvCurrentLocation.text = address.getAddressLine(0)
                 moveCameraToLocation(latitude, longitude)
+
+                // Menampilkan marker untuk klinik-klinik di sekitar lokasi pencarian
+                showClinicsAroundLocation(latitude, longitude)
             } else {
                 Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show()
             }
@@ -389,18 +399,53 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun showClinicsAroundLocation(latitude: Double, longitude: Double) {
+        val radius = 5000.0
+
+        val clinics = getDummyClinics()
+
+        clinics.forEach { clinic ->
+            val clinicLocation = LatLng(clinic.detailedAddress.location.latitude, clinic.detailedAddress.location.longitude)
+
+            val results = FloatArray(1)
+            Location.distanceBetween(latitude, longitude, clinicLocation.latitude, clinicLocation.longitude, results)
+
+            if (results[0] <= radius) {
+                gMap.addMarker(MarkerOptions().position(clinicLocation).title(clinic.name))
+            }
+        }
+    }
+
     private fun moveCameraToLocation(latitude: Double, longitude: Double) {
         val location = LatLng(latitude, longitude)
-        gMap.clear()
         gMap.addMarker(MarkerOptions().position(location).title("Searched Location"))
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12f))
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         gMap = googleMap
+
         val defaultLocation = LatLng(-7.9666, 112.6326)
-        gMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
+
+        val clinics = getDummyClinics()
+        if (clinics.isNotEmpty()) {
+            val builder = LatLngBounds.Builder()
+
+            clinics.forEach { clinic ->
+                val clinicLocation = LatLng(clinic.detailedAddress.location.latitude, clinic.detailedAddress.location.longitude)
+                gMap.addMarker(MarkerOptions().position(clinicLocation).title(clinic.name))
+
+                builder.include(clinicLocation)
+            }
+
+            val bounds = builder.build()
+            val padding = 100
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+            gMap.animateCamera(cameraUpdate)
+        } else {
+            Toast.makeText(this, "No clinics found", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onRequestPermissionsResult(

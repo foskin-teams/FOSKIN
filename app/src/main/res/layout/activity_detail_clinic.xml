@@ -46,10 +46,10 @@
                 android:id="@+id/ibShare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/flag_transparent"
                 android:contentDescription="Back"
                 android:padding="10dp"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/share" />
         </LinearLayout>
 
@@ -88,34 +88,35 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins_medium"
                     android:maxLines="3"
+                    android:layout_marginBottom="10dp"
                     android:text="Miracle Aesthetic Clinic Malang"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_detail_clinic"
-                        android:padding="5dp">
+                        app:cardElevation="4dp"
+                        app:cardCornerRadius="5dp">
 
                         <ImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
+                            android:layout_margin="5dp"
                             android:background="@drawable/flag_transparent"
                             android:src="@drawable/ic_star" />
-                    </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
                         android:layout_marginStart="8dp"
+                        android:layout_weight="6"
                         android:gravity="start"
                         android:orientation="vertical">
 
@@ -125,15 +126,15 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="Rating"
                             android:textColor="#ABABAB"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvRating"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:fontFamily="@font/poppins_medium"
                             android:text="4.8 out of 5.0"
-                            android:layout_marginTop="2dp"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -145,25 +146,26 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_detail_clinic"
-                        android:padding="5dp">
+                        app:cardElevation="4dp"
+                        app:cardCornerRadius="5dp">
 
                         <ImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
+                            android:layout_margin="5dp"
                             android:background="@drawable/flag_transparent"
                             android:src="@drawable/group" />
-                    </RelativeLayout>
+
+                    </androidx.cardview.widget.CardView>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
                         android:layout_marginStart="8dp"
+                        android:layout_weight="6"
                         android:gravity="start"
                         android:orientation="vertical">
 
@@ -173,15 +175,15 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="Total Reviews"
                             android:textColor="#ABABAB"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvTotalReviews"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:fontFamily="@font/poppins_medium"
                             android:text="124+"
-                            android:layout_marginTop="2dp"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -192,96 +194,109 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About"
-            android:fontFamily="@font/poppins_medium"
-            android:textSize="17sp"
-            android:textColor="@color/black"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="About"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/tvAbout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_light"
             android:text="A leading aesthetic clinic offering premium skin treatments."
-            android:fontFamily="@font/poppins_light"
-            android:textSize="14sp"
             android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="16dp"/>
+            android:textSize="14sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="@color/light_grey" />
 
-        <TextView
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Operational hours"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="7dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Weekday"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
-        <TextView
-            android:id="@+id/tvWeekday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="09:00 AM - 08:00 PM"
-            android:fontFamily="@font/poppins_light"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Operational hours"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:paddingBottom="8dp" />
+            </TableRow>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Weekend"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="16dp"/>
-        <TextView
-            android:id="@+id/tvWeekend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="09:00 AM - 08:00 PM"
-            android:fontFamily="@font/poppins_light"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Weekday :"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:paddingEnd="16dp" />
+
+
+                <TextView
+                    android:id="@+id/tvWeekday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_light"
+                    android:text="09:00 AM - 08:00 PM"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Weekend :"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:paddingEnd="16dp" />
+
+                <TextView
+                    android:id="@+id/tvWeekend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_light"
+                    android:text="09:00 AM - 08:00 PM"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </TableRow>
+        </TableLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="16dp"
-            android:background="@color/grey" />
+            android:background="@color/light_grey" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Location"
-            android:fontFamily="@font/poppins_medium"
-            android:textSize="17sp"
-            android:textColor="@color/black"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Location"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp">
+            android:layout_height="wrap_content">
 
             <fragment
                 android:id="@+id/mapView"
@@ -290,18 +305,18 @@
                 android:layout_height="130dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/gmaps"/>
+                android:background="@drawable/gmaps" />
 
-            <ImageButton
-                android:id="@+id/ibNavigation"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginEnd="30dp"
-                android:layout_gravity="end"
-                android:background="@drawable/circle_background"
-                android:src="@drawable/paper"
-                android:scaleType="center" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/ibNavigation"-->
+<!--                android:layout_width="35dp"-->
+<!--                android:layout_height="35dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginTop="80dp"-->
+<!--                android:layout_marginEnd="30dp"-->
+<!--                android:background="@drawable/circle_background"-->
+<!--                android:scaleType="center"-->
+<!--                android:src="@drawable/paper" />-->
         </FrameLayout>
 
         <Button
@@ -309,15 +324,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="Book Now"
-            android:textSize="15sp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/purple_500"
+            android:fontFamily="@font/poppins_semi_bold"
             android:padding="10dp"
             android:shadowRadius="10"
-            android:fontFamily="@font/poppins_semi_bold"/>
+            android:text="Book Now"
+            android:textSize="15sp" />
 
     </LinearLayout>
 </ScrollView>
