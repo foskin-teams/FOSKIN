@@ -18,7 +18,6 @@ class BlogActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        // Setup RecyclerView for horizontal blog items
         binding.rvBlogHorizontal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val adapterH = BlogAdapter(getBlogDataH(), isHomeLayout = false) { blogItem ->
             val intent = Intent(this, DetailBlogActivity::class.java).apply {
@@ -28,7 +27,6 @@ class BlogActivity : AppCompatActivity() {
         }
         binding.rvBlogHorizontal.adapter = adapterH
 
-        // Setup RecyclerView for vertical blog items
         binding.rvBlogVertical.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val marginDecoration = MarginItemDecoration(0)

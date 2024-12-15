@@ -11,6 +11,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -73,18 +74,6 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.btnBack.setOnClickListener {
             finish()
         }
-
-        val clinics = getDummyClinics()
-
-        binding.rvClinic.layoutManager = LinearLayoutManager(this)
-        val clinicAdapter = ClinicAdapter(clinics) { clinicItem ->
-            val intent = Intent(this, DetailClinicActivity::class.java).apply {
-                putExtra("CLINIC_ITEM", clinicItem)
-            }
-            startActivity(intent)
-
-        }
-        binding.rvClinic.adapter = clinicAdapter
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -290,10 +279,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 val latitude = location.latitude
                 val longitude = location.longitude
 
-                getDummyClinics().forEach { clinic ->
-                    val clinicLocation = LatLng(clinic.detailedAddress.location.latitude, clinic.detailedAddress.location.longitude)
-                    gMap.addMarker(MarkerOptions().position(clinicLocation).title(clinic.name))
-                }
+                showClinicsAroundLocation(latitude, longitude)
 
                 val geocoder = Geocoder(this, Locale.getDefault())
                 try {
@@ -303,7 +289,6 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                         val locality = address.locality
                         val adminArea = address.adminArea
                         val locationText = "$locality, $adminArea"
-
                         binding.tvCurrentLocation.text = locationText
                     } else {
                         binding.tvCurrentLocation.text = "Location name not found"
@@ -366,6 +351,9 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
 
                     moveCameraToLocation(latitude, longitude)
+
+                    // Update Clinics list after location is fetched
+                    showClinicsAroundLocation(latitude, longitude)
                     fusedLocationClient.removeLocationUpdates(this)
                 } else {
                     binding.tvCurrentLocation.text = "Unable to fetch location"
@@ -388,7 +376,6 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.tvCurrentLocation.text = address.getAddressLine(0)
                 moveCameraToLocation(latitude, longitude)
 
-                // Menampilkan marker untuk klinik-klinik di sekitar lokasi pencarian
                 showClinicsAroundLocation(latitude, longitude)
             } else {
                 Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show()
@@ -400,19 +387,46 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showClinicsAroundLocation(latitude: Double, longitude: Double) {
-        val radius = 5000.0
+        val radius = 10000.0
 
         val clinics = getDummyClinics()
+        val nearbyClinics = mutableListOf<Clinic>()
 
         clinics.forEach { clinic ->
             val clinicLocation = LatLng(clinic.detailedAddress.location.latitude, clinic.detailedAddress.location.longitude)
-
             val results = FloatArray(1)
             Location.distanceBetween(latitude, longitude, clinicLocation.latitude, clinicLocation.longitude, results)
 
             if (results[0] <= radius) {
                 gMap.addMarker(MarkerOptions().position(clinicLocation).title(clinic.name))
+                nearbyClinics.add(clinic)
             }
+        }
+
+        updateClinicRecyclerView(nearbyClinics)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateClinicRecyclerView(clinics: List<Clinic>) {
+        if (clinics.isEmpty()) {
+            binding.rvClinic.visibility = View.GONE
+            binding.tvNoClinicsMessage.visibility = View.VISIBLE
+            binding.tvNoClinicsMessage.text = "There are no clinics around you"
+        } else {
+            binding.rvClinic.visibility = View.VISIBLE
+            binding.tvNoClinicsMessage.visibility = View.GONE
+
+            val layoutManager = LinearLayoutManager(this)
+            binding.rvClinic.layoutManager = layoutManager
+            val clinicAdapter = ClinicAdapter(clinics) { clinicItem ->
+                val intent = Intent(this, DetailClinicActivity::class.java).apply {
+                    putExtra("CLINIC_ITEM", clinicItem)
+                }
+                startActivity(intent)
+            }
+            binding.rvClinic.adapter = clinicAdapter
+
+            clinicAdapter.notifyDataSetChanged()
         }
     }
 

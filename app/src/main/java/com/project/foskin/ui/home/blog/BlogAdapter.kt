@@ -1,13 +1,13 @@
 package com.project.foskin.ui.home.blog
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.foskin.R
+import com.project.foskin.databinding.ItemBlogHomeBinding
+import com.project.foskin.databinding.ItemBlogHorizontalBinding
+import com.project.foskin.databinding.ItemBlogVerticalBinding
 
 class BlogAdapter(
     private val blogList: List<BlogItem>,
@@ -15,39 +15,60 @@ class BlogAdapter(
     private val onItemClicked: (BlogItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class HomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val blogImage: ImageView = view.findViewById(R.id.iv_image)
-        val blogDate: TextView = view.findViewById(R.id.tv_date)
-        val blogTitle: TextView = view.findViewById(R.id.tv_title)
-        val blogDescription: TextView = view.findViewById(R.id.tv_description)
+    class HomeViewHolder(private val binding: ItemBlogHomeBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(blogItem: BlogItem, onItemClicked: (BlogItem) -> Unit) {
+            binding.tvDate.text = blogItem.date
+            binding.tvTitle.text = blogItem.title
+            binding.tvDescription.text = blogItem.description
+            Glide.with(binding.ivImage.context)
+                .load(blogItem.imageUrl)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_error)
+                .into(binding.ivImage)
+            binding.root.setOnClickListener { onItemClicked(blogItem) }
+        }
     }
 
-    class HorizontalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val blogImage: ImageView = view.findViewById(R.id.iv_image)
-        val blogDate: TextView = view.findViewById(R.id.tv_date)
-        val blogTitle: TextView = view.findViewById(R.id.tv_title)
+    class HorizontalViewHolder(private val binding: ItemBlogHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(blogItem: BlogItem, onItemClicked: (BlogItem) -> Unit) {
+            binding.tvDate.text = blogItem.date
+            binding.tvTitle.text = blogItem.title
+            Glide.with(binding.ivImage.context)
+                .load(blogItem.imageUrl)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_error)
+                .into(binding.ivImage)
+            binding.root.setOnClickListener { onItemClicked(blogItem) }
+        }
     }
 
-    class VerticalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val blogImage: ImageView = view.findViewById(R.id.iv_image)
-        val blogDate: TextView = view.findViewById(R.id.tv_date)
-        val blogTitle: TextView = view.findViewById(R.id.tv_title)
-        val blogDescription: TextView = view.findViewById(R.id.tv_description)
+    class VerticalViewHolder(private val binding: ItemBlogVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(blogItem: BlogItem, onItemClicked: (BlogItem) -> Unit) {
+            binding.tvDate.text = blogItem.date
+            binding.tvTitle.text = blogItem.title
+            binding.tvDescription.text = blogItem.description
+            Glide.with(binding.ivImage.context)
+                .load(blogItem.imageUrl)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_error)
+                .into(binding.ivImage)
+            binding.root.setOnClickListener { onItemClicked(blogItem) }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_HOME -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_home, parent, false)
-                HomeViewHolder(view)
+                val binding = ItemBlogHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                HomeViewHolder(binding)
             }
             VIEW_TYPE_HORIZONTAL -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_horizontal, parent, false)
-                HorizontalViewHolder(view)
+                val binding = ItemBlogHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                HorizontalViewHolder(binding)
             }
             else -> { // VIEW_TYPE_VERTICAL
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_blog_vertical, parent, false)
-                VerticalViewHolder(view)
+                val binding = ItemBlogVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                VerticalViewHolder(binding)
             }
         }
     }
@@ -55,42 +76,13 @@ class BlogAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val blogItem = blogList[position]
         when (holder) {
-            is HomeViewHolder -> {
-                holder.blogDate.text = blogItem.date
-                holder.blogTitle.text = blogItem.title
-                holder.blogDescription.text = blogItem.description
-                Glide.with(holder.blogImage.context)
-                    .load(blogItem.imageUrl)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_error)
-                    .into(holder.blogImage)
-                holder.itemView.setOnClickListener { onItemClicked(blogItem) }
-            }
-            is HorizontalViewHolder -> {
-                holder.blogDate.text = blogItem.date
-                holder.blogTitle.text = blogItem.title
-                Glide.with(holder.blogImage.context)
-                    .load(blogItem.imageUrl)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_error)
-                    .into(holder.blogImage)
-                holder.itemView.setOnClickListener { onItemClicked(blogItem) }
-            }
-            is VerticalViewHolder -> {
-                holder.blogDate.text = blogItem.date
-                holder.blogTitle.text = blogItem.title
-                holder.blogDescription.text = blogItem.description
-                Glide.with(holder.blogImage.context)
-                    .load(blogItem.imageUrl)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_error)
-                    .into(holder.blogImage)
-                holder.itemView.setOnClickListener { onItemClicked(blogItem) }
-            }
+            is HomeViewHolder -> holder.bind(blogItem, onItemClicked)
+            is HorizontalViewHolder -> holder.bind(blogItem, onItemClicked)
+            is VerticalViewHolder -> holder.bind(blogItem, onItemClicked)
         }
     }
 
-    override  fun getItemCount(): Int = blogList.size
+    override fun getItemCount(): Int = blogList.size
 
     override fun getItemViewType(position: Int): Int {
         return if (isHomeLayout) {
@@ -103,7 +95,6 @@ class BlogAdapter(
             }
         }
     }
-
 
     companion object {
         private const val VIEW_TYPE_HOME = 1

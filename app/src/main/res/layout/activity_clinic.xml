@@ -145,8 +145,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvClinic"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingBottom="240dp" />
+
+            <TextView
+                android:id="@+id/tvNoClinicsMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No clinics available"
+                android:layout_margin="14dp"
+                android:visibility="gone"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

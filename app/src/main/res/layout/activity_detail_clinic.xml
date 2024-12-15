@@ -88,7 +88,6 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins_medium"
                     android:maxLines="3"
-                    android:layout_marginBottom="10dp"
                     android:text="Miracle Aesthetic Clinic Malang"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
@@ -102,12 +101,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:cardElevation="4dp"
+                        android:layout_margin="5dp"
                         app:cardCornerRadius="5dp">
 
                         <ImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
-                            android:layout_margin="5dp"
+                            android:layout_margin="4dp"
                             android:background="@drawable/flag_transparent"
                             android:src="@drawable/ic_star" />
                     </androidx.cardview.widget.CardView>
@@ -117,6 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="6"
+                        android:layout_margin="5dp"
                         android:gravity="start"
                         android:orientation="vertical">
 
@@ -143,19 +144,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:cardElevation="4dp"
+                        android:layout_margin="5dp"
                         app:cardCornerRadius="5dp">
 
                         <ImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
-                            android:layout_margin="5dp"
+                            android:layout_margin="4dp"
                             android:background="@drawable/flag_transparent"
                             android:src="@drawable/group" />
 
@@ -166,6 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="6"
+                        android:layout_margin="5dp"
                         android:gravity="start"
                         android:orientation="vertical">
 

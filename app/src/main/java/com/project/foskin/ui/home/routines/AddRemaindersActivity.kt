@@ -3,87 +3,70 @@ package com.project.foskin.ui.home.routines
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.NumberPicker
 import android.widget.Switch
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.project.foskin.R
+import com.project.foskin.databinding.ActivityAddRemaindersBinding
 import java.util.Calendar
 
 class AddRemaindersActivity : AppCompatActivity() {
 
-    private lateinit var npHour: NumberPicker
-    private lateinit var npMinute: NumberPicker
-    private lateinit var tvSubheader: TextView
-    private lateinit var tvRepeat: TextView
-    private lateinit var tvSkincareItem: TextView
-    private lateinit var tvAlarmPeriod: TextView
-    private lateinit var tvChooseSkincareItem: TextView
-    private lateinit var btnBack: ImageButton
-    private lateinit var btnSave: ImageButton
+    private lateinit var binding: ActivityAddRemaindersBinding
     private lateinit var alarmViewModel: AlarmViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_add_remainders)
+
+        binding = ActivityAddRemaindersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
-        npHour = findViewById(R.id.np_hour)
-        npMinute = findViewById(R.id.np_minute)
-        tvSubheader = findViewById(R.id.tv_subheader)
-        tvRepeat = findViewById(R.id.tv_repeat)
-        tvAlarmPeriod = findViewById(R.id.tv_alarm_period)
-        tvSkincareItem = findViewById(R.id.tv_skincare_items)
-        tvChooseSkincareItem = findViewById(R.id.tvChooseSkincareItem)
-        btnBack = findViewById(R.id.btn_back)
-        btnSave = findViewById(R.id.btn_save)
         alarmViewModel = ViewModelProvider(this)[AlarmViewModel::class.java]
 
-        npHour.minValue = 0
-        npHour.maxValue = 23
-        npHour.wrapSelectorWheel = true
+        binding.npHour.minValue = 0
+        binding.npHour.maxValue = 23
+        binding.npHour.wrapSelectorWheel = true
 
-        npMinute.minValue = 0
-        npMinute.maxValue = 59
-        npMinute.wrapSelectorWheel = true
+        binding.npMinute.minValue = 0
+        binding.npMinute.maxValue = 59
+        binding.npMinute.wrapSelectorWheel = true
 
         setTimeToNow()
 
-        npHour.setOnValueChangedListener { _, _, _ ->
+        binding.npHour.setOnValueChangedListener { _, _, _ ->
             updateSubheaderTime()
             updateAlarmPeriod()
         }
 
-        npMinute.setOnValueChangedListener { _, _, _ ->
+        binding.npMinute.setOnValueChangedListener { _, _, _ ->
             updateSubheaderTime()
         }
 
-        tvRepeat.setOnClickListener {
+        binding.tvRepeat.setOnClickListener {
             showRepeatOptionsDialog()
         }
 
-        tvSkincareItem.setOnClickListener {
+        binding.tvSkincareItems.setOnClickListener {
             showItemSkincareOptionsDialog()
         }
 
-        btnBack.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
-        btnSave.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             if (validateInputs()) {
-                val hour = npHour.value
-                val minute = npMinute.value
-                val period = tvAlarmPeriod.text.toString()
-                val repeat = tvRepeat.text.toString()
-                val skincareItems = tvChooseSkincareItem.text.toString()
-                val vibrate = findViewById<Switch>(R.id.switch_vibrate).isChecked
-                val deleteAfterRing = findViewById<Switch>(R.id.switch_delete_after_ringing).isChecked
+                val hour = binding.npHour.value
+                val minute = binding.npMinute.value
+                val period = binding.tvAlarmPeriod.text.toString()
+                val repeat = binding.tvRepeat.text.toString()
+                val skincareItems = binding.tvChooseSkincareItem.text.toString()
+                val vibrate = binding.switchVibrate.isChecked
+                val deleteAfterRing = binding.switchDeleteAfterRinging.isChecked
 
                 val newAlarm = AlarmData(
                     id = System.currentTimeMillis(),
@@ -145,20 +128,20 @@ class AddRemaindersActivity : AppCompatActivity() {
 
     private fun setTimeToNow() {
         val calendar = Calendar.getInstance()
-        npHour.value = calendar.get(Calendar.HOUR_OF_DAY)
-        npMinute.value = calendar.get(Calendar.MINUTE)
+        binding.npHour.value = calendar.get(Calendar.HOUR_OF_DAY)
+        binding.npMinute.value = calendar.get(Calendar.MINUTE)
         updateSubheaderTime()
         updateAlarmPeriod()
     }
 
     private fun showRepeatOptionsDialog() {
         val repeatOptions = arrayOf("Once", "Daily")
-        val currentSelection = repeatOptions.indexOf(tvRepeat.text.toString())
+        val currentSelection = repeatOptions.indexOf(binding.tvRepeat.text.toString())
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Repeat Options")
         builder.setSingleChoiceItems(repeatOptions, currentSelection) { dialog, which ->
-            tvRepeat.text = repeatOptions[which]
+            binding.tvRepeat.text = repeatOptions[which]
             dialog.dismiss()
         }
         builder.create().show()
@@ -171,7 +154,7 @@ class AddRemaindersActivity : AppCompatActivity() {
         )
 
         val selectedItems = mutableListOf<String>()
-        val currentItemsText = tvChooseSkincareItem.text.toString()
+        val currentItemsText = binding.tvChooseSkincareItem.text.toString()
         selectedItems.addAll(currentItemsText.split(", ").filter { it.isNotBlank() })
 
         val checkedItems = skincareOptions.map { selectedItems.contains(it) }.toBooleanArray()
@@ -193,7 +176,7 @@ class AddRemaindersActivity : AppCompatActivity() {
         builder.setPositiveButton("OK") { _, _ ->
             val sortedSelectedItems = selectedItems.sortedBy { skincareOptions.indexOf(it) }
             val selectedText = sortedSelectedItems.joinToString(", ")
-            tvChooseSkincareItem.text = selectedText
+            binding.tvChooseSkincareItem.text = selectedText
         }
 
         builder.setNegativeButton("Cancel", null)
@@ -205,8 +188,8 @@ class AddRemaindersActivity : AppCompatActivity() {
         val calendarNow = Calendar.getInstance()
         val selectedCalendar = Calendar.getInstance()
 
-        selectedCalendar.set(Calendar.HOUR_OF_DAY, npHour.value)
-        selectedCalendar.set(Calendar.MINUTE, npMinute.value)
+        selectedCalendar.set(Calendar.HOUR_OF_DAY, binding.npHour.value)
+        selectedCalendar.set(Calendar.MINUTE, binding.npMinute.value)
         selectedCalendar.set(Calendar.SECOND, 0)
 
         if (selectedCalendar.timeInMillis <= calendarNow.timeInMillis) {
@@ -220,30 +203,30 @@ class AddRemaindersActivity : AppCompatActivity() {
         val hours = (diffInMinutes % (24 * 60)) / 60
         val minutes = (diffInMinutes % 60)
 
-        if (calendarNow.get(Calendar.HOUR_OF_DAY) == npHour.value &&
-            calendarNow.get(Calendar.MINUTE) == npMinute.value) {
-            tvSubheader.text = "Alarm time has passed\nAlarm in 23 hour 59 minute"
+        if (calendarNow.get(Calendar.HOUR_OF_DAY) == binding.npHour.value &&
+            calendarNow.get(Calendar.MINUTE) == binding.npMinute.value) {
+            binding.tvSubheader.text = "Alarm time has passed\nAlarm in 23 hour 59 minute"
         }
         else if (diffInMillis <= 60000) {
-            tvSubheader.text = "Alarm in $hours hour $minutes minute"
+            binding.tvSubheader.text = "Alarm in $hours hour $minutes minute"
         }
         else if (days > 0) {
-            tvSubheader.text = "Alarm in $days day $hours hour $minutes minute"
+            binding.tvSubheader.text = "Alarm in $days day $hours hour $minutes minute"
         } else if (hours > 0 || minutes > 0) {
-            tvSubheader.text = "Alarm in $hours hour $minutes minute"
+            binding.tvSubheader.text = "Alarm in $hours hour $minutes minute"
         } else {
-            tvSubheader.text = "Alarm time has passed"
+            binding.tvSubheader.text = "Alarm time has passed"
         }
     }
 
     private fun updateAlarmPeriod() {
-        val hour = npHour.value
-        tvAlarmPeriod.text = if (hour in 0..11) "Morning" else "Evening"
+        val hour = binding.npHour.value
+        binding.tvAlarmPeriod.text = if (hour in 0..11) "Morning" else "Evening"
     }
 
     private fun validateInputs(): Boolean {
-        val repeatText = tvRepeat.text.toString()
-        val skincareItemsText = tvChooseSkincareItem.text.toString()
+        val repeatText = binding.tvRepeat.text.toString()
+        val skincareItemsText = binding.tvChooseSkincareItem.text.toString()
 
         if (repeatText.isBlank()) {
             Toast.makeText(this, "Please select repeat option", Toast.LENGTH_SHORT).show()

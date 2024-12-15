@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.foskin.R
+import com.project.foskin.databinding.ItemRoutineBinding
 
 class PastAlarmAdapter(
     private var alarms: MutableList<AlarmData>,
@@ -15,44 +15,41 @@ class PastAlarmAdapter(
 
     private val checkedItems = mutableSetOf<AlarmData>()
 
-    inner class PastAlarmViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvDetails: TextView = view.findViewById(R.id.tvDetails)
-        val tvTime: TextView = view.findViewById(R.id.tvTime)
-        val tvRepeat: TextView = view.findViewById(R.id.tvRepeat)
-        val tvPeriode: TextView = view.findViewById(R.id.tvPeriode)
-        val ivCheck: ImageButton = view.findViewById(R.id.iv_check)
-        val vBackgroundRoutine: View = view.findViewById(R.id.vBackgroundRoutine)
+    inner class PastAlarmViewHolder(private val binding: ItemRoutineBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(alarm: AlarmData, position: Int) {
+            val formattedTime = String.format("%02d:%02d", alarm.hour, alarm.minute)
+
+            binding.tvDetails.text = alarm.skincareItems
+            binding.tvTime.text = formattedTime
+            binding.tvRepeat.text = alarm.repeat
+            binding.tvPeriode.text = alarm.period
+
+            binding.vBackgroundRoutine.setBackgroundColor(itemView.context.getColor(R.color.purple_500))
+
+            itemView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+
+            val checkIcon = if (checkedItems.contains(alarm)) {
+                R.drawable.check_circle_remainders
+            } else {
+                R.drawable.check_circle_outline
+            }
+            binding.ivCheck.setImageResource(checkIcon)
+
+            binding.ivCheck.setOnClickListener {
+                toggleCheck(alarm, position)
+                onAlarmChecked(alarm)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PastAlarmViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_routine, parent, false)
-        return PastAlarmViewHolder(view)
+        val binding = ItemRoutineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PastAlarmViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PastAlarmViewHolder, position: Int) {
         val alarm = alarms[position]
-        val formattedTime = String.format("%02d:%02d", alarm.hour, alarm.minute)
-
-        holder.tvDetails.text = alarm.skincareItems
-        holder.tvTime.text = formattedTime
-        holder.tvRepeat.text = alarm.repeat
-        holder.tvPeriode.text = alarm.period
-
-        holder.vBackgroundRoutine.setBackgroundColor(holder.itemView.context.getColor(R.color.purple_500))
-
-        holder.itemView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-
-        val checkIcon = if (checkedItems.contains(alarm)) {
-            R.drawable.check_circle_remainders
-        } else {
-            R.drawable.check_circle_outline
-        }
-        holder.ivCheck.setImageResource(checkIcon)
-
-        holder.ivCheck.setOnClickListener {
-            toggleCheck(alarm, position)
-            onAlarmChecked(alarm)
-        }
+        holder.bind(alarm, position)
     }
 
     override fun getItemCount(): Int = alarms.size
