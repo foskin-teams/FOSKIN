@@ -19,7 +19,6 @@ class QuickSurvey1Activity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        // Set click listener for the Next button
         binding.btnNext.setOnClickListener {
             if (validateInputs()) {
                 val intent = Intent(this, QuickSurvey2Activity::class.java)
@@ -27,7 +26,6 @@ class QuickSurvey1Activity : AppCompatActivity() {
             }
         }
 
-        // Set click listener for icon_minus
         binding.iconMinus.setOnClickListener {
             val currentAge = binding.etAgeText.text.toString().toIntOrNull() ?: 0
             if (currentAge > 0) {
@@ -35,20 +33,17 @@ class QuickSurvey1Activity : AppCompatActivity() {
             }
         }
 
-        // Set click listener for icon_plus
         binding.iconPlus.setOnClickListener {
             val currentAge = binding.etAgeText.text.toString().toIntOrNull() ?: 0
-            if (currentAge < 120) { // Maximum age limit
+            if (currentAge < 120) {
                 binding.etAgeText.setText((currentAge + 1).toString())
             }
         }
 
-        // Set click listener for buttonMan
         binding.buttonMan.setOnClickListener {
             selectGender(true)
         }
 
-        // Set click listener for buttonWoman
         binding.buttonWoman.setOnClickListener {
             selectGender(false)
         }
@@ -70,8 +65,9 @@ class QuickSurvey1Activity : AppCompatActivity() {
             return false
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches() || !email.endsWith("@gmail.com")) {
-            Toast.makeText(this, "Please enter a valid Gmail address", Toast.LENGTH_SHORT).show()
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches() ||
+            !(email.endsWith("@gmail.com") || email.endsWith("@bangkit.academy"))) {
+            Toast.makeText(this, "Please enter a valid Gmail or Bangkit Academy email address", Toast.LENGTH_SHORT).show()
             return false
         }
 

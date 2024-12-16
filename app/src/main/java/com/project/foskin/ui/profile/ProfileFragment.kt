@@ -13,6 +13,7 @@ import android.widget.Switch
 import androidx.fragment.app.Fragment
 import com.project.foskin.R
 import com.project.foskin.ui.Auth.EnterWhatsappNumberActivity
+import com.project.foskin.ui.home.clinic.ManageClinicActivity
 
 class ProfileFragment : Fragment() {
 
@@ -31,6 +32,7 @@ class ProfileFragment : Fragment() {
         val layoutLogout = view.findViewById<LinearLayout>(R.id.logout)
         val llPrivacyPolicy = view.findViewById<LinearLayout>(R.id.llPrivacyPolicy)
         val llWebsite = view.findViewById<LinearLayout>(R.id.llWebsite)
+        val manageClinic = view.findViewById<LinearLayout>(R.id.manageClinic)
 
         layoutLogout.setOnClickListener {
             showLogoutConfirmation()
@@ -41,6 +43,11 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        manageClinic.setOnClickListener {
+            val intent = Intent(requireContext(), ManageClinicActivity::class.java)
+            startActivity(intent)
+        }
+
         llWebsite.setOnClickListener {
             val url = "https://foskin.id/"
             val intent = Intent(Intent.ACTION_VIEW)
@@ -48,12 +55,11 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
-        // Update mode icon when switch changes
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                modeImageView.setImageResource(R.drawable.night_mode) // Change to night mode
+                modeImageView.setImageResource(R.drawable.night_mode)
             } else {
-                modeImageView.setImageResource(R.drawable.day_mode) // Change to day mode
+                modeImageView.setImageResource(R.drawable.day_mode)
             }
         }
 
@@ -79,4 +85,5 @@ class ProfileFragment : Fragment() {
         startActivity(intent)
         requireActivity().finish()
     }
+
 }

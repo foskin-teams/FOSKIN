@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.foskin.R
 import com.project.foskin.databinding.ItemClinicBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ClinicAdapter(
     private val clinics: List<Clinic>,
@@ -53,20 +56,39 @@ class ClinicAdapter(
         }
 
         private fun isClinicOpen(operationalHours: OperationalHours): Boolean {
-            val currentHour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-            val currentDayOfWeek = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_WEEK)
+            val now = Calendar.getInstance()
+            val currentTime = now.get(Calendar.HOUR_OF_DAY) * 100 + now.get(Calendar.MINUTE)
+            val currentDayOfWeek = now.get(Calendar.DAY_OF_WEEK)
 
             val todayOpeningHours = when (currentDayOfWeek) {
-                java.util.Calendar.MONDAY -> operationalHours.weekday["Monday"]
-                java.util.Calendar.SATURDAY -> operationalHours.weekend["Saturday"]
-                java.util.Calendar.SUNDAY -> operationalHours.weekend["Sunday"]
+                Calendar.MONDAY -> operationalHours.weekday["Monday"]
+                Calendar.SATURDAY -> operationalHours.weekend["Saturday"]
+                Calendar.SUNDAY -> operationalHours.weekend["Sunday"]
                 else -> operationalHours.weekday["Other"]
             }
 
-            val openingTime = todayOpeningHours?.substringBefore("-")?.trim()?.toIntOrNull()
-            val closingTime = todayOpeningHours?.substringAfter("-")?.trim()?.toIntOrNull()
+            if (todayOpeningHours.isNullOrEmpty() || todayOpeningHours == "Closed") {
+                return false
+            }
 
-            return openingTime != null && closingTime != null && currentHour in openingTime..closingTime
+            val openingTime = parseTimeToHHMM(todayOpeningHours.substringBefore("-").trim())
+            val closingTime = parseTimeToHHMM(todayOpeningHours.substringAfter("-").trim())
+
+            return openingTime != null && closingTime != null && currentTime in openingTime..closingTime
+        }
+
+        fun parseTimeToHHMM(time: String): Int? {
+            val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            return try {
+                val date = dateFormat.parse(time)
+                val calendar = Calendar.getInstance()
+                calendar.time = date!!
+                val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                val minute = calendar.get(Calendar.MINUTE)
+                hour * 100 + minute
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 }
