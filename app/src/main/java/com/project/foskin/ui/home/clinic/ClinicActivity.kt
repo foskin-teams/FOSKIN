@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
@@ -388,17 +389,32 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showClinicsAroundLocation(latitude: Double, longitude: Double) {
         val radius = 10000.0
-
         val clinics = getDummyClinics()
         val nearbyClinics = mutableListOf<Clinic>()
 
+        gMap.clear()
+
         clinics.forEach { clinic ->
-            val clinicLocation = LatLng(clinic.detailedAddress.location.latitude, clinic.detailedAddress.location.longitude)
+            val clinicLocation = LatLng(
+                clinic.detailedAddress.location.latitude,
+                clinic.detailedAddress.location.longitude
+            )
             val results = FloatArray(1)
-            Location.distanceBetween(latitude, longitude, clinicLocation.latitude, clinicLocation.longitude, results)
+            Location.distanceBetween(
+                latitude,
+                longitude,
+                clinicLocation.latitude,
+                clinicLocation.longitude,
+                results
+            )
 
             if (results[0] <= radius) {
-                gMap.addMarker(MarkerOptions().position(clinicLocation).title(clinic.name))
+                gMap.addMarker(
+                    MarkerOptions()
+                        .position(clinicLocation)
+                        .title(clinic.name)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_pin))
+                )
                 nearbyClinics.add(clinic)
             }
         }
