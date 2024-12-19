@@ -76,36 +76,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <LinearLayout
-            android:id="@+id/llSearchBar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/bg_search_map"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/editSearch"
+            <LinearLayout
+                android:id="@+id/llSearchBar"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/poppins_regular"
-                android:hint="Search location..."
-                android:paddingStart="15dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:layout_height="32dp"
+                android:background="@drawable/bg_search_map"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ibMic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <EditText
+                    android:id="@+id/editSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="Search location..."
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <ImageButton
+                    android:id="@+id/btnSearchIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Search Icon"
+                    android:padding="8dp"
+                    android:src="@drawable/search_icon" />
+            </LinearLayout>
 
             <ImageButton
-                android:id="@+id/btnSearchIcon"
+                android:id="@+id/ibMic"
                 android:layout_width="40dp"
-                android:layout_height="match_parent"
+                android:layout_height="32dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="Search Icon"
+                android:contentDescription="Microphone Icon"
                 android:padding="8dp"
-                android:src="@drawable/search_icon" />
-        </LinearLayout>
+                android:src="@drawable/mic_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
     <fragment
