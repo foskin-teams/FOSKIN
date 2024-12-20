@@ -10,12 +10,15 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,7 +31,6 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.project.foskin.R
 import com.project.foskin.databinding.ActivityClinicBinding
-import java.util.Calendar
 import java.util.Locale
 
 class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -38,9 +40,14 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var gMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var speechRecognizerIntent: Intent
+    private lateinit var listeningDialog: android.app.Dialog
+
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        private const val MICROPHONE_PERMISSION_REQUEST_CODE = 101
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +85,100 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        initializeSpeechRecognizer()
+
+        binding.ibMic.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    MICROPHONE_PERMISSION_REQUEST_CODE
+
+                )
+            } else {
+                startVoiceRecognition()
+            }
+        }
+    }
+
+    private fun showListeningDialog() {
+        listeningDialog = android.app.Dialog(this).apply {
+            setContentView(R.layout.dialog_listening)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setCancelable(false)
+        }
+        listeningDialog.show()
+    }
+
+    private fun dismissListeningDialog() {
+        if (::listeningDialog.isInitialized && listeningDialog.isShowing) {
+            listeningDialog.dismiss()
+        }
+    }
+
+
+    private fun initializeSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+        speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        }
+    }
+
+    private fun startVoiceRecognition() {
+        showListeningDialog() // Tampilkan pop-up dialog
+
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+                // Mungkin tambahkan indikator visual
+            }
+
+            override fun onBeginningOfSpeech() {
+                // Mulai mendengarkan
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {}
+
+            override fun onBufferReceived(buffer: ByteArray?) {}
+
+            override fun onEndOfSpeech() {
+                dismissListeningDialog() // Tutup dialog saat selesai mendengarkan
+            }
+
+            override fun onError(error: Int) {
+                dismissListeningDialog() // Tutup dialog saat terjadi error
+                val errorMessage = when (error) {
+                    SpeechRecognizer.ERROR_NETWORK -> "Network error. Please try again."
+                    SpeechRecognizer.ERROR_NO_MATCH -> "No speech recognized. Please try again."
+                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Speech input timed out. Please try again."
+                    else -> "Error occurred: $error"
+                }
+                Toast.makeText(this@ClinicActivity, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResults(results: Bundle?) {
+                dismissListeningDialog() // Tutup dialog saat hasil diterima
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                if (!matches.isNullOrEmpty()) {
+                    val recognizedText = matches[0]
+                    editSearch.setText(recognizedText)
+                    searchLocation(recognizedText)
+                }
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {}
+
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
+
+        speechRecognizer.startListening(speechRecognizerIntent)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        speechRecognizer.destroy()
     }
 
     private fun getDummyClinics(): List<Clinic> {
@@ -484,12 +585,24 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                getCurrentLocation()
-            } else {
-                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getCurrentLocation()
+                } else {
+                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+                }
+            }
+            MICROPHONE_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Microphone permission granted", Toast.LENGTH_SHORT).show()
+                    startVoiceRecognition()
+                } else {
+                    Toast.makeText(this, "Microphone permission denied", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
 }
