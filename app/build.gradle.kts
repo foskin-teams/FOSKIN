@@ -91,4 +91,6 @@ dependencies {
 
     implementation("androidx.appcompat:appcompat:1.3.1")
 
+    implementation("com.google.mlkit:face-detection:16.1.7")
+
 }
