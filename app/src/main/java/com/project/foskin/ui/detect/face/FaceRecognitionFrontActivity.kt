@@ -45,6 +45,7 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             onBackPressed()
         }
+
     }
 
     override fun onResume() {
@@ -209,5 +210,4 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
         const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
         const val CAMERAX_RESULT = 200
     }
-
 }
