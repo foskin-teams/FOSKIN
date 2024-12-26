@@ -1,5 +1,6 @@
 package com.project.foskin.ui.detect.face
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -45,6 +46,9 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
     private var isFaceDetected = false
     private var imageAnalysis: ImageAnalysis? = null
 
+    // Progress Dialog
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFaceRecognitionLeftBinding.inflate(layoutInflater)
@@ -56,6 +60,11 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
         binding.btnGallery.setOnClickListener { openGallery() }
 
         setupFaceDetection()
+
+        // Initialize ProgressDialog
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("The image is being adjusted...")
+        progressDialog.setCancelable(false)
     }
 
     override fun onResume() {
@@ -86,7 +95,8 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
     private fun processImageProxy(detector: FaceDetector, imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         if (mediaImage != null) {
-            val inputImage = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+            val inputImage =
+                InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             detector.process(inputImage)
                 .addOnSuccessListener { faces: List<Face?> ->
                     binding.graphicOverlay.clear()
@@ -131,7 +141,11 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
                     imageAnalysis
                 )
             } catch (exc: Exception) {
-                Toast.makeText(this@FaceRecognitionLeftActivity, "Failed to start camera.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@FaceRecognitionLeftActivity,
+                    "Failed to start camera.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.e(TAG, "startCamera: ${exc.message}")
             }
         }, ContextCompat.getMainExecutor(this))
@@ -139,7 +153,11 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         if (!isFaceDetected) {
-            Toast.makeText(this, "No face detected. Please ensure your face is visible.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "No face detected. Please ensure your face is visible.",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -157,12 +175,18 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
                     if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
                         val flippedFile = flipImageHorizontally(photoFile)
                         val flippedUri = Uri.fromFile(flippedFile)
-                        val intent = Intent(this@FaceRecognitionLeftActivity, FaceValidationLeftActivity::class.java)
+                        val intent = Intent(
+                            this@FaceRecognitionLeftActivity,
+                            FaceValidationLeftActivity::class.java
+                        )
                         intent.putExtra(EXTRA_IMAGE_URI_LEFT, flippedUri.toString())
                         startActivity(intent)
                         finish()
                     } else {
-                        val intent = Intent(this@FaceRecognitionLeftActivity, FaceValidationLeftActivity::class.java)
+                        val intent = Intent(
+                            this@FaceRecognitionLeftActivity,
+                            FaceValidationLeftActivity::class.java
+                        )
                         intent.putExtra(EXTRA_IMAGE_URI_LEFT, savedUri.toString())
                         startActivity(intent)
                         finish()
@@ -170,7 +194,11 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
                 }
 
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(this@FaceRecognitionLeftActivity, "Failed to take picture.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@FaceRecognitionLeftActivity,
+                        "Failed to take picture.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e(TAG, "Camera error: ${exc.message}")
                 }
             }
@@ -181,7 +209,8 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeFile(file.path)
 
         val exif = ExifInterface(file.path)
-        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        val orientation =
+            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
 
         val matrix = Matrix()
 
@@ -193,7 +222,8 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
 
         matrix.postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f)
 
-        val flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        val flippedBitmap =
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
         val outputStream = FileOutputStream(file)
         flippedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
@@ -213,7 +243,10 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         intent.type = "image/*"
         startActivityForResult(intent, pickImageRequestCode)
     }
@@ -224,7 +257,13 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
             val bounds = face.boundingBox
 
             // Memotong gambar berdasarkan koordinat bounding box wajah
-            return Bitmap.createBitmap(bitmap, bounds.left, bounds.top, bounds.width(), bounds.height())
+            return Bitmap.createBitmap(
+                bitmap,
+                bounds.left,
+                bounds.top,
+                bounds.width(),
+                bounds.height()
+            )
         }
         return null
     }
@@ -235,6 +274,9 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
         if (requestCode == pickImageRequestCode && resultCode == RESULT_OK) {
             data?.data?.let { imageUri ->
                 Log.d(TAG, "Selected Image URI: $imageUri")
+
+                // Show ProgressDialog while image is being adjusted
+                progressDialog.show()
 
                 val inputStream = contentResolver.openInputStream(imageUri)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -247,34 +289,52 @@ class FaceRecognitionLeftActivity : AppCompatActivity() {
 
                 detector.process(inputImage)
                     .addOnSuccessListener { faces ->
+                        // Dismiss ProgressDialog after processing
+                        progressDialog.dismiss()
+
                         if (faces.isNotEmpty()) {
                             // Crop the face from the selected image
                             val croppedBitmap = cropFaceFromBitmap(bitmap, faces)
-
                             if (croppedBitmap != null) {
-                                // Convert cropped bitmap back to file
                                 val file = createCustomTempFile(application)
                                 FileOutputStream(file).use { outputStream ->
-                                    croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                                    croppedBitmap.compress(
+                                        Bitmap.CompressFormat.JPEG,
+                                        100,
+                                        outputStream
+                                    )
                                 }
                                 val croppedUri = Uri.fromFile(file)
 
-                                // Start FaceValidationLeftActivity with the cropped image
                                 val intent = Intent(this, FaceValidationLeftActivity::class.java)
                                 intent.putExtra(EXTRA_IMAGE_URI_LEFT, croppedUri.toString())
                                 startActivity(intent)
                             } else {
-                                Toast.makeText(this, "No face detected in the selected image.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    "No face detected in the selected image.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         } else {
-                            Toast.makeText(this, "No face detected in the selected image.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "No face detected in the selected image.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Failed to process the selected image.", Toast.LENGTH_SHORT).show()
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            this,
+                            "Failed to process the selected image.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             } ?: run {
-                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

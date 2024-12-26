@@ -1,5 +1,6 @@
 package com.project.foskin.ui.detect.face
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -45,6 +46,9 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
     private val pickImageRequestCode = 1001
     private var isFaceDetected = false
 
+    // Progress Dialog
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFaceRecognitionRightBinding.inflate(layoutInflater)
@@ -56,6 +60,11 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
         binding.btnGallery.setOnClickListener { openGallery() }
 
         setupFaceDetection()
+
+        // Initialize ProgressDialog
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("The image is being adjusted...")
+        progressDialog.setCancelable(false)
     }
 
     override fun onResume() {
@@ -245,12 +254,31 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
         startActivityForResult(intent, pickImageRequestCode)
     }
 
+    private fun cropFaceFromBitmap(bitmap: Bitmap, faces: List<Face>): Bitmap? {
+        if (faces.isNotEmpty()) {
+            val face = faces[0] // Taking the first face
+            val bounds = face.boundingBox
+
+            return Bitmap.createBitmap(
+                bitmap,
+                bounds.left,
+                bounds.top,
+                bounds.width(),
+                bounds.height()
+            )
+        }
+        return null
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == pickImageRequestCode && resultCode == RESULT_OK) {
             data?.data?.let { imageUri ->
                 Log.d(TAG, "Selected Image URI: $imageUri")
+
+                // Show ProgressDialog while image is being adjusted
+                progressDialog.show()
 
                 val inputStream = contentResolver.openInputStream(imageUri)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -263,6 +291,9 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
 
                 detector.process(inputImage)
                     .addOnSuccessListener { faces ->
+                        // Dismiss ProgressDialog after processing
+                        progressDialog.dismiss()
+
                         if (faces.isNotEmpty()) {
                             val croppedBitmap = cropFaceFromBitmap(bitmap, faces)
                             if (croppedBitmap != null) {
@@ -295,6 +326,7 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                         }
                     }
                     .addOnFailureListener {
+                        progressDialog.dismiss()
                         Toast.makeText(
                             this,
                             "Failed to process the selected image.",
@@ -306,22 +338,6 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                     .show()
             }
         }
-    }
-
-    private fun cropFaceFromBitmap(bitmap: Bitmap, faces: List<Face>): Bitmap? {
-        if (faces.isNotEmpty()) {
-            val face = faces[0] // Taking the first face
-            val bounds = face.boundingBox
-
-            return Bitmap.createBitmap(
-                bitmap,
-                bounds.left,
-                bounds.top,
-                bounds.width(),
-                bounds.height()
-            )
-        }
-        return null
     }
 
     companion object {

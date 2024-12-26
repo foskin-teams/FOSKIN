@@ -1,5 +1,6 @@
 package com.project.foskin.ui.detect.face
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -44,6 +45,9 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
     private val pickImageRequestCode = 1001
     private var isFaceDetected = false
 
+    // Progress Dialog
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFaceRecognitionFrontBinding.inflate(layoutInflater)
@@ -58,6 +62,11 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
         backButton.setOnClickListener { v: View? -> onBackPressed() }
 
         setupFaceDetection()
+
+        // Initialize ProgressDialog
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("The image is being adjusted...")
+        progressDialog.setCancelable(false)
     }
 
     override fun onResume() {
@@ -268,6 +277,9 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
                 val bitmap = BitmapFactory.decodeStream(inputStream)
                 val inputImage = InputImage.fromBitmap(bitmap, 0)
 
+                // Show ProgressDialog while image is being adjusted
+                progressDialog.show()
+
                 val detectorOptions = FaceDetectorOptions.Builder()
                     .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
                     .build()
@@ -275,6 +287,9 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
 
                 detector.process(inputImage)
                     .addOnSuccessListener { faces ->
+                        // Dismiss ProgressDialog after processing
+                        progressDialog.dismiss()
+
                         if (faces.isNotEmpty()) {
                             // Crop the face from the selected image
                             val croppedBitmap = cropFaceFromBitmap(bitmap, faces)
@@ -299,6 +314,7 @@ class FaceRecognitionFrontActivity : AppCompatActivity() {
                         }
                     }
                     .addOnFailureListener {
+                        progressDialog.dismiss()
                         Toast.makeText(this, "Failed to process the selected image.", Toast.LENGTH_SHORT).show()
                     }
             } else {
