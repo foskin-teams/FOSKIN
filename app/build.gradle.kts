@@ -90,5 +90,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
+    implementation("com.google.mlkit:face-mesh-detection:16.0.0-beta1")
+    implementation("com.google.mlkit:barcode-scanning:17.1.0")
 
 }

@@ -8,26 +8,42 @@ import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.google.android.gms.tasks.Task
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetector
+import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.project.foskin.R
 import com.project.foskin.databinding.ActivityFaceRecognitionRightBinding
 import com.project.foskin.ui.detect.face.FaceValidationRightActivity.Companion.EXTRA_IMAGE_URI_RIGHT
 import com.project.foskin.utils.createCustomTempFile
 import java.io.File
 import java.io.FileOutputStream
+import java.util.concurrent.Executors
 
 class FaceRecognitionRightActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFaceRecognitionRightBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
+    private var imageAnalysis: ImageAnalysis? = null
     private val pickImageRequestCode = 1001
+    private var isFaceDetected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +54,63 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
         binding.captureImage.setOnClickListener { takePhoto() }
         binding.btnRotate.setOnClickListener { toggleCamera() }
         binding.btnGallery.setOnClickListener { openGallery() }
+
+        setupFaceDetection()
     }
 
     override fun onResume() {
         super.onResume()
         startCamera()
         toggleCamera()
+    }
+
+    private fun setupFaceDetection() {
+        val detectorOptions = FaceDetectorOptions.Builder()
+            .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+            .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
+            .build()
+
+        val detector = FaceDetection.getClient(detectorOptions)
+
+        imageAnalysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+
+        val executor = Executors.newSingleThreadExecutor()
+        imageAnalysis!!.setAnalyzer(executor) { imageProxy: ImageProxy ->
+            processImageProxy(
+                detector,
+                imageProxy
+            )
+        }
+    }
+
+    @OptIn(ExperimentalGetImage::class)
+    private fun processImageProxy(detector: FaceDetector, imageProxy: ImageProxy) {
+        val mediaImage = imageProxy.image
+        if (mediaImage != null) {
+            val inputImage =
+                InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+            detector.process(inputImage)
+                .addOnSuccessListener { faces: List<Face?> ->
+                    binding.graphicOverlay.clear()
+                    isFaceDetected = faces.isNotEmpty()
+                    if (isFaceDetected) {
+                        for (face in faces) {
+                            val faceBox = FaceBox(
+                                binding.graphicOverlay, face!!, mediaImage.cropRect
+                            )
+                            binding.graphicOverlay.add(faceBox)
+                        }
+                    }
+                }
+                .addOnFailureListener { e: Exception ->
+                    Log.e(TAG, "Face detection failed: " + e.message)
+                }
+                .addOnCompleteListener { task: Task<List<Face?>?>? -> imageProxy.close() }
+        } else {
+            imageProxy.close()
+        }
     }
 
     private fun startCamera() {
@@ -64,18 +131,31 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                     this,
                     cameraSelector,
                     preview,
-                    imageCapture
+                    imageCapture,
+                    imageAnalysis
                 )
             } catch (exc: Exception) {
-                Toast.makeText(this@FaceRecognitionRightActivity, "Failed to start camera.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@FaceRecognitionRightActivity,
+                    "Failed to start camera.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.e(TAG, "startCamera: ${exc.message}")
             }
         }, ContextCompat.getMainExecutor(this))
     }
 
     private fun takePhoto() {
-        val imageCapture = imageCapture ?: return
+        if (!isFaceDetected) {
+            Toast.makeText(
+                this,
+                "No face detected. Please ensure your face is visible.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
 
+        val imageCapture = imageCapture ?: return
         val photoFile = createCustomTempFile(application)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
@@ -89,12 +169,18 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                         val flippedFile = flipImageHorizontally(photoFile)
                         val flippedUri = Uri.fromFile(flippedFile)
 
-                        val intent = Intent(this@FaceRecognitionRightActivity, FaceValidationRightActivity::class.java)
+                        val intent = Intent(
+                            this@FaceRecognitionRightActivity,
+                            FaceValidationRightActivity::class.java
+                        )
                         intent.putExtra(EXTRA_IMAGE_URI_RIGHT, flippedUri.toString())
                         startActivity(intent)
                         finish()
                     } else {
-                        val intent = Intent(this@FaceRecognitionRightActivity, FaceValidationRightActivity::class.java)
+                        val intent = Intent(
+                            this@FaceRecognitionRightActivity,
+                            FaceValidationRightActivity::class.java
+                        )
                         intent.putExtra(EXTRA_IMAGE_URI_RIGHT, savedUri.toString())
                         startActivity(intent)
                         finish()
@@ -102,7 +188,11 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
                 }
 
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(this@FaceRecognitionRightActivity, "Failed to take picture.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@FaceRecognitionRightActivity,
+                        "Failed to take picture.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e(TAG, "Camera error: ${exc.message}")
                 }
             }
@@ -113,7 +203,8 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeFile(file.path)
 
         val exif = ExifInterface(file.path)
-        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        val orientation =
+            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
 
         val matrix = Matrix()
 
@@ -125,7 +216,8 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
 
         matrix.postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f)
 
-        val flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        val flippedBitmap =
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
         val outputStream = FileOutputStream(file)
         flippedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
@@ -145,7 +237,10 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(
+            Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         intent.type = "image/*"
         startActivityForResult(intent, pickImageRequestCode)
     }
@@ -157,13 +252,76 @@ class FaceRecognitionRightActivity : AppCompatActivity() {
             data?.data?.let { imageUri ->
                 Log.d(TAG, "Selected Image URI: $imageUri")
 
-                val intent = Intent(this@FaceRecognitionRightActivity, FaceValidationRightActivity::class.java)
-                intent.putExtra(FaceValidationRightActivity.EXTRA_IMAGE_URI_RIGHT, imageUri.toString())
-                startActivity(intent)
+                val inputStream = contentResolver.openInputStream(imageUri)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                val inputImage = InputImage.fromBitmap(bitmap, 0)
+
+                val detectorOptions = FaceDetectorOptions.Builder()
+                    .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                    .build()
+                val detector = FaceDetection.getClient(detectorOptions)
+
+                detector.process(inputImage)
+                    .addOnSuccessListener { faces ->
+                        if (faces.isNotEmpty()) {
+                            val croppedBitmap = cropFaceFromBitmap(bitmap, faces)
+                            if (croppedBitmap != null) {
+                                val file = createCustomTempFile(application)
+                                FileOutputStream(file).use { outputStream ->
+                                    croppedBitmap.compress(
+                                        Bitmap.CompressFormat.JPEG,
+                                        100,
+                                        outputStream
+                                    )
+                                }
+                                val croppedUri = Uri.fromFile(file)
+
+                                val intent = Intent(this, FaceValidationRightActivity::class.java)
+                                intent.putExtra(EXTRA_IMAGE_URI_RIGHT, croppedUri.toString())
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "No face detected in the selected image.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "No face detected in the selected image.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            this,
+                            "Failed to process the selected image.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
             } ?: run {
-                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to pick image from gallery.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
+    }
+
+    private fun cropFaceFromBitmap(bitmap: Bitmap, faces: List<Face>): Bitmap? {
+        if (faces.isNotEmpty()) {
+            val face = faces[0] // Taking the first face
+            val bounds = face.boundingBox
+
+            return Bitmap.createBitmap(
+                bitmap,
+                bounds.left,
+                bounds.top,
+                bounds.width(),
+                bounds.height()
+            )
+        }
+        return null
     }
 
     companion object {

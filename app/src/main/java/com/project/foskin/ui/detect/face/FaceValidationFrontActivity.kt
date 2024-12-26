@@ -27,6 +27,7 @@ class FaceValidationFrontActivity : AppCompatActivity() {
         binding.btnTryAgainValidate.setOnClickListener {
             val intent = Intent(this, FaceRecognitionFrontActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.btnAgreeValidate.setOnClickListener {
