@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -13,6 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.hbb20.CountryCodePicker
 import com.project.foskin.R
+import com.project.foskin.data.remote.api.ApiConfig
+import com.project.foskin.data.remote.api.SendOtpRequest
+import com.project.foskin.data.remote.api.SendOtpResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EnterWhatsappNumberActivity : AppCompatActivity() {
 
@@ -93,11 +100,42 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
                 errorMessageText.text = "Phone number must be at least 10 digits"
                 errorMessageText.visibility = View.VISIBLE
             } else {
-                val intent = Intent(this, OtpVerificationActivity::class.java)
                 val fullPhoneNumber = "$countryCode$phoneNumber"
-                intent.putExtra("PHONE_NUMBER", fullPhoneNumber)
-                startActivity(intent)
+                sendOtp(fullPhoneNumber)
             }
         }
     }
+
+    private fun sendOtp(phoneNumber: String) {
+        val apiService = ApiConfig.getApiService()
+        val request = SendOtpRequest(phoneNumber)
+
+        apiService.sendOtp(request).enqueue(object : Callback<SendOtpResponse> {
+            override fun onResponse(call: Call<SendOtpResponse>, response: Response<SendOtpResponse>) {
+                if (response.isSuccessful) {
+                    val otpNumber = response.body()?.data?.otpNumber
+                    if (!otpNumber.isNullOrEmpty()) {
+                        // Log OTP to logcat
+                        Log.d("SendOtp", "OTP Received: $otpNumber")
+
+                        val intent = Intent(this@EnterWhatsappNumberActivity, OtpVerificationActivity::class.java)
+                        intent.putExtra("PHONE_NUMBER", phoneNumber)
+                        startActivity(intent)
+                    } else {
+                        Log.d("SendOtp", "OTP data is empty")
+                        Toast.makeText(this@EnterWhatsappNumberActivity, "Failed to send OTP", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.d("SendOtp", "Failed to send OTP: ${response.message()}")
+                    Toast.makeText(this@EnterWhatsappNumberActivity, "Failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<SendOtpResponse>, t: Throwable) {
+                Log.e("SendOtp", "Error: ${t.message}", t)
+                Toast.makeText(this@EnterWhatsappNumberActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }

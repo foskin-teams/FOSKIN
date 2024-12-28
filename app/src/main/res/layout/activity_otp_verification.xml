@@ -160,5 +160,4 @@
         android:text="Don't receive a code? Resend"
         android:textSize="14sp" />
 
-
 </LinearLayout>

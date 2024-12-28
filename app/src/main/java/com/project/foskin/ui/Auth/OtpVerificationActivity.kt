@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.project.foskin.R
+import com.project.foskin.data.remote.api.ApiConfig
+import com.project.foskin.data.remote.api.SendOtpRequest
+import com.project.foskin.data.remote.api.SendOtpResponse
+import com.project.foskin.data.remote.api.SignInRequest
+import com.project.foskin.data.remote.api.SignInResponse
 import com.project.foskin.databinding.ActivityOtpVerificationBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class OtpVerificationActivity : AppCompatActivity() {
 
@@ -35,15 +39,15 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun setupOtpBoxes() {
-        val otpBoxes = listOf<EditText>(
-            findViewById(R.id.otpBox1),
-            findViewById(R.id.otpBox2),
-            findViewById(R.id.otpBox3),
-            findViewById(R.id.otpBox4),
-            findViewById(R.id.otpBox5),
-            findViewById(R.id.otpBox6)
+        val otpBoxes = listOf(
+            binding.otpBox1,
+            binding.otpBox2,
+            binding.otpBox3,
+            binding.otpBox4,
+            binding.otpBox5,
+            binding.otpBox6
         )
-        val errorMessage = findViewById<TextView>(R.id.otpErrorMessage)
+        val errorMessage = binding.otpErrorMessage
 
         for (i in otpBoxes.indices) {
             otpBoxes[i].addTextChangedListener(object : TextWatcher {
@@ -69,7 +73,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun setupResendButton() {
-        val resendText = findViewById<TextView>(R.id.resendCodeText)
+        val resendText = binding.resendCodeText
         val fullText = "Don't receive a code? Resend"
         val spannableString = android.text.SpannableString(fullText)
 
@@ -86,12 +90,29 @@ class OtpVerificationActivity : AppCompatActivity() {
         resendText.text = spannableString
 
         resendText.setOnClickListener {
-            Toast.makeText(this, "Verification code resent!", Toast.LENGTH_SHORT).show()
+            val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+            if (phoneNumber.isEmpty()) {
+                Toast.makeText(this, "Phone number is missing", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Reset OTP fields before sending new OTP
+            val otpBoxes = listOf(
+                binding.otpBox1,
+                binding.otpBox2,
+                binding.otpBox3,
+                binding.otpBox4,
+                binding.otpBox5,
+                binding.otpBox6
+            )
+            otpBoxes.forEach { it.text.clear() }
+
+            sendOtp(phoneNumber)
         }
     }
 
     private fun setupBackButton() {
-        val backButton = findViewById<ImageView>(R.id.backButtonOtp)
+        val backButton = binding.backButtonOtp
         backButton.setOnClickListener {
             val intent = Intent(this, EnterWhatsappNumberActivity::class.java)
             startActivity(intent)
@@ -100,56 +121,124 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun setupVerifyButton() {
-        val verifyButton = findViewById<TextView>(R.id.verifyButton)
-        val errorMessage = findViewById<TextView>(R.id.otpErrorMessage)
-        val otpBoxes = listOf<EditText>(
-            findViewById(R.id.otpBox1),
-            findViewById(R.id.otpBox2),
-            findViewById(R.id.otpBox3),
-            findViewById(R.id.otpBox4),
-            findViewById(R.id.otpBox5),
-            findViewById(R.id.otpBox6)
+        val verifyButton = binding.verifyButton
+        val errorMessage = binding.otpErrorMessage
+        val otpBoxes = listOf(
+            binding.otpBox1,
+            binding.otpBox2,
+            binding.otpBox3,
+            binding.otpBox4,
+            binding.otpBox5,
+            binding.otpBox6
         )
 
         verifyButton.setOnClickListener {
-            var allFilled = true
-
-            for (otpBox in otpBoxes) {
-                if (otpBox.text.toString().isEmpty()) {
-                    allFilled = false
-                    otpBox.background = getDrawable(R.drawable.error_background)
-                } else {
-                    otpBox.background = getDrawable(R.drawable.otp_box_background)
-                }
-            }
-
-            if (!allFilled) {
+            val otpInput = otpBoxes.joinToString(separator = "") { it.text.toString() }
+            if (otpInput.length < 6) {
                 errorMessage.text = "All fields must be filled"
                 errorMessage.visibility = View.VISIBLE
-            } else {
-                val otpInput = otpBoxes.joinToString("") { it.text.toString() }
+                otpBoxes.forEach { it.background = getDrawable(R.drawable.error_background) }
+                return@setOnClickListener
+            }
 
-                if (otpInput != "123456") {
-                    errorMessage.text = "Invalid OTP"
-                    errorMessage.visibility = View.VISIBLE
+            val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+            if (phoneNumber.isEmpty()) {
+                Toast.makeText(this, "Phone number is missing", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-                    otpBoxes.forEach { otpBox ->
-                        otpBox.text.clear()
-                        otpBox.background = getDrawable(R.drawable.otp_box_background)
+            verifyOtp(phoneNumber, otpInput)
+        }
+    }
+
+    private fun sendOtp(phoneNumber: String) {
+        val apiService = ApiConfig.getApiService()
+        val request = SendOtpRequest(phoneNumber)
+
+        apiService.sendOtp(request).enqueue(object : Callback<SendOtpResponse> {
+            override fun onResponse(call: Call<SendOtpResponse>, response: Response<SendOtpResponse>) {
+                if (response.isSuccessful) {
+                    val otpNumber = response.body()?.data?.otpNumber
+                    if (!otpNumber.isNullOrEmpty()) {
+                        // Log OTP to logcat
+                        Log.d("SendOtp", "OTP Received: $otpNumber")
+
+                        val intent = Intent(this@OtpVerificationActivity, OtpVerificationActivity::class.java)
+                        intent.putExtra("PHONE_NUMBER", phoneNumber)
+                        startActivity(intent)
+                    } else {
+                        Log.d("SendOtp", "OTP data is empty")
+                        Toast.makeText(this@OtpVerificationActivity, "Failed to send OTP", Toast.LENGTH_SHORT).show()
                     }
-
-                    otpBoxes[0].requestFocus()
-
-                    Toast.makeText(this, "Incorrect OTP. Please try again", Toast.LENGTH_SHORT).show()
                 } else {
-                    errorMessage.visibility = View.GONE
-                    Toast.makeText(this, "OTP Verified!", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(this, QuickSurvey1Activity::class.java)
-                    startActivity(intent)
-                    finish()
+                    Log.d("SendOtp", "Failed to send OTP: ${response.message()}")
+                    Toast.makeText(this@OtpVerificationActivity, "Failed: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            override fun onFailure(call: Call<SendOtpResponse>, t: Throwable) {
+                Log.e("SendOtp", "Error: ${t.message}", t)
+                Toast.makeText(this@OtpVerificationActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun verifyOtp(phoneNumber: String, otp: String) {
+        val apiService = ApiConfig.getApiService()
+        val request = SignInRequest(phoneNumber, otp)
+
+        apiService.signIn(request).enqueue(object : Callback<SignInResponse> {
+            override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
+                Log.d("DEBUG", "Response code: ${response.code()}")
+                Log.d("DEBUG", "Response message: ${response.message()}")
+                Log.d("DEBUG", "Response body: ${response.body()?.toString()}")
+
+                if (response.isSuccessful) {
+                    val token = response.body()?.data?.accessToken
+                    if (!token.isNullOrEmpty()) {
+                        // Success - redirect to the next activity
+                        Toast.makeText(this@OtpVerificationActivity, "Login successful", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@OtpVerificationActivity, QuickSurvey1Activity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        showError("The OTP code entered is incorrect")
+                    }
+                } else {
+                    // Handle the error case
+                    val errorDetail = response.errorBody()?.string() ?: "No additional details"
+                    // Check for specific error code or message from the API
+                    if (response.code() == 400 && errorDetail.contains("Invalid OTP", true)) {
+                        showError("The OTP code entered is incorrect")
+                    } else {
+                        showError("Failed: $errorDetail")
+                    }
+                    Log.e("DEBUG", "Error detail: $errorDetail")
+                }
+            }
+
+            override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
+                showError("Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun showError(message: String) {
+        val errorMessage = binding.otpErrorMessage
+        errorMessage.text = message
+        errorMessage.visibility = View.VISIBLE
+
+        val otpBoxes = listOf(
+            binding.otpBox1,
+            binding.otpBox2,
+            binding.otpBox3,
+            binding.otpBox4,
+            binding.otpBox5,
+            binding.otpBox6
+        )
+
+        otpBoxes.forEach {
+            it.background = getDrawable(R.drawable.error_background)
         }
     }
 }
