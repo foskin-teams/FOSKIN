@@ -83,12 +83,6 @@
             android:name=".ui.home.blog.DetailBlogActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Auth.OtpVerificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Auth.EnterWhatsappNumberActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.home.routines.RemaindersActivity"
             android:exported="false" />
         <activity
@@ -108,6 +102,12 @@
             android:exported="false" />
         <activity
             android:name=".ui.Auth.QuickSurvey1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Auth.OtpVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Auth.EnterWhatsappNumberActivity"
             android:exported="false" />
         <activity
             android:name=".ui.introduction.SplashScreen"
