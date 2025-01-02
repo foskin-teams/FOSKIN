@@ -26,15 +26,15 @@
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/chat_notification_badge"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:background="@drawable/shape_btn"
-            android:gravity="center"
-            android:text="6"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/chat_notification_badge"-->
+<!--            android:layout_width="18dp"-->
+<!--            android:layout_height="18dp"-->
+<!--            android:background="@drawable/shape_btn"-->
+<!--            android:gravity="center"-->
+<!--            android:text="6"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="14sp" />-->
     </LinearLayout>
 
     <ScrollView
