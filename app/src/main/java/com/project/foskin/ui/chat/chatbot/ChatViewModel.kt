@@ -1,6 +1,7 @@
 package com.project.foskin.ui.chat.chatbot
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.foskin.ui.chat.ChatAI
@@ -16,11 +17,11 @@ class ChatViewModel : ViewModel() {
     fun onEvent(event: ChatUiEvent) {
         when (event) {
             is ChatUiEvent.SendPrompt -> {
-                if (event.prompt.isNotEmpty()) {
-                    addPrompt(event.prompt, event.bitmap)
+                if (event.prompt?.isNotEmpty() == true) {
+                    event.prompt?.let { addPrompt(it, event.bitmap) }
 
                     if (event.bitmap != null) {
-                        getResponseWithImage(event.prompt, event.bitmap)
+                        event.prompt?.let { getResponseWithImage(it, event.bitmap) }
                     } else {
                         getResponse(event.prompt)
                     }
@@ -39,7 +40,7 @@ class ChatViewModel : ViewModel() {
         _chatState.update {
             it.copy(
                 chatList = it.chatList.toMutableList().apply {
-                    add(0, ChatAI(prompt, bitmap, true))
+                    add(ChatAI(prompt, bitmap, isFromUser = true)) // Menambahkan pesan dengan gambar
                 },
                 prompt = "",
                 bitmap = null
@@ -53,7 +54,7 @@ class ChatViewModel : ViewModel() {
             _chatState.update {
                 it.copy(
                     chatList = it.chatList.toMutableList().apply {
-                        add(0, chat)
+                        add(chat.copy(isFromUser = false)) // Add bot response
                     }
                 )
             }
@@ -61,6 +62,7 @@ class ChatViewModel : ViewModel() {
     }
 
     private fun getResponseWithImage(prompt: String, bitmap: Bitmap) {
+        Log.d("ChatViewModel", "Received bitmap: ${bitmap}")
         viewModelScope.launch {
             val chat = ChatAIData.getResponseWithImage(prompt, bitmap)
             _chatState.update {
@@ -72,4 +74,5 @@ class ChatViewModel : ViewModel() {
             }
         }
     }
+
 }
