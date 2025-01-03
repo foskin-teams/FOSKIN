@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.foskin.R
-import com.project.foskin.ui.chat.chatbot.ChatActivity
 
 class ChatFragment : Fragment() {
 

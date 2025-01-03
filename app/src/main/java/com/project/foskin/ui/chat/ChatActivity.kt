@@ -1,7 +1,6 @@
-package com.project.foskin.ui.chat.chatbot
+package com.project.foskin.ui.chat
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.project.foskin.databinding.ActivityChatBinding
 
