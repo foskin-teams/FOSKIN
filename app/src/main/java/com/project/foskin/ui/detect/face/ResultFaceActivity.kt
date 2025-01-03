@@ -1,5 +1,7 @@
 package com.project.foskin.ui.detect.face
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +29,22 @@ class ResultFaceActivity : AppCompatActivity() {
         showImageRight()
 
         binding.btnBack.setOnClickListener {
-            finish()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Confirmation")
+            builder.setMessage("Do you want to use Face Recognition again?")
+
+            builder.setPositiveButton("Yes") { dialog, which ->
+                val intent = Intent(this, FaceRecognitionFrontActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            builder.setNegativeButton("No") { dialog, which ->
+                onBackPressed()
+                finish()
+            }
+
+            builder.show()
         }
 
         val maxScrollY = resources.displayMetrics.density * 300
