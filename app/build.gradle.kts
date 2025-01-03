@@ -46,6 +46,11 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
@@ -94,4 +99,5 @@ dependencies {
     implementation("com.google.mlkit:face-mesh-detection:16.0.0-beta1")
     implementation("com.google.mlkit:barcode-scanning:17.1.0")
 
+    implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
 }

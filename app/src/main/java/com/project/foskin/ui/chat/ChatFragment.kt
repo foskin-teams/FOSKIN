@@ -1,5 +1,6 @@
 package com.project.foskin.ui.chat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.foskin.R
+import com.project.foskin.ui.chat.chatbot.ChatActivity
 
 class ChatFragment : Fragment() {
 
@@ -24,7 +26,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val ChatList = listOf(
+        val chatList = listOf(
             ChatItem(
                 profileImage = R.drawable.chatbot,
                 name = "Chat with AI",
@@ -36,12 +38,18 @@ class ChatFragment : Fragment() {
                 profileImage = R.drawable.marcello,
                 name = "Marcello Ilham",
                 time = "3:02PM",
-                message = "Hello! How are you doing? I hope everything is going well with your current project. Let me know if you need any assistance with the tasks that are pending. Also, don't forget that we need to discuss the upcoming deadlines during our meeting next week.",
+                message = "Hello! How are you doing? I hope everything is going well with your current project.",
                 notificationCount = 1
             )
         )
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = ChatAdapter(ChatList)
+        recyclerView.adapter = ChatAdapter(chatList) { chatItem ->
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("CHAT_NAME", chatItem.name)
+            startActivity(intent)
+        }
+
     }
+
 }

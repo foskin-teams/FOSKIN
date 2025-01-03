@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.foskin.R
 
-class ChatAdapter(private val chatList: List<ChatItem>) :
-    RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
+class ChatAdapter(
+    private val chatList: List<ChatItem>,
+    private val onChatItemClicked: (ChatItem) -> Unit
+) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val profileImage: ImageView = view.findViewById(R.id.profile_image)
@@ -37,6 +39,10 @@ class ChatAdapter(private val chatList: List<ChatItem>) :
             holder.notificationBadge.visibility = View.VISIBLE
         } else {
             holder.notificationBadge.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            onChatItemClicked(item)
         }
     }
 

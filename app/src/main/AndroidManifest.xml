@@ -32,6 +32,9 @@
         android:theme="@style/Theme.FOSKIN"
         tools:targetApi="31">
         <activity
+            android:name=".ui.chat.chatbot.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.home.clinic.ManageClinicActivity"
             android:exported="false" />
         <activity
