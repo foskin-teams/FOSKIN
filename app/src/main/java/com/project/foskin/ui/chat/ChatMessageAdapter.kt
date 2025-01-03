@@ -1,5 +1,6 @@
 package com.project.foskin.ui.chat
 
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,6 @@ class ChatMessageAdapter(
 
         holder.messageTextView.text = chat.prompt
 
-        // Handle image if present
         if (chat.bitmap != null) {
             holder.messageImageView.setImageBitmap(chat.bitmap)
             holder.messageImageView.visibility = View.VISIBLE
@@ -39,23 +39,22 @@ class ChatMessageAdapter(
             holder.messageImageView.visibility = View.GONE
         }
 
-        // Adjust alignment and background dynamically
         val layoutParams = holder.messageContainer.layoutParams as FrameLayout.LayoutParams
         if (chat.isFromUser) {
-            layoutParams.gravity = Gravity.END // Push to the right
+            layoutParams.gravity = Gravity.END
             holder.messageContainer.setBackgroundResource(R.drawable.bg_message_user)
         } else {
-            layoutParams.gravity = Gravity.START // Push to the left
+            layoutParams.gravity = Gravity.START
             holder.messageContainer.setBackgroundResource(R.drawable.bg_message_bot)
         }
         holder.messageContainer.layoutParams = layoutParams
     }
 
-
     override fun getItemCount(): Int = messages.size
 
     fun updateMessages(newMessages: List<ChatAI>) {
+        val previousSize = messages.size
         messages = newMessages
-        notifyDataSetChanged()
+        notifyItemInserted(previousSize)
     }
 }

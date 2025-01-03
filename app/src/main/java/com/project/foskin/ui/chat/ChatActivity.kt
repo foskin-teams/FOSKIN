@@ -21,20 +21,20 @@ class ChatActivity : AppCompatActivity() {
     private val viewModel: ChatViewModel by viewModels()
     private lateinit var chatAdapter: ChatMessageAdapter
 
-    private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK && result.data != null) {
-            val imageUri: Uri? = result.data?.data
-            imageUri?.let {
-                val inputStream = contentResolver.openInputStream(it)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                // Kirim gambar ke ViewModel
-                viewModel.onEvent(ChatUiEvent.SendPrompt(null, bitmap))
-            }
-        }
-    }
+//    private val pickImageLauncher = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) { result ->
+//        if (result.resultCode == RESULT_OK && result.data != null) {
+//            val imageUri: Uri? = result.data?.data
+//            imageUri?.let {
+//                val inputStream = contentResolver.openInputStream(it)
+//                val bitmap = BitmapFactory.decodeStream(inputStream)
+//
+//                // Kirim gambar ke ViewModel
+//                viewModel.onEvent(ChatUiEvent.SendPrompt(null, bitmap))
+//            }
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +54,6 @@ class ChatActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.btnAttached.setOnClickListener {
-            openGallery()
-        }
-
         lifecycleScope.launchWhenStarted {
             viewModel.chatState.collectLatest { state ->
                 chatAdapter.updateMessages(state.chatList)
@@ -74,8 +70,8 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        pickImageLauncher.launch(intent)
-    }
+//    private fun openGallery() {
+//        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//        pickImageLauncher.launch(intent)
+//    }
 }

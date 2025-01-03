@@ -77,15 +77,14 @@
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnAttached"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Send"
-            android:padding="12dp"
-            android:src="@drawable/attached" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/btnAttached"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:background="?android:attr/selectableItemBackgroundBorderless"-->
+<!--            android:padding="12dp"-->
+<!--            android:src="@drawable/attached" />-->
 
         <EditText
             android:id="@+id/etMessageInput"

@@ -15,4 +15,3 @@ data class ChatAI (
     val bitmap: Bitmap?,
     val isFromUser: Boolean
 )
-

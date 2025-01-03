@@ -40,7 +40,7 @@ class ChatViewModel : ViewModel() {
         _chatState.update {
             it.copy(
                 chatList = it.chatList.toMutableList().apply {
-                    add(ChatAI(prompt, bitmap, isFromUser = true)) // Menambahkan pesan dengan gambar
+                    add(ChatAI(prompt, bitmap, isFromUser = true))
                 },
                 prompt = "",
                 bitmap = null
@@ -54,7 +54,7 @@ class ChatViewModel : ViewModel() {
             _chatState.update {
                 it.copy(
                     chatList = it.chatList.toMutableList().apply {
-                        add(chat.copy(isFromUser = false)) // Add bot response
+                        add(chat.copy(isFromUser = false))
                     }
                 )
             }
@@ -74,5 +74,4 @@ class ChatViewModel : ViewModel() {
             }
         }
     }
-
 }
