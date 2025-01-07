@@ -20,17 +20,16 @@ class AlarmReceiver : BroadcastReceiver() {
         val deleteAfterRing = intent.getBooleanExtra("delete_after_ring", false)
         val alarmId = intent.getLongExtra("alarm_id", -1)
 
-        // Vibrate if enabled
         if (vibrate) {
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            val vibrationDuration = (1000..5000).random()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE))
+                vibrator.vibrate(VibrationEffect.createOneShot(vibrationDuration.toLong(), VibrationEffect.DEFAULT_AMPLITUDE))
             } else {
-                vibrator.vibrate(1000)
+                vibrator.vibrate(vibrationDuration.toLong())
             }
         }
 
-        // Show notification
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setSmallIcon(R.drawable.notification)
             .setContentTitle("Alarm Notification")
@@ -41,11 +40,11 @@ class AlarmReceiver : BroadcastReceiver() {
 
         NotificationManagerCompat.from(context).notify(alarmId.toInt(), notification)
 
-        // Delete alarm if enabled
         if (deleteAfterRing && alarmId != -1L) {
             val savedAlarms = SharedPreferencesHelper.getAlarms(context).toMutableList()
             val updatedAlarms = savedAlarms.filter { it.id != alarmId }
             SharedPreferencesHelper.saveAlarms(context, updatedAlarms)
         }
     }
+
 }
