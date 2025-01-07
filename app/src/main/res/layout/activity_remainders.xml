@@ -73,7 +73,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="270dp">
+            android:layout_height="300dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_next_intake"
@@ -106,7 +106,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout_intake"
             android:layout_width="match_parent"
-            android:layout_height="270dp">
+            android:layout_height="300dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_past_intake"

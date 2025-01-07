@@ -1,12 +1,22 @@
 package com.project.foskin.ui.home.routines
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import com.project.foskin.R
 import com.project.foskin.databinding.ActivityAddRemaindersBinding
@@ -17,6 +27,7 @@ class AddRemaindersActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddRemaindersBinding
     private lateinit var alarmViewModel: AlarmViewModel
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,6 +38,7 @@ class AddRemaindersActivity : AppCompatActivity() {
 
         alarmViewModel = ViewModelProvider(this)[AlarmViewModel::class.java]
 
+        // Configure number pickers
         binding.npHour.minValue = 0
         binding.npHour.maxValue = 23
         binding.npHour.wrapSelectorWheel = true
@@ -41,29 +53,26 @@ class AddRemaindersActivity : AppCompatActivity() {
             updateSubheaderTime()
             updateAlarmPeriod()
         }
+        binding.npMinute.setOnValueChangedListener { _, _, _ -> updateSubheaderTime() }
 
-        binding.npMinute.setOnValueChangedListener { _, _, _ ->
-            updateSubheaderTime()
-        }
+        binding.tvRepeat.setOnClickListener { showRepeatOptionsDialog() }
+        binding.tvSkincareItems.setOnClickListener { showItemSkincareOptionsDialog() }
 
-        binding.tvRepeat.setOnClickListener {
-            showRepeatOptionsDialog()
-        }
-
-        binding.tvSkincareItems.setOnClickListener {
-            showItemSkincareOptionsDialog()
-        }
-
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
+        binding.btnBack.setOnClickListener { finish() }
 
         binding.btnSave.setOnClickListener {
             if (validateInputs()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+                        return@setOnClickListener
+                    }
+                }
+
                 val hour = binding.npHour.value
                 val minute = binding.npMinute.value
-                val period = binding.tvAlarmPeriod.text.toString()
                 val repeat = binding.tvRepeat.text.toString()
+                val period = binding.tvAlarmPeriod.text.toString()
                 val skincareItems = binding.tvChooseSkincareItem.text.toString()
                 val vibrate = binding.switchVibrate.isChecked
                 val deleteAfterRing = binding.switchDeleteAfterRinging.isChecked
@@ -79,52 +88,65 @@ class AddRemaindersActivity : AppCompatActivity() {
                     deleteAfterRinging = deleteAfterRing
                 )
 
-                val savedAlarms = SharedPreferencesHelper.getAlarms(this)
+                saveAlarm(newAlarm)
+                setAlarm(newAlarm)
+                Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
 
-                val existingAlarm = savedAlarms.find {
-                    it.hour == hour && it.minute == minute
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Alarm Channel"
+            val descriptionText = "Channel for alarm notifications"
+            val importance = NotificationManagerCompat.IMPORTANCE_HIGH
+            val channel = NotificationChannel("alarm_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
-                if (existingAlarm != null) {
-                    AlertDialog.Builder(this)
-                        .setTitle("Time Conflict")
-                        .setMessage("An alarm is already set for ${String.format("%02d:%02d", hour, minute)}. Do you want to delete the previous alarm?")
-                        .setPositiveButton("Yes") { dialog, _ ->
-                            val updatedAlarms = savedAlarms.filter { it.id != existingAlarm.id }.toMutableList()
-                            SharedPreferencesHelper.saveAlarms(this, updatedAlarms) // Save updated list
-
-                            alarmViewModel.addAlarm(this, newAlarm)
-                            updatedAlarms.add(newAlarm)
-                            SharedPreferencesHelper.saveAlarms(this, updatedAlarms)
-
-                            val intent = Intent(this, RemaindersActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            startActivity(intent)
-
-                            Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
-                            finish()
-                        }
-                        .setNegativeButton("No") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .show()
-                } else {
-                    alarmViewModel.addAlarm(this, newAlarm)
-
-                    val updatedAlarms = savedAlarms.toMutableList()
-                    updatedAlarms.add(newAlarm)
-                    SharedPreferencesHelper.saveAlarms(this, updatedAlarms)
-
-                    val intent = Intent(this, RemaindersActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
-
-                    Toast.makeText(this, "Alarm saved successfully!", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+                return
             }
         }
     }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private fun setAlarm(alarm: AlarmData) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java).apply {
+            putExtra("alarm_message", "Time for your skincare routine!")
+            putExtra("vibrate", alarm.vibrate)
+            putExtra("delete_after_ring", alarm.deleteAfterRinging)
+            putExtra("alarm_id", alarm.id)
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            alarm.id.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, alarm.hour)
+            set(Calendar.MINUTE, alarm.minute)
+            set(Calendar.SECOND, 0)
+        }
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
+    private fun saveAlarm(alarm: AlarmData) {
+        val savedAlarms = SharedPreferencesHelper.getAlarms(this).toMutableList()
+        savedAlarms.add(alarm)
+        SharedPreferencesHelper.saveAlarms(this, savedAlarms)
+        alarmViewModel.loadAlarms(this)
+    }
+
 
     private fun setTimeToNow() {
         val calendar = Calendar.getInstance()
@@ -204,13 +226,12 @@ class AddRemaindersActivity : AppCompatActivity() {
         val minutes = (diffInMinutes % 60)
 
         if (calendarNow.get(Calendar.HOUR_OF_DAY) == binding.npHour.value &&
-            calendarNow.get(Calendar.MINUTE) == binding.npMinute.value) {
+            calendarNow.get(Calendar.MINUTE) == binding.npMinute.value
+        ) {
             binding.tvSubheader.text = "Alarm time has passed\nAlarm in 23 hour 59 minute"
-        }
-        else if (diffInMillis <= 60000) {
+        } else if (diffInMillis <= 60000) {
             binding.tvSubheader.text = "Alarm in $hours hour $minutes minute"
-        }
-        else if (days > 0) {
+        } else if (days > 0) {
             binding.tvSubheader.text = "Alarm in $days day $hours hour $minutes minute"
         } else if (hours > 0 || minutes > 0) {
             binding.tvSubheader.text = "Alarm in $hours hour $minutes minute"
@@ -234,7 +255,8 @@ class AddRemaindersActivity : AppCompatActivity() {
         }
 
         if (skincareItemsText.isBlank()) {
-            Toast.makeText(this, "Please choose at least one skincare item", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please choose at least one skincare item", Toast.LENGTH_SHORT)
+                .show()
             return false
         }
 
