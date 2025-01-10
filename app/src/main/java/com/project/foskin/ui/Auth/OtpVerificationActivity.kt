@@ -142,12 +142,17 @@ class OtpVerificationActivity : AppCompatActivity() {
             }
 
             val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
-            if (phoneNumber.isEmpty()) {
-                Toast.makeText(this, "Phone number is missing", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+            val dummyOtp = intent.getStringExtra("DUMMY_OTP") ?: ""
 
-            verifyOtp(phoneNumber, otpInput)
+            if (otpInput == dummyOtp) {
+                // Jika OTP sesuai dengan dummy OTP
+                Toast.makeText(this, "Dummy OTP Verification Successful", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, QuickSurvey1Activity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                verifyOtp(phoneNumber, otpInput)
+            }
         }
     }
 

@@ -64,6 +64,10 @@ class ClinicAdapter(
                 Calendar.MONDAY -> operationalHours.weekday["Monday"]
                 Calendar.SATURDAY -> operationalHours.weekend["Saturday"]
                 Calendar.SUNDAY -> operationalHours.weekend["Sunday"]
+                Calendar.TUESDAY -> operationalHours.weekday["Tuesday"]
+                Calendar.WEDNESDAY -> operationalHours.weekday["Wednesday"]
+                Calendar.THURSDAY -> operationalHours.weekday["Thursday"]
+                Calendar.FRIDAY -> operationalHours.weekday["Friday"]
                 else -> operationalHours.weekday["Other"]
             }
 

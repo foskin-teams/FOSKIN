@@ -186,7 +186,7 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
             Clinic(
                 name = "Miracle Aesthetic Clinic Malang",
                 address = "Jl. Wilis No.6, Malang",
-                imageResId = R.drawable.clinic_photo,
+                imageResId = R.drawable.miracle,
                 rating = 4.8f,
                 reviews = 120,
                 slug = "miracle-aesthetic-malang",
@@ -195,8 +195,17 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 operationalHours = OperationalHours(
                     opening = "09:00 AM",
                     closing = "08:00 PM",
-                    weekday = mapOf("Monday" to "09:00 AM - 08:00 PM"),
-                    weekend = mapOf("Saturday" to "09:00 AM - 05:00 PM", "Sunday" to "Closed")
+                    weekday = mapOf(
+                        "Monday" to "09:00 AM - 08:00 PM",
+                        "Tuesday" to "09:00 AM - 08:00 PM",
+                        "Wednesday" to "09:00 AM - 08:00 PM",
+                        "Thursday" to "09:00 AM - 08:00 PM",
+                        "Friday" to "09:00 AM - 08:00 PM"
+                    ),
+                    weekend = mapOf(
+                        "Saturday" to "09:00 AM - 05:00 PM",
+                        "Sunday" to "Closed"
+                    )
                 ),
                 detailedAddress = DetailedAddress(
                     country = "Indonesia",
@@ -222,8 +231,17 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 operationalHours = OperationalHours(
                     opening = "10:00 AM",
                     closing = "07:00 PM",
-                    weekday = mapOf("Monday" to "10:00 AM - 07:00 PM"),
-                    weekend = mapOf("Saturday" to "10:00 AM - 03:00 PM", "Sunday" to "Closed")
+                    weekday = mapOf(
+                        "Monday" to "10:00 AM - 07:00 PM",
+                        "Tuesday" to "10:00 AM - 07:00 PM",
+                        "Wednesday" to "10:00 AM - 07:00 PM",
+                        "Thursday" to "10:00 AM - 07:00 PM",
+                        "Friday" to "10:00 AM - 07:00 PM"
+                    ),
+                    weekend = mapOf(
+                        "Saturday" to "10:00 AM - 03:00 PM",
+                        "Sunday" to "Closed"
+                    )
                 ),
                 detailedAddress = DetailedAddress(
                     country = "Indonesia",
@@ -249,8 +267,17 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 operationalHours = OperationalHours(
                     opening = "08:00 AM",
                     closing = "06:00 PM",
-                    weekday = mapOf("Monday" to "08:00 AM - 06:00 PM"),
-                    weekend = mapOf("Saturday" to "09:00 AM - 02:00 PM", "Sunday" to "Closed")
+                    weekday = mapOf(
+                        "Monday" to "08:00 AM - 06:00 PM",
+                        "Tuesday" to "08:00 AM - 06:00 PM",
+                        "Wednesday" to "08:00 AM - 06:00 PM",
+                        "Thursday" to "08:00 AM - 06:00 PM",
+                        "Friday" to "08:00 AM - 06:00 PM"
+                    ),
+                    weekend = mapOf(
+                        "Saturday" to "09:00 AM - 02:00 PM",
+                        "Sunday" to "Closed"
+                    )
                 ),
                 detailedAddress = DetailedAddress(
                     country = "Indonesia",
@@ -276,8 +303,17 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 operationalHours = OperationalHours(
                     opening = "09:00 AM",
                     closing = "07:00 PM",
-                    weekday = mapOf("Monday" to "09:00 AM - 07:00 PM"),
-                    weekend = mapOf("Saturday" to "10:00 AM - 04:00 PM", "Sunday" to "Closed")
+                    weekday = mapOf(
+                        "Monday" to "09:00 AM - 07:00 PM",
+                        "Tuesday" to "09:00 AM - 07:00 PM",
+                        "Wednesday" to "09:00 AM - 07:00 PM",
+                        "Thursday" to "09:00 AM - 07:00 PM",
+                        "Friday" to "09:00 AM - 07:00 PM"
+                    ),
+                    weekend = mapOf(
+                        "Saturday" to "10:00 AM - 04:00 PM",
+                        "Sunday" to "Closed"
+                    )
                 ),
                 detailedAddress = DetailedAddress(
                     country = "Indonesia",
@@ -303,8 +339,17 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 operationalHours = OperationalHours(
                     opening = "08:30 AM",
                     closing = "08:30 PM",
-                    weekday = mapOf("Monday" to "08:30 AM - 08:30 PM"),
-                    weekend = mapOf("Saturday" to "09:00 AM - 05:00 PM", "Sunday" to "Closed")
+                    weekday = mapOf(
+                        "Monday" to "08:30 AM - 08:30 PM",
+                        "Tuesday" to "08:30 AM - 08:30 PM",
+                        "Wednesday" to "08:30 AM - 08:30 PM",
+                        "Thursday" to "08:30 AM - 08:30 PM",
+                        "Friday" to "08:30 AM - 08:30 PM"
+                    ),
+                    weekend = mapOf(
+                        "Saturday" to "09:00 AM - 05:00 PM",
+                        "Sunday" to "Closed"
+                    )
                 ),
                 detailedAddress = DetailedAddress(
                     country = "Indonesia",
@@ -330,8 +375,17 @@ class ClinicActivity : AppCompatActivity(), OnMapReadyCallback {
                 operationalHours = OperationalHours(
                     opening = "09:00 AM",
                     closing = "06:00 PM",
-                    weekday = mapOf("Monday" to "09:00 AM - 06:00 PM"),
-                    weekend = mapOf("Saturday" to "09:00 AM - 02:00 PM", "Sunday" to "Closed")
+                    weekday = mapOf(
+                        "Monday" to "09:00 AM - 06:00 PM",
+                        "Tuesday" to "09:00 AM - 06:00 PM",
+                        "Wednesday" to "09:00 AM - 06:00 PM",
+                        "Thursday" to "09:00 AM - 06:00 PM",
+                        "Friday" to "09:00 AM - 06:00 PM"
+                    ),
+                    weekend = mapOf(
+                        "Saturday" to "09:00 AM - 02:00 PM",
+                        "Sunday" to "Closed"
+                    )
                 ),
                 detailedAddress = DetailedAddress(
                     country = "Indonesia",

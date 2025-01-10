@@ -109,33 +109,37 @@ class EnterWhatsappNumberActivity : AppCompatActivity() {
     private fun sendOtp(phoneNumber: String) {
         val apiService = ApiConfig.getApiService()
         val request = SendOtpRequest(phoneNumber)
+        val dummyOtp = "123456" // Dummy OTP
 
         apiService.sendOtp(request).enqueue(object : Callback<SendOtpResponse> {
             override fun onResponse(call: Call<SendOtpResponse>, response: Response<SendOtpResponse>) {
                 if (response.isSuccessful) {
-                    val otpNumber = response.body()?.data?.otpNumber
-                    if (!otpNumber.isNullOrEmpty()) {
-                        // Log OTP to logcat
-                        Log.d("SendOtp", "OTP Received: $otpNumber")
+                    val otpNumber = response.body()?.data?.otpNumber ?: dummyOtp
+                    Log.d("SendOtp", "OTP Received: $otpNumber")
 
-                        val intent = Intent(this@EnterWhatsappNumberActivity, OtpVerificationActivity::class.java)
-                        intent.putExtra("PHONE_NUMBER", phoneNumber)
-                        startActivity(intent)
-                    } else {
-                        Log.d("SendOtp", "OTP data is empty")
-                        Toast.makeText(this@EnterWhatsappNumberActivity, "Failed to send OTP", Toast.LENGTH_SHORT).show()
-                    }
+                    val intent = Intent(this@EnterWhatsappNumberActivity, OtpVerificationActivity::class.java)
+                    intent.putExtra("PHONE_NUMBER", phoneNumber)
+                    intent.putExtra("DUMMY_OTP", otpNumber) // Kirim OTP ke Activity berikutnya
+                    startActivity(intent)
                 } else {
-                    Log.d("SendOtp", "Failed to send OTP: ${response.message()}")
-                    Toast.makeText(this@EnterWhatsappNumberActivity, "Failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    fallbackToDummyOtp(phoneNumber, dummyOtp)
                 }
             }
 
             override fun onFailure(call: Call<SendOtpResponse>, t: Throwable) {
-                Log.e("SendOtp", "Error: ${t.message}", t)
-                Toast.makeText(this@EnterWhatsappNumberActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                fallbackToDummyOtp(phoneNumber, dummyOtp)
             }
         })
     }
+
+    private fun fallbackToDummyOtp(phoneNumber: String, dummyOtp: String) {
+        Log.e("SendOtp", "Using Dummy OTP: $dummyOtp")
+
+        val intent = Intent(this@EnterWhatsappNumberActivity, OtpVerificationActivity::class.java)
+        intent.putExtra("PHONE_NUMBER", phoneNumber)
+        intent.putExtra("DUMMY_OTP", dummyOtp) // Kirim OTP ke Activity berikutnya
+        startActivity(intent)
+    }
+
 
 }
