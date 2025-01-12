@@ -93,7 +93,11 @@ class ProductScanActivity : AppCompatActivity() {
                     imageCapture
                 )
             } catch (exc: Exception) {
-                Toast.makeText(this@ProductScanActivity, "Failed to start camera.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@ProductScanActivity,
+                    "Failed to start camera.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.e(TAG, "startCamera: ${exc.message}")
             }
         }, ContextCompat.getMainExecutor(this))
@@ -111,14 +115,22 @@ class ProductScanActivity : AppCompatActivity() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    val intent = Intent(this@ProductScanActivity, ValidateProductScanActivity::class.java)
-                    intent.putExtra(ValidateProductScanActivity.EXTRA_IMAGE_URI, savedUri.toString())
+                    val intent =
+                        Intent(this@ProductScanActivity, ValidateProductScanActivity::class.java)
+                    intent.putExtra(
+                        ValidateProductScanActivity.EXTRA_IMAGE_URI,
+                        savedUri.toString()
+                    )
                     startActivity(intent)
                     finish()
                 }
 
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(this@ProductScanActivity, "Failed to take picture.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ProductScanActivity,
+                        "Failed to take picture.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e(TAG, "onError: ${exc.message}")
                 }
             }
